@@ -22,10 +22,14 @@
   "homepage": "https://github.com/OrKoN/koa2-example-app#readme",
   "dependencies": {
     "babel-polyfill": "^6.5.0",
+    "dotenv": "^4.0.0",
     "kcors": "^2.0.0",
+    "knex": "^0.13.0",
     "koa": "^2.0.0-alpha.3",
     "koa-bodyparser": "^3.0.0",
     "koa-router": "^7.0.1",
+    "mysql2": "^1.2.0",
+    "objection": "^0.8.4",
     "promise-redis": "0.0.5",
     "redis": "^2.4.2"
   },
