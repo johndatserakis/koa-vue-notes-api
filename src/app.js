@@ -29,13 +29,14 @@ app.use(bodyParser())
 app.use(router.routes())
 app.use(router.allowedMethods());
 
-//Birds-eye processing
-app.use(async (ctx, next) => {
-    try {
-        await next();
-    } catch (error) {
-        throw error;
-    }
-})
+
+//Birds-eye processing -- Is this even necessary?
+// app.use(async (ctx, next) => {
+//     try {
+//         await next();
+//     } catch (error) {
+//         throw error;
+//     }
+// })
 
 export default app;
