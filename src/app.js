@@ -2,22 +2,12 @@ import Koa from 'koa';
 import router from './router';
 import bodyParser from 'koa-bodyparser';
 import cors from 'kcors';
-import mysql from 'mysql2';
 
 //For .env file
-require('dotenv').config();
+import {} from 'dotenv/config';
 
+//Initialize app
 const app = new Koa()
-
-//Set up global mysql handler
-const config = {
-    host:     process.env.DB_HOST,
-    port:     process.env.DB_PORT,
-    user:     process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-};
-global.connectionPool = mysql.createPool(config);
 
 //For cors
 app.use(cors())
@@ -29,14 +19,15 @@ app.use(bodyParser())
 app.use(router.routes())
 app.use(router.allowedMethods());
 
-
 //Birds-eye processing -- Is this even necessary?
-// app.use(async (ctx, next) => {
-//     try {
-//         await next();
-//     } catch (error) {
-//         throw error;
-//     }
-// })
+app.use(async (ctx, next) => {
+    try {
+        await next();
+    } catch (err) {
+        ctx.status = err.status || 500;
+        ctx.body = err.message;
+        ctx.app.emit('error', err, ctx);
+    }
+});
 
 export default app;
