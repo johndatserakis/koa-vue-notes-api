@@ -4,14 +4,14 @@ import rand from 'randexp'
 import bcrypt from 'bcrypt'
 import jsonwebtoken from 'jsonwebtoken'
 import {} from 'dotenv/config'
+import fse from 'fs-extra'
 import sgMail from '@sendgrid/mail'
-
-import fs from 'fs'
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 import dateFormat from 'date-fns/format'
+import dateAddMinutes from 'date-fns/add_minutes'
 import dateAddMonths from 'date-fns/add_months'
 import dateCompareAsc from 'date-fns/compare_asc'
-
 
 const userSchemaSignup = joi.object({
     firstName: joi.string().min(1).max(25).alphanum().required(),
@@ -30,11 +30,6 @@ class User {
     constructor() {}
 
     async signup(ctx) {
-
-
-        return;
-
-
         //First do validation on the input
         const validator = joi.validate(ctx.request.body, userSchemaSignup)
         if (validator.error) { ctx.throw(400, validator.error.details[0].message) }
@@ -56,26 +51,30 @@ class User {
         } catch (error) { ctx.throw(400, error) }
 
         //Let's grab their ipaddress
-        ctx.request.body.ip_address = ctx.request.ip
+        ctx.request.body.ipAddress = ctx.request.ip
 
         //Ok, at this point we can sign them up.
         try {
             let result = await pool.query(`INSERT INTO koa_vue_notes_users SET ?`, ctx.request.body)
 
-            // //Let's send a welcome email.
-            // const data = {
-            //   to: ctx.request.body.email,
-            //   from: process.env.APP_EMAIL,
-            //   subject: 'Welcome To Koa-Vue-Notes-Api',
-            //   text: 'Hello plain world!',
-            //   html: '<p>Hello HTML world!</p>',
-            // };
-
-            // //Send email
-            // sgMail.send(data)
+            //Let's send a welcome email.
+            let email = await fse.readFile('./src/email/welcome.html', 'utf8');
+            const emailData = {
+                to: ctx.request.body.email,
+                from: process.env.APP_EMAIL,
+                subject: 'Welcome To Koa-Vue-Notes-Api',
+                html: email,
+                categories: ['koa-vue-notes-api-new-user'],
+                substitutions: {
+                    appName: process.env.APP_NAME,
+                    appEmail: process.env.APP_EMAIL
+                }
+            };
+            await sgMail.send(emailData)
 
             //And return our response.
-            ctx.body = {'id': result.insertId}
+            // ctx.body = {'id': result.insertId}
+            ctx.body = {'messgae': 'SUCCESS'}
         } catch (error) { ctx.throw(400, error) }
     }
 
@@ -176,9 +175,48 @@ class User {
         ctx.body = {'message': 'SUCCESS'}
     }
 
+    async forgot(ctx) {
+        if (!ctx.request.body.email) { ctx.throw(404, 'INVALID_DATA') }
 
+        let resetData = {
+            'passwordResetToken': new rand(/[a-zA-Z0-9_-]{64,64}/).gen(),
+            'passwordResetExpiration': dateAddMinutes(new Date(), 30)
+        }
 
+        try {
+            await pool.query(`UPDATE koa_vue_notes_users SET ? WHERE email = ?`, [resetData, ctx.request.body.email])
+        } catch (error) { ctx.throw(400, error) }
 
+        let email = await fse.readFile('./src/email/forgot.html', 'utf8');
+        const emailData = {
+            to: ctx.request.body.email,
+            from: process.env.APP_EMAIL,
+            subject: 'Password Reset For ' + process.env.APP_NAME,
+            html: email,
+            categories: ['koa-vue-notes-api-forgot'],
+            substitutions: {
+                appName: process.env.APP_NAME,
+                email: ctx.request.body.email,
+                resetUrl: process.env.APP_URL + '/user/reset?passwordResetToken=' + resetData.passwordResetToken + '&email=' + ctx.request.body.email
+            }
+        };
+        await sgMail.send(emailData)
+
+        ctx.body = {'message': 'SUCCESS'}
+    }
+
+    async checkPasswordResetToken(ctx) {
+        if (!ctx.request.body.passwordResetToken || !ctx.request.body.email) { ctx.throw(404, 'INVALID_DATA') }
+
+        var passwordResetData = await pool.query(`SELECT passwordResetExpiration FROM koa_vue_notes_users WHERE (email = ? AND passwordResetToken = ?)`, [ctx.request.body.email, ctx.request.body.passwordResetToken])
+        if (!passwordResetData.length) { ctx.throw(400, 'INVALID_TOKEN') }
+
+        //Let's make sure the refreshToken is not expired
+        var tokenIsValid = dateCompareAsc(dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss'), passwordResetData[0].passwordResetExpiration);
+        if (tokenIsValid !== -1) { ctx.throw(400, 'RESET_TOKEN_EXPIRED') }
+
+        ctx.body = {'message': 'SUCCESS'}
+    }
 
 
 

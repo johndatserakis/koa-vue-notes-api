@@ -36,7 +36,15 @@ router.post('/api/v1/user/invalidateRefreshToken', jwtMiddleware, async (ctx, ne
     await user.invalidateRefreshToken(ctx)
 })
 
+router.post('/api/v1/user/forgot', async (ctx, next) => {
+    const user = new User()
+    await user.forgot(ctx)
+})
 
+router.post('/api/v1/user/checkPasswordResetToken', async (ctx, next) => {
+    const user = new User()
+    await user.checkPasswordResetToken(ctx)
+})
 
 
 

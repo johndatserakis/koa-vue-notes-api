@@ -7,8 +7,6 @@ import cors from 'kcors';
 import {} from 'dotenv/config';
 import logger from './log';
 import userAgent from 'koa-useragent';
-// import jwtMiddleware from 'koa-jwt';
-
 import error from 'koa-json-error';
 
 //Initialize app
