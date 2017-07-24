@@ -1,15 +1,44 @@
 import Router from 'koa-router'
-const router = new Router()
+import User from '../models/User'
+import dateFormat from 'date-fns/format'
+import jwt from '../middleware/jwt'
+import logger from './log'
 
-import Message from '../models/Message';
+const router = new Router()
+const jwtMiddleware = jwt({secret: process.env.JWT_SECRET})
 
 router.get('/', async (ctx, next) => {
-  ctx.body = 'Hello'
+    ctx.body = {'message': 'Hi there.'}
 })
 
-router.get('/messages', async (ctx, next) => {
-    var message = new Message();
-    ctx.body = await message.getAllMessages();
+router.post('/api/v1/user/signup', async (ctx, next) => {
+    const user = new User()
+    await user.signup(ctx)
 })
 
-export default router;
+router.post('/api/v1/user/authenticate', async (ctx, next) => {
+    const user = new User()
+    await user.authenticate(ctx)
+})
+
+router.post('/api/v1/user/refreshAccessToken', async (ctx, next) => {
+    const user = new User()
+    await user.refreshAccessToken(ctx)
+})
+
+router.post('/api/v1/user/private', jwtMiddleware, async (ctx, next) => {
+    const user = new User()
+    await user.private(ctx)
+})
+
+// router.get('/api/v1/user/getAllUsers', async (ctx, next) => {
+//     const user = new User()
+//     await user.getAllUsers(ctx)
+// })
+
+// router.get('/api/v1/user/getUser', async (ctx, next) => {
+//     const user = new User()
+//     await user.getUser(ctx)
+// })
+
+export default router

@@ -14,3 +14,4 @@ if (env === 'development') {
 const app = require(src).default;
 app.listen(port);
 console.log('Server running at ' + port);
+console.log("Running in "  + process.env.NODE_ENV);
