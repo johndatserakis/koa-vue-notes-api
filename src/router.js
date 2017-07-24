@@ -26,6 +26,22 @@ router.post('/api/v1/user/refreshAccessToken', async (ctx, next) => {
     await user.refreshAccessToken(ctx)
 })
 
+router.post('/api/v1/user/invalidateAllRefreshTokens', jwtMiddleware, async (ctx, next) => {
+    const user = new User()
+    await user.invalidateAllRefreshTokens(ctx)
+})
+
+router.post('/api/v1/user/invalidateRefreshToken', jwtMiddleware, async (ctx, next) => {
+    const user = new User()
+    await user.invalidateRefreshToken(ctx)
+})
+
+
+
+
+
+
+
 router.post('/api/v1/user/private', jwtMiddleware, async (ctx, next) => {
     const user = new User()
     await user.private(ctx)

@@ -16,7 +16,7 @@ module.exports = (opts = {}) => {
             const decoded = await jsonwebtoken.verify(token, process.env.JWT_SECRET)
 
             //If it worked set the ctx.state.user parameter to the decoded token.
-            ctx.state.user = decoded;
+            ctx.state.user = decoded.data;
         } catch (error) {
 
             //If it's an expiration error, let's report that specifically.
