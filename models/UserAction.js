@@ -1,13 +1,12 @@
+import {} from 'dotenv/config'
 import pool from '../src/db'
 import joi from 'joi'
 import rand from 'randexp'
 import bcrypt from 'bcrypt'
 import jsonwebtoken from 'jsonwebtoken'
-import {} from 'dotenv/config'
 import fse from 'fs-extra'
 import sgMail from '@sendgrid/mail'
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 import dateFormat from 'date-fns/format'
 import dateAddMinutes from 'date-fns/add_minutes'
 import dateAddMonths from 'date-fns/add_months'
@@ -21,12 +20,13 @@ const userSchemaSignup = joi.object({
     password: joi.string().min(8).max(35).required(),
 })
 
-const userSchemaAuthenticate = joi.object({
-    username: joi.string().required(),
+const userSchemaResetPassword = joi.object({
+    email: joi.string().email().required(),
     password: joi.string().min(8).max(35).required(),
+    passwordResetToken: joi.string().required()
 })
 
-class User {
+class UserAction {
     constructor() {}
 
     async signup(ctx) {
@@ -45,7 +45,7 @@ class User {
         //Now let's generate a token for this user
         ctx.request.body.token = await this.generateUniqueToken()
 
-        //Ok now let's has their password.
+        //Ok now let's hash their password.
         try {
             ctx.request.body.password = await bcrypt.hash(ctx.request.body.password, 12)
         } catch (error) { ctx.throw(400, error) }
@@ -73,17 +73,15 @@ class User {
             await sgMail.send(emailData)
 
             //And return our response.
-            // ctx.body = {'id': result.insertId}
             ctx.body = {'messgae': 'SUCCESS'}
         } catch (error) { ctx.throw(400, error) }
     }
 
     async authenticate(ctx) {
-        const validator = joi.validate(ctx.request.body, userSchemaAuthenticate)
-        if (validator.error) { ctx.throw(400, validator.error.details[0].message) }
+        if (!ctx.request.body.username || !ctx.request.body.password) { ctx.throw(404, 'INVALID_DATA') }
 
         //Let's find that user
-        let userData = await pool.query(`SELECT id, token, username, email, password FROM koa_vue_notes_users WHERE username = ?`, ctx.request.body.username)
+        let userData = await pool.query(`SELECT id, token, username, email, password, admin FROM koa_vue_notes_users WHERE username = ?`, ctx.request.body.username)
         if (!userData.length) { ctx.throw(401, 'INVALID_CREDENTIALS') }
 
         //Now let's check the password
@@ -176,7 +174,7 @@ class User {
     }
 
     async forgot(ctx) {
-        if (!ctx.request.body.email) { ctx.throw(404, 'INVALID_DATA') }
+        if (!ctx.request.body.email || !ctx.request.body.url || !ctx.request.body.type) { ctx.throw(404, 'INVALID_DATA') }
 
         let resetData = {
             'passwordResetToken': new rand(/[a-zA-Z0-9_-]{64,64}/).gen(),
@@ -184,10 +182,20 @@ class User {
         }
 
         try {
-            await pool.query(`UPDATE koa_vue_notes_users SET ? WHERE email = ?`, [resetData, ctx.request.body.email])
+
+            let resultData = await pool.query(`UPDATE koa_vue_notes_users SET ? WHERE email = ?`, [resetData, ctx.request.body.email])
+            if (resultData.changedRows === 0) {
+                ctx.throw(400, 'INVALID_DATA')
+            }
+
         } catch (error) { ctx.throw(400, error) }
 
+        //Now for the email.
         let email = await fse.readFile('./src/email/forgot.html', 'utf8');
+        let resetUrlCustom
+        if (ctx.request.body.type === 'web') {
+            resetUrlCustom = ctx.request.body.url + '?passwordResetToken=' + resetData.passwordResetToken + '&email=' + ctx.request.body.email
+        }
         const emailData = {
             to: ctx.request.body.email,
             from: process.env.APP_EMAIL,
@@ -197,12 +205,12 @@ class User {
             substitutions: {
                 appName: process.env.APP_NAME,
                 email: ctx.request.body.email,
-                resetUrl: process.env.APP_URL + '/user/reset?passwordResetToken=' + resetData.passwordResetToken + '&email=' + ctx.request.body.email
+                resetUrl: resetUrlCustom
             }
         };
         await sgMail.send(emailData)
 
-        ctx.body = {'message': 'SUCCESS'}
+        ctx.body = {'passwordResetToken': resetData.passwordResetToken}
     }
 
     async checkPasswordResetToken(ctx) {
@@ -218,21 +226,52 @@ class User {
         ctx.body = {'message': 'SUCCESS'}
     }
 
+    async resetPassword(ctx) {
+        //First do validation on the input
+        const validator = joi.validate(ctx.request.body, userSchemaResetPassword)
+        if (validator.error) { ctx.throw(400, validator.error.details[0].message) }
 
+        //Ok, let's make sure their token is correct again, just to be sure since it could have
+        //been some time between page entrance and form submission
+        var passwordResetData = await pool.query(`SELECT passwordResetExpiration FROM koa_vue_notes_users WHERE (email = ? AND passwordResetToken = ?)`, [ctx.request.body.email, ctx.request.body.passwordResetToken])
+        if (!passwordResetData.length) { ctx.throw(400, 'INVALID_TOKEN') }
+        var tokenIsValid = dateCompareAsc(dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss'), passwordResetData[0].passwordResetExpiration);
+        if (tokenIsValid !== -1) { ctx.throw(400, 'RESET_TOKEN_EXPIRED') }
 
+        //Ok, so we're good. Let's reset their password with the new one they submitted.
+
+        //Hash it
+        try {
+            ctx.request.body.password = await bcrypt.hash(ctx.request.body.password, 12)
+        } catch (error) { ctx.throw(400, error) }
+
+        //Make sure to null out the password reset token and expiration on insertion
+        ctx.request.body.passwordResetToken = null
+        ctx.request.body.passwordResetExpiration = null
+        try {
+            let result = await pool.query(`UPDATE koa_vue_notes_users SET ?`, ctx.request.body)
+        } catch (error) { ctx.throw(400, 'INVALID_DATA') }
+
+        ctx.body = {'message': 'SUCCESS'}
+    }
+
+    async private(ctx) {
+
+        ctx.body = {'user': ctx.state.user}
+    }
 
     //Helpers
     async generateUniqueToken() {
         let token = new rand(/[a-zA-Z0-9_-]{7,7}/).gen()
 
-        if (await this.checkToken(token)) {
+        if (await this.checkUniqueToken(token)) {
             await this.generateUniqueToken()
         } else {
             return token
         }
     }
 
-    async checkToken(token) {
+    async checkUniqueToken(token) {
         let result = await pool.query(`SELECT COUNT(id) as count FROM koa_vue_notes_users WHERE token = ?`, token)
         if (result[0].count) { return true }
     }
@@ -254,42 +293,6 @@ class User {
         }
         return ctx.throw(401, 'AUTHENTICATION_ERROR')
     }
-
-
-
-
-
-
-
-
-
-
-    //Holding as scratch
-    async private(ctx) {
-        ctx.body = {'message': ctx.state.user}
-    }
-
-    async getAllUsers(ctx) {
-        try {
-            let result = await pool.query(`SELECT * FROM koa_vue_notes_users`)
-            ctx.body = result
-        } catch (error) {
-            ctx.throw(400, error)
-        }
-    }
-
-    async getUser(ctx) {
-        if (!ctx.request.query.id) { ctx.throw(400, error) }
-
-
-        // try {
-        //     let result = await pool.query(`SELECT * FROM koa_vue_notes_users`)
-        //     ctx.body = result
-        // } catch (error) {
-        //     console.log(error)
-        //     ctx.throw(400, error)
-        // }
-    }
 }
 
-module.exports = User
+module.exports = UserAction

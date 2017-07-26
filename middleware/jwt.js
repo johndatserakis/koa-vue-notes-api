@@ -4,7 +4,6 @@ module.exports = (opts = {}) => {
     const secret = opts.secret
 
     const middleware = async function jwt(ctx, next) {
-
         //If there's no secret set, toss it out right away
         if (!secret) ctx.throw(401, 'INVALID_SECRET')
 
