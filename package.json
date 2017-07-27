@@ -1,14 +1,17 @@
 {
   "name": "koa-vue-notes-api",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A SPA using Koa as the backend and Vue as the frontend.",
   "author": "John Datserakis",
   "private": false,
   "scripts": {
-    "start": "node index.js",
+    "start": "npm run pretty && node app.js",
     "watch": "nodemon --exec npm run start",
     "test": "npm run build; mocha --require 'babel-polyfill' --compilers js:babel-register",
-    "build": "babel src -d build"
+    "build": "babel src -d build",
+    "pretty": "prettier --write --print-width 80 --single-quote --trailing-comma es5 --tab-width 4 'src/**/*.js' 'models/**/*.js' 'middleware/**/*.js' 'config/**/*.js'",
+    "production": "pm2 start app.js",
+    "clean": "npm run clean:dist && npm run clean:tmp"
   },
   "license": "MIT",
   "homepage": "https://github.com/OrKoN/koa2-example-app#readme",
@@ -33,6 +36,7 @@
     "koa-useragent": "^1.0.0",
     "log4js": "^2.2.0",
     "npm": "^5.3.0",
+    "pm2": "^2.6.1",
     "promise-mysql": "^3.0.2",
     "randexp": "^0.4.5"
   },
@@ -52,5 +56,13 @@
       "es2015",
       "stage-3"
     ]
-  }
+  },
+  "keywords": [
+      "koa",
+      "koa2",
+      "api",
+      "boilerplate",
+      "vue",
+      "spa"
+    ]
 }

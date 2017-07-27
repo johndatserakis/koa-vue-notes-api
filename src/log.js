@@ -7,27 +7,30 @@ log4js.configure({
             type: 'file',
             filename: 'logs/main.log',
             maxLogSize: 20480,
-            backups: 10
+            backups: 10,
         },
         console: {
-            type: 'stdout'
-        }
+            type: 'stdout',
+        },
     },
     categories: {
         development: {
             appenders: ['file', 'console'],
-            level: 'all'
+            level: 'all',
         },
         production: {
             appenders: ['file'],
-            level: 'info'
+            level: 'info',
         },
         default: {
             appenders: ['file'],
-            level: 'info'
-        }
-    }
+            level: 'info',
+        },
+    },
 });
-const logger = (process.env.NODE_ENV === 'development') ? log4js.getLogger('development') : log4js.getLogger('production');
+const logger =
+    process.env.NODE_ENV === 'development'
+        ? log4js.getLogger('development')
+        : log4js.getLogger('production');
 
-export default logger
+export default logger;

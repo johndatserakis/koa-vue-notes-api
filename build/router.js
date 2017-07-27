@@ -37,7 +37,7 @@ router.get('/', function () {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
-                        ctx.body = { 'message': 'Hi there.' };
+                        ctx.body = { message: 'Hi there.' };
 
                     case 1:
                     case 'end':
