@@ -8,9 +8,9 @@
     "start": "npm run pretty && node app.js",
     "watch": "nodemon --exec npm run start",
     "test": "npm run build; mocha --require 'babel-polyfill' --compilers js:babel-register",
-    "build": "babel src -d build",
+    "build": "babel src -d build && npm run pretty",
     "pretty": "prettier --write --print-width 80 --single-quote --trailing-comma es5 --tab-width 4 'src/**/*.js' 'models/**/*.js' 'middleware/**/*.js' 'config/**/*.js'",
-    "production": "pm2 start app.js",
+    "start-production": "pm2 start app.js",
     "clean": "npm run clean:dist && npm run clean:tmp"
   },
   "license": "MIT",
@@ -58,11 +58,11 @@
     ]
   },
   "keywords": [
-      "koa",
-      "koa2",
-      "api",
-      "boilerplate",
-      "vue",
-      "spa"
-    ]
+    "koa",
+    "koa2",
+    "api",
+    "boilerplate",
+    "vue",
+    "spa"
+  ]
 }

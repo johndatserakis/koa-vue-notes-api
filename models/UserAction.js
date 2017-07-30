@@ -93,7 +93,7 @@ class UserAction {
             await sgMail.send(emailData);
 
             //And return our response.
-            ctx.body = { messgae: 'SUCCESS' };
+            ctx.body = { message: 'SUCCESS' };
         } catch (error) {
             ctx.throw(400, error);
         }
