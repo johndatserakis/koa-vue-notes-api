@@ -211,7 +211,7 @@ var UserController = function () {
 
                                 //Let's find that user
                                 _context2.next = 3;
-                                return _db2.default.query('SELECT id, token, username, email, password, admin FROM koa_vue_notes_users WHERE username = ?', ctx.request.body.username);
+                                return _db2.default.query('SELECT id, token, username, email, password, isAdmin FROM koa_vue_notes_users WHERE username = ?', ctx.request.body.username);
 
                             case 3:
                                 userData = _context2.sent;
@@ -341,7 +341,7 @@ var UserController = function () {
 
                             case 15:
                                 _context3.next = 17;
-                                return _db2.default.query('SELECT id, token, username, email FROM koa_vue_notes_users WHERE username = ?', refreshTokenDatabaseData[0].username);
+                                return _db2.default.query('SELECT id, token, username, email, isAdmin FROM koa_vue_notes_users WHERE username = ?', refreshTokenDatabaseData[0].username);
 
                             case 17:
                                 userData = _context3.sent;

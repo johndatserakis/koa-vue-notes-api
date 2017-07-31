@@ -60,7 +60,7 @@ router.post('/api/v1/notes', jwtMiddleware, function () {
                     case 0:
                         noteController = new _NoteController2.default();
                         _context2.next = 3;
-                        return noteController.create(ctx);
+                        return noteController.store(ctx);
 
                     case 3:
                     case 'end':
@@ -96,6 +96,54 @@ router.get('/api/v1/notes/:id', jwtMiddleware, function () {
 
     return function (_x5, _x6) {
         return _ref3.apply(this, arguments);
+    };
+}());
+
+router.put('/api/v1/notes/:id', jwtMiddleware, function () {
+    var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(ctx, next) {
+        var noteController;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+            while (1) {
+                switch (_context4.prev = _context4.next) {
+                    case 0:
+                        noteController = new _NoteController2.default();
+                        _context4.next = 3;
+                        return noteController.update(ctx);
+
+                    case 3:
+                    case 'end':
+                        return _context4.stop();
+                }
+            }
+        }, _callee4, undefined);
+    }));
+
+    return function (_x7, _x8) {
+        return _ref4.apply(this, arguments);
+    };
+}());
+
+router.delete('/api/v1/notes/:id', jwtMiddleware, function () {
+    var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(ctx, next) {
+        var noteController;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+            while (1) {
+                switch (_context5.prev = _context5.next) {
+                    case 0:
+                        noteController = new _NoteController2.default();
+                        _context5.next = 3;
+                        return noteController.destroy(ctx);
+
+                    case 3:
+                    case 'end':
+                        return _context5.stop();
+                }
+            }
+        }, _callee5, undefined);
+    }));
+
+    return function (_x9, _x10) {
+        return _ref5.apply(this, arguments);
     };
 }());
 

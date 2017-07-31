@@ -14,12 +14,22 @@ router.get('/api/v1/notes', jwtMiddleware, async (ctx, next) => {
 
 router.post('/api/v1/notes', jwtMiddleware, async (ctx, next) => {
     const noteController = new NoteController();
-    await noteController.create(ctx);
+    await noteController.store(ctx);
 });
 
 router.get('/api/v1/notes/:id', jwtMiddleware, async (ctx, next) => {
     const noteController = new NoteController();
     await noteController.show(ctx);
+});
+
+router.put('/api/v1/notes/:id', jwtMiddleware, async (ctx, next) => {
+    const noteController = new NoteController();
+    await noteController.update(ctx);
+});
+
+router.delete('/api/v1/notes/:id', jwtMiddleware, async (ctx, next) => {
+    const noteController = new NoteController();
+    await noteController.destroy(ctx);
 });
 
 export default router;

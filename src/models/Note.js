@@ -1,28 +1,17 @@
 import {} from 'dotenv/config';
 import pool from '../db';
-import joi from 'joi';
 
 class Note {
     constructor(data) {
-        if (!data) return;
-
-        this.data = {
-            id: data.id,
-            userId: data.userId,
-            title: data.title,
-            content: data.content,
-            ipAddress: data.ipAddress,
-        };
-    }
-
-    async save() {
-        try {
-            await pool.query(`INSERT INTO koa_vue_notes_notes SET ?`, [
-                this.data,
-            ]);
-        } catch (error) {
-            ctx.throw(400, error);
+        if (!data) {
+            return;
         }
+
+        this.id = data.id;
+        this.userId = data.userId;
+        this.title = data.title;
+        this.content = data.content;
+        this.ipAddress = data.ipAddress;
     }
 }
 

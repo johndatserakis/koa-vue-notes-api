@@ -43,14 +43,18 @@ class NoteController {
 
     async show(ctx) {
         if (!ctx.params.id) ctx.throw(400, 'INVALID_DATA');
+
+        //Get the matching note and make sure it exists
         const note = new Note(await findNoteById(ctx.params.id, ctx));
+        if (!note.id) ctx.throw(400, 'INVALID_DATA');
+
         ctx.body = note;
     }
 
-    async create(ctx) {
+    async store(ctx) {
         //Attach logged in user
         const user = new User(ctx.state.user[0]);
-        ctx.request.body.userId = user.data.id;
+        ctx.request.body.userId = user.id;
 
         //Add ip
         ctx.request.body.ipAddress = ctx.ip;
@@ -58,12 +62,62 @@ class NoteController {
         //Create a new note object
         const note = new Note(ctx.request.body);
 
-        // //Validate the newly created note
-        const validator = joi.validate(note.data, noteSchema);
+        //Validate the newly created note
+        const validator = joi.validate(note, noteSchema);
         if (validator.error) ctx.throw(400, validator.error.details[0].message);
 
         //Actually create the note
-        note.save();
+        try {
+            await pool.query(`INSERT INTO koa_vue_notes_notes SET ?`, [note]);
+        } catch (error) {
+            ctx.throw(400, error);
+        }
+
+        //Respond back with success
+        ctx.body = { message: 'SUCCESS' };
+    }
+
+    async update(ctx) {
+        if (!ctx.params.id) ctx.throw(400, 'INVALID_DATA');
+
+        //Get matching note. Make sure it exists
+        const note = new Note(await findNoteById(ctx.params.id, ctx));
+        if (!note.id) ctx.throw(400, 'INVALID_DATA');
+
+        const user = new User(ctx.state.user[0]);
+
+        //Make sure to match both the note and the user
+        try {
+            await pool.query(
+                `UPDATE koa_vue_notes_notes SET ? WHERE id = ? AND userId = ?`,
+                [ctx.request.body, note.id, user.id]
+            );
+        } catch (error) {
+            ctx.throw(400, error);
+        }
+
+        //Respond back with success
+        ctx.body = { message: 'SUCCESS' };
+    }
+
+    async destroy(ctx) {
+        if (!ctx.params.id) ctx.throw(400, 'INVALID_DATA');
+
+        //Get matching note. Make sure it exists
+        const note = new Note(await findNoteById(ctx.params.id, ctx));
+        if (!note.id) ctx.throw(400, 'INVALID_DATA');
+
+        const user = new User(ctx.state.user[0]);
+
+        //Make sure to match both the note and the user
+        try {
+            await pool.query(
+                `DELETE FROM koa_vue_notes_notes WHERE id = ? AND userId = ?`,
+                [note.id, user.id]
+            );
+        } catch (error) {
+            ctx.throw(400, error);
+        }
 
         //Respond back with success
         ctx.body = { message: 'SUCCESS' };

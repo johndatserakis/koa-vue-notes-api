@@ -54,15 +54,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var User = function User(data) {
     _classCallCheck(this, User);
 
-    if (!data) return;
+    if (!data) {
+        return;
+    }
 
-    this.data = {
-        id: data.id,
-        token: data.token,
-        username: data.username,
-        email: data.email,
-        isAdmin: data.isAdmin
-    };
+    this.id = data.id;
+    this.token = data.token;
+    this.username = data.username;
+    this.email = data.email;
+    this.isAdmin = data.isAdmin;
 };
 
 exports.User = User;

@@ -106,7 +106,7 @@ class UserController {
 
         //Let's find that user
         let userData = await pool.query(
-            `SELECT id, token, username, email, password, admin FROM koa_vue_notes_users WHERE username = ?`,
+            `SELECT id, token, username, email, password, isAdmin FROM koa_vue_notes_users WHERE username = ?`,
             ctx.request.body.username
         );
         if (!userData.length) {
@@ -203,7 +203,7 @@ class UserController {
 
         //Let's find that user
         let userData = await pool.query(
-            `SELECT id, token, username, email FROM koa_vue_notes_users WHERE username = ?`,
+            `SELECT id, token, username, email, isAdmin FROM koa_vue_notes_users WHERE username = ?`,
             refreshTokenDatabaseData[0].username
         );
         if (!userData.length) {

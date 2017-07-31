@@ -93,6 +93,8 @@ var NoteController = function () {
                         switch (_context2.prev = _context2.next) {
                             case 0:
                                 if (!ctx.params.id) ctx.throw(400, 'INVALID_DATA');
+
+                                //Get the matching note and make sure it exists
                                 _context2.t0 = _Note.Note;
                                 _context2.next = 4;
                                 return (0, _Note.findById)(ctx.params.id, ctx);
@@ -101,9 +103,11 @@ var NoteController = function () {
                                 _context2.t1 = _context2.sent;
                                 note = new _context2.t0(_context2.t1);
 
+                                if (!note.id) ctx.throw(400, 'INVALID_DATA');
+
                                 ctx.body = note;
 
-                            case 7:
+                            case 8:
                             case 'end':
                                 return _context2.stop();
                         }
@@ -118,7 +122,7 @@ var NoteController = function () {
             return show;
         }()
     }, {
-        key: 'create',
+        key: 'store',
         value: function () {
             var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(ctx) {
                 var user, note, validator;
@@ -129,7 +133,7 @@ var NoteController = function () {
                                 //Attach logged in user
                                 user = new _User.User(ctx.state.user[0]);
 
-                                ctx.request.body.userId = user.data.id;
+                                ctx.request.body.userId = user.id;
 
                                 //Add ip
                                 ctx.request.body.ipAddress = ctx.ip;
@@ -137,31 +141,163 @@ var NoteController = function () {
                                 //Create a new note object
                                 note = new _Note.Note(ctx.request.body);
 
-                                // //Validate the newly created note
+                                //Validate the newly created note
 
-                                validator = _joi2.default.validate(note.data, noteSchema);
+                                validator = _joi2.default.validate(note, noteSchema);
 
                                 if (validator.error) ctx.throw(400, validator.error.details[0].message);
 
                                 //Actually create the note
-                                note.save();
+                                _context3.prev = 6;
+                                _context3.next = 9;
+                                return _db2.default.query('INSERT INTO koa_vue_notes_notes SET ?', [note]);
+
+                            case 9:
+                                _context3.next = 14;
+                                break;
+
+                            case 11:
+                                _context3.prev = 11;
+                                _context3.t0 = _context3['catch'](6);
+
+                                ctx.throw(400, _context3.t0);
+
+                            case 14:
 
                                 //Respond back with success
                                 ctx.body = { message: 'SUCCESS' };
 
-                            case 8:
+                            case 15:
                             case 'end':
                                 return _context3.stop();
                         }
                     }
-                }, _callee3, this);
+                }, _callee3, this, [[6, 11]]);
             }));
 
-            function create(_x3) {
+            function store(_x3) {
                 return _ref3.apply(this, arguments);
             }
 
-            return create;
+            return store;
+        }()
+    }, {
+        key: 'update',
+        value: function () {
+            var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(ctx) {
+                var note, user;
+                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                    while (1) {
+                        switch (_context4.prev = _context4.next) {
+                            case 0:
+                                if (!ctx.params.id) ctx.throw(400, 'INVALID_DATA');
+
+                                //Get matching note. Make sure it exists
+                                _context4.t0 = _Note.Note;
+                                _context4.next = 4;
+                                return (0, _Note.findById)(ctx.params.id, ctx);
+
+                            case 4:
+                                _context4.t1 = _context4.sent;
+                                note = new _context4.t0(_context4.t1);
+
+                                if (!note.id) ctx.throw(400, 'INVALID_DATA');
+
+                                user = new _User.User(ctx.state.user[0]);
+
+                                //Make sure to match both the note and the user
+
+                                _context4.prev = 8;
+                                _context4.next = 11;
+                                return _db2.default.query('UPDATE koa_vue_notes_notes SET ? WHERE id = ? AND userId = ?', [ctx.request.body, note.id, user.id]);
+
+                            case 11:
+                                _context4.next = 16;
+                                break;
+
+                            case 13:
+                                _context4.prev = 13;
+                                _context4.t2 = _context4['catch'](8);
+
+                                ctx.throw(400, _context4.t2);
+
+                            case 16:
+
+                                //Respond back with success
+                                ctx.body = { message: 'SUCCESS' };
+
+                            case 17:
+                            case 'end':
+                                return _context4.stop();
+                        }
+                    }
+                }, _callee4, this, [[8, 13]]);
+            }));
+
+            function update(_x4) {
+                return _ref4.apply(this, arguments);
+            }
+
+            return update;
+        }()
+    }, {
+        key: 'destroy',
+        value: function () {
+            var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(ctx) {
+                var note, user;
+                return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                    while (1) {
+                        switch (_context5.prev = _context5.next) {
+                            case 0:
+                                if (!ctx.params.id) ctx.throw(400, 'INVALID_DATA');
+
+                                //Get matching note. Make sure it exists
+                                _context5.t0 = _Note.Note;
+                                _context5.next = 4;
+                                return (0, _Note.findById)(ctx.params.id, ctx);
+
+                            case 4:
+                                _context5.t1 = _context5.sent;
+                                note = new _context5.t0(_context5.t1);
+
+                                if (!note.id) ctx.throw(400, 'INVALID_DATA');
+
+                                user = new _User.User(ctx.state.user[0]);
+
+                                //Make sure to match both the note and the user
+
+                                _context5.prev = 8;
+                                _context5.next = 11;
+                                return _db2.default.query('DELETE FROM koa_vue_notes_notes WHERE id = ? AND userId = ?', [note.id, user.id]);
+
+                            case 11:
+                                _context5.next = 16;
+                                break;
+
+                            case 13:
+                                _context5.prev = 13;
+                                _context5.t2 = _context5['catch'](8);
+
+                                ctx.throw(400, _context5.t2);
+
+                            case 16:
+
+                                //Respond back with success
+                                ctx.body = { message: 'SUCCESS' };
+
+                            case 17:
+                            case 'end':
+                                return _context5.stop();
+                        }
+                    }
+                }, _callee5, this, [[8, 13]]);
+            }));
+
+            function destroy(_x5) {
+                return _ref5.apply(this, arguments);
+            }
+
+            return destroy;
         }()
     }]);
 
