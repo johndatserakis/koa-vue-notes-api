@@ -8,10 +8,6 @@ var _koa = require('koa');
 
 var _koa2 = _interopRequireDefault(_koa);
 
-var _router = require('./router');
-
-var _router2 = _interopRequireDefault(_router);
-
 var _koaBodyparser = require('koa-bodyparser');
 
 var _koaBodyparser2 = _interopRequireDefault(_koaBodyparser);
@@ -42,9 +38,20 @@ var _ioredis = require('ioredis');
 
 var _ioredis2 = _interopRequireDefault(_ioredis);
 
+var _userActions = require('./routes/userActions');
+
+var _userActions2 = _interopRequireDefault(_userActions);
+
+var _notes = require('./routes/notes');
+
+var _notes2 = _interopRequireDefault(_notes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+//Routes
+
 
 //Initialize app
 var app = new _koa2.default();
@@ -157,7 +164,9 @@ app.use(_koaUseragent2.default);
 app.use((0, _koaBodyparser2.default)({ enableTypes: ['json'] }));
 
 //For router
-app.use(_router2.default.routes());
-app.use(_router2.default.allowedMethods());
+app.use(_userActions2.default.routes());
+app.use(_userActions2.default.allowedMethods());
+app.use(_notes2.default.routes());
+app.use(_notes2.default.allowedMethods());
 
 exports.default = app;

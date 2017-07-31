@@ -1,7 +1,6 @@
 'use strict';
 
 import Koa from 'koa';
-import router from './router';
 import bodyParser from 'koa-bodyparser';
 import cors from 'kcors';
 import {} from 'dotenv/config';
@@ -10,6 +9,10 @@ import userAgent from 'koa-useragent';
 import error from 'koa-json-error';
 import ratelimit from 'koa-ratelimit';
 import redis from 'ioredis';
+
+//Routes
+import userActionsRouter from './routes/userActions';
+import notesRouter from './routes/notes';
 
 //Initialize app
 const app = new Koa();
@@ -76,7 +79,9 @@ app.use(userAgent);
 app.use(bodyParser({ enableTypes: ['json'] }));
 
 //For router
-app.use(router.routes());
-app.use(router.allowedMethods());
+app.use(userActionsRouter.routes());
+app.use(userActionsRouter.allowedMethods());
+app.use(notesRouter.routes());
+app.use(notesRouter.allowedMethods());
 
 export default app;

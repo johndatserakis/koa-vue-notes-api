@@ -1,16 +1,16 @@
 import {} from 'dotenv/config';
-import pool from '../src/db';
+import pool from '../db';
 import joi from 'joi';
 import rand from 'randexp';
 import bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
 import fse from 'fs-extra';
 import sgMail from '@sendgrid/mail';
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 import dateFormat from 'date-fns/format';
 import dateAddMinutes from 'date-fns/add_minutes';
 import dateAddMonths from 'date-fns/add_months';
 import dateCompareAsc from 'date-fns/compare_asc';
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const userSchemaSignup = joi.object({
     firstName: joi.string().min(1).max(25).alphanum().required(),
@@ -26,7 +26,7 @@ const userSchemaResetPassword = joi.object({
     passwordResetToken: joi.string().required(),
 });
 
-class UserAction {
+class UserController {
     constructor() {}
 
     async signup(ctx) {
@@ -239,7 +239,7 @@ class UserAction {
         const token = jsonwebtoken.sign(
             { data: userData },
             process.env.JWT_SECRET,
-            { expiresIn: '10m' }
+            { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME }
         );
         ctx.body = {
             access_token: token,
@@ -461,4 +461,4 @@ class UserAction {
     }
 }
 
-module.exports = UserAction;
+export default UserController;

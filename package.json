@@ -5,7 +5,7 @@
   "author": "John Datserakis",
   "private": false,
   "scripts": {
-    "start": "npm run pretty && node app.js",
+    "start": "node app.js",
     "watch": "nodemon --exec npm run start",
     "test": "npm run build; mocha --require 'babel-polyfill' --compilers js:babel-register",
     "build": "babel src -d build && npm run pretty",
