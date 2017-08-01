@@ -1,6 +1,7 @@
 import {} from 'dotenv/config';
 import pool from '../db';
 import joi from 'joi';
+import dateFormat from 'date-fns/format';
 
 import { User, findById as findUserById } from '../models/User';
 import { Note, findById as findNoteById } from '../models/Note';
@@ -24,18 +25,20 @@ class NoteController {
                 SELECT *
                 FROM koa_vue_notes_notes
                 WHERE userId = ?
+                AND title LIKE CONCAT('%', ?, '%')
                 ORDER BY ?
                 LIMIT ?, ?
                 `,
                 [
                     user.id,
+                    ctx.query.sort,
                     ctx.query.order,
                     +ctx.query.page * +ctx.query.limit,
                     +ctx.query.limit,
                 ]
             );
         } catch (error) {
-            ctx.throw(400, 'INVALID_DATA');
+            ctx.throw(400, error + 'INVALID_DATA');
         }
 
         ctx.body = notes;
@@ -85,6 +88,12 @@ class NoteController {
         if (!note.id) ctx.throw(400, 'INVALID_DATA');
 
         const user = new User(ctx.state.user[0]);
+
+        //Add the updated date value
+        ctx.request.body.updatedAt = dateFormat(
+            new Date(),
+            'YYYY-MM-DD HH:mm:ss'
+        );
 
         //Make sure to match both the note and the user
         try {

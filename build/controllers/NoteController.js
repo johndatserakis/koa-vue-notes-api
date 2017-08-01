@@ -16,6 +16,10 @@ var _joi = require('joi');
 
 var _joi2 = _interopRequireDefault(_joi);
 
+var _format = require('date-fns/format');
+
+var _format2 = _interopRequireDefault(_format);
+
 var _User = require('../models/User');
 
 var _Note = require('../models/Note');
@@ -52,7 +56,7 @@ var NoteController = function () {
                                 notes = void 0;
                                 _context.prev = 2;
                                 _context.next = 5;
-                                return _db2.default.query('\n                SELECT *\n                FROM koa_vue_notes_notes\n                WHERE userId = ?\n                ORDER BY ?\n                LIMIT ?, ?\n                ', [user.id, ctx.query.order, +ctx.query.page * +ctx.query.limit, +ctx.query.limit]);
+                                return _db2.default.query('\n                SELECT *\n                FROM koa_vue_notes_notes\n                WHERE userId = ?\n                AND title LIKE CONCAT(\'%\', ?, \'%\')\n                ORDER BY ?\n                LIMIT ?, ?\n                ', [user.id, ctx.query.sort, ctx.query.order, +ctx.query.page * +ctx.query.limit, +ctx.query.limit]);
 
                             case 5:
                                 notes = _context.sent;
@@ -63,7 +67,7 @@ var NoteController = function () {
                                 _context.prev = 8;
                                 _context.t0 = _context['catch'](2);
 
-                                ctx.throw(400, 'INVALID_DATA');
+                                ctx.throw(400, _context.t0 + 'INVALID_DATA');
 
                             case 11:
 
@@ -205,33 +209,36 @@ var NoteController = function () {
 
                                 user = new _User.User(ctx.state.user[0]);
 
-                                //Make sure to match both the note and the user
+                                //Add the updated date value
 
-                                _context4.prev = 8;
-                                _context4.next = 11;
+                                ctx.request.body.updatedAt = (0, _format2.default)(new Date(), 'YYYY-MM-DD HH:mm:ss');
+
+                                //Make sure to match both the note and the user
+                                _context4.prev = 9;
+                                _context4.next = 12;
                                 return _db2.default.query('UPDATE koa_vue_notes_notes SET ? WHERE id = ? AND userId = ?', [ctx.request.body, note.id, user.id]);
 
-                            case 11:
-                                _context4.next = 16;
+                            case 12:
+                                _context4.next = 17;
                                 break;
 
-                            case 13:
-                                _context4.prev = 13;
-                                _context4.t2 = _context4['catch'](8);
+                            case 14:
+                                _context4.prev = 14;
+                                _context4.t2 = _context4['catch'](9);
 
                                 ctx.throw(400, _context4.t2);
 
-                            case 16:
+                            case 17:
 
                                 //Respond back with success
                                 ctx.body = { message: 'SUCCESS' };
 
-                            case 17:
+                            case 18:
                             case 'end':
                                 return _context4.stop();
                         }
                     }
-                }, _callee4, this, [[8, 13]]);
+                }, _callee4, this, [[9, 14]]);
             }));
 
             function update(_x4) {
