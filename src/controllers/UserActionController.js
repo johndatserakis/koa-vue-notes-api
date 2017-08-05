@@ -1,5 +1,5 @@
 import {} from 'dotenv/config';
-import pool from '../db';
+import pool from '../db/db';
 import joi from 'joi';
 import rand from 'randexp';
 import bcrypt from 'bcrypt';

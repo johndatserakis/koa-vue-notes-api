@@ -4,7 +4,7 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import cors from 'kcors';
 import {} from 'dotenv/config';
-import logger from './log';
+import logger from './logs/log';
 import userAgent from 'koa-useragent';
 import error from 'koa-json-error';
 import ratelimit from 'koa-ratelimit';

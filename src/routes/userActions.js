@@ -1,6 +1,6 @@
 import Router from 'koa-router';
 import jwt from '../middleware/jwt';
-import logger from '../log';
+import logger from '../logs/log';
 
 import UserActionController from '../controllers/UserActionController';
 

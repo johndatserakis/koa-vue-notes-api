@@ -1,5 +1,5 @@
 import {} from 'dotenv/config';
-import pool from '../db';
+import pool from '../db/db';
 
 class Note {
     constructor(data) {

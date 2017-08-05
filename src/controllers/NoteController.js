@@ -1,5 +1,5 @@
 import {} from 'dotenv/config';
-import pool from '../db';
+import pool from '../db/db';
 import joi from 'joi';
 import dateFormat from 'date-fns/format';
 
@@ -19,6 +19,11 @@ class NoteController {
         const user = new User(ctx.state.user[0]);
         let notes;
 
+        //Let's check that the sort options were set. Sort can be empty
+        if (!ctx.query.order || !ctx.query.page || !ctx.query.limit) {
+            ctx.throw(400, 'INVALID_ROUTE_OPTIONS');
+        }
+
         try {
             notes = await pool.query(
                 `
@@ -31,7 +36,7 @@ class NoteController {
                 `,
                 [
                     user.id,
-                    ctx.query.sort,
+                    ctx.query.sort ? ctx.query.sort : '',
                     ctx.query.order,
                     +ctx.query.page * +ctx.query.limit,
                     +ctx.query.limit,
