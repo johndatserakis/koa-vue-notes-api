@@ -15,7 +15,7 @@ class User {
     }
 }
 
-async function findById(id, ctx) {
+async function findById(id) {
     try {
         let userData = await pool.query(
             `
@@ -27,7 +27,8 @@ async function findById(id, ctx) {
         );
         return userData[0];
     } catch (error) {
-        ctx.throw(500, 'SERVER_ERROR');
+        console.log(error);
+        throw new Error('ERROR');
     }
 }
 

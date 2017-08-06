@@ -3,8 +3,8 @@ import pool from '../db/db';
 import joi from 'joi';
 import dateFormat from 'date-fns/format';
 
-import { User, findById as findUserById } from '../models/User';
-import { Note, findById as findNoteById } from '../models/Note';
+import { User } from '../models/User';
+import { Note } from '../models/Note';
 
 const noteSchema = joi.object({
     id: joi.number().integer(),
@@ -16,8 +16,12 @@ const noteSchema = joi.object({
 
 class NoteController {
     async index(ctx) {
+        //Attach logged in user
         const user = new User(ctx.state.user[0]);
-        let notes;
+        ctx.query.userId = user.id;
+
+        //Init a new note object
+        const note = new Note();
 
         //Let's check that the sort options were set. Sort can be empty
         if (!ctx.query.order || !ctx.query.page || !ctx.query.limit) {
@@ -25,41 +29,32 @@ class NoteController {
         }
 
         try {
-            notes = await pool.query(
-                `
-                SELECT *
-                FROM koa_vue_notes_notes
-                WHERE userId = ?
-                AND title LIKE CONCAT('%', ?, '%')
-                ORDER BY ?
-                LIMIT ?, ?
-                `,
-                [
-                    user.id,
-                    ctx.query.sort ? ctx.query.sort : '',
-                    ctx.query.order,
-                    +ctx.query.page * +ctx.query.limit,
-                    +ctx.query.limit,
-                ]
-            );
+            let result = await note.all(ctx.query);
+            ctx.body = result;
         } catch (error) {
-            ctx.throw(400, error + 'INVALID_DATA');
+            console.log(error);
+            ctx.throw(400, 'INVALID_DATA');
         }
-
-        ctx.body = notes;
     }
 
     async show(ctx) {
+        //Make sure they've chosen an id to show
         if (!ctx.params.id) ctx.throw(400, 'INVALID_DATA');
 
-        //Get the matching note and make sure it exists
-        const note = new Note(await findNoteById(ctx.params.id, ctx));
-        if (!note.id) ctx.throw(400, 'INVALID_DATA');
+        //Initialize note
+        const note = new Note();
 
-        ctx.body = note;
+        try {
+            //Find and show note
+            await note.find(ctx.params);
+            ctx.body = note;
+        } catch (error) {
+            console.log(error);
+            ctx.throw(400, 'INVALID_DATA');
+        }
     }
 
-    async store(ctx) {
+    async create(ctx) {
         //Attach logged in user
         const user = new User(ctx.state.user[0]);
         ctx.request.body.userId = user.id;
@@ -67,74 +62,74 @@ class NoteController {
         //Add ip
         ctx.request.body.ipAddress = ctx.ip;
 
-        //Create a new note object
+        //Create a new note object using the request params
         const note = new Note(ctx.request.body);
 
         //Validate the newly created note
         const validator = joi.validate(note, noteSchema);
         if (validator.error) ctx.throw(400, validator.error.details[0].message);
 
-        //Actually create the note
         try {
-            await pool.query(`INSERT INTO koa_vue_notes_notes SET ?`, [note]);
+            await note.store();
+            ctx.body = { message: 'SUCCESS' };
         } catch (error) {
-            ctx.throw(400, error);
+            console.log(error);
+            ctx.throw(400, 'INVALID_DATA');
         }
-
-        //Respond back with success
-        ctx.body = { message: 'SUCCESS' };
     }
 
     async update(ctx) {
+        //Make sure they've specified a note
         if (!ctx.params.id) ctx.throw(400, 'INVALID_DATA');
 
-        //Get matching note. Make sure it exists
-        const note = new Note(await findNoteById(ctx.params.id, ctx));
-        if (!note.id) ctx.throw(400, 'INVALID_DATA');
+        //Find that note
+        const note = new Note();
+        await note.find(ctx.params);
+        if (!note) ctx.throw(400, 'INVALID_DATA');
 
+        //Grab the user //If it's not their note - error out
         const user = new User(ctx.state.user[0]);
+        if (note.userId !== user.id) ctx.throw(400, 'INVALID_DATA');
 
         //Add the updated date value
-        ctx.request.body.updatedAt = dateFormat(
-            new Date(),
-            'YYYY-MM-DD HH:mm:ss'
-        );
+        note.updatedAt = dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss');
 
-        //Make sure to match both the note and the user
+        //Add the ip
+        ctx.request.body.ipAddress = ctx.ip;
+
+        //Replace the note data with the new updated note data
+        Object.keys(ctx.request.body).forEach(function(parameter, index) {
+            note[parameter] = ctx.request.body[parameter];
+        });
+
         try {
-            await pool.query(
-                `UPDATE koa_vue_notes_notes SET ? WHERE id = ? AND userId = ?`,
-                [ctx.request.body, note.id, user.id]
-            );
+            await note.save();
+            ctx.body = { message: 'SUCCESS' };
         } catch (error) {
-            ctx.throw(400, error);
+            console.log(error);
+            ctx.throw(400, 'INVALID_DATA');
         }
-
-        //Respond back with success
-        ctx.body = { message: 'SUCCESS' };
     }
 
-    async destroy(ctx) {
+    async delete(ctx) {
         if (!ctx.params.id) ctx.throw(400, 'INVALID_DATA');
 
-        //Get matching note. Make sure it exists
-        const note = new Note(await findNoteById(ctx.params.id, ctx));
-        if (!note.id) ctx.throw(400, 'INVALID_DATA');
+        //Find that note
+        const note = new Note();
+        await note.find(ctx.params);
+        if (!note) ctx.throw(400, 'INVALID_DATA');
 
+        //Grab the user //If it's not their note - error out
         const user = new User(ctx.state.user[0]);
+        if (note.userId !== user.id) ctx.throw(400, 'INVALID_DATA');
 
-        //Make sure to match both the note and the user
         try {
-            await pool.query(
-                `DELETE FROM koa_vue_notes_notes WHERE id = ? AND userId = ?`,
-                [note.id, user.id]
-            );
+            await note.destroy();
+            ctx.body = { message: 'SUCCESS' };
         } catch (error) {
-            ctx.throw(400, error);
+            console.log(error);
+            ctx.throw(400, 'INVALID_DATA');
         }
-
-        //Respond back with success
-        ctx.body = { message: 'SUCCESS' };
     }
 }
 

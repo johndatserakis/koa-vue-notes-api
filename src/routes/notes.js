@@ -14,7 +14,7 @@ router.get('/api/v1/notes', jwtMiddleware, async (ctx, next) => {
 
 router.post('/api/v1/notes', jwtMiddleware, async (ctx, next) => {
     const noteController = new NoteController();
-    await noteController.store(ctx);
+    await noteController.create(ctx);
 });
 
 router.get('/api/v1/notes/:id', jwtMiddleware, async (ctx, next) => {
@@ -29,7 +29,7 @@ router.put('/api/v1/notes/:id', jwtMiddleware, async (ctx, next) => {
 
 router.delete('/api/v1/notes/:id', jwtMiddleware, async (ctx, next) => {
     const noteController = new NoteController();
-    await noteController.destroy(ctx);
+    await noteController.delete(ctx);
 });
 
 export default router;

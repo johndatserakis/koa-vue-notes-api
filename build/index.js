@@ -18,7 +18,7 @@ var _kcors2 = _interopRequireDefault(_kcors);
 
 require('dotenv/config');
 
-var _log = require('./log');
+var _log = require('./logs/log');
 
 var _log2 = _interopRequireDefault(_log);
 

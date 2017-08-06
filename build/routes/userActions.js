@@ -12,7 +12,7 @@ var _jwt = require('../middleware/jwt');
 
 var _jwt2 = _interopRequireDefault(_jwt);
 
-var _log = require('../log');
+var _log = require('../logs/log');
 
 var _log2 = _interopRequireDefault(_log);
 

@@ -12,7 +12,7 @@ var _jwt = require('../middleware/jwt');
 
 var _jwt2 = _interopRequireDefault(_jwt);
 
-var _log = require('../log');
+var _log = require('../logs/log');
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -60,7 +60,7 @@ router.post('/api/v1/notes', jwtMiddleware, function () {
                     case 0:
                         noteController = new _NoteController2.default();
                         _context2.next = 3;
-                        return noteController.store(ctx);
+                        return noteController.create(ctx);
 
                     case 3:
                     case 'end':
@@ -132,7 +132,7 @@ router.delete('/api/v1/notes/:id', jwtMiddleware, function () {
                     case 0:
                         noteController = new _NoteController2.default();
                         _context5.next = 3;
-                        return noteController.destroy(ctx);
+                        return noteController.delete(ctx);
 
                     case 3:
                     case 'end':

@@ -8,7 +8,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 require('dotenv/config');
 
-var _db = require('../db');
+var _db = require('../db/db');
 
 var _db2 = _interopRequireDefault(_db);
 

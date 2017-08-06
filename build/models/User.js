@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.findById = exports.User = undefined;
 
 var findById = function () {
-    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(id, ctx) {
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(id) {
         var userData;
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
@@ -24,9 +24,10 @@ var findById = function () {
                         _context.prev = 7;
                         _context.t0 = _context['catch'](0);
 
-                        ctx.throw(500, 'SERVER_ERROR');
+                        console.log(_context.t0);
+                        throw new Error('ERROR');
 
-                    case 10:
+                    case 11:
                     case 'end':
                         return _context.stop();
                 }
@@ -34,14 +35,14 @@ var findById = function () {
         }, _callee, this, [[0, 7]]);
     }));
 
-    return function findById(_x, _x2) {
+    return function findById(_x) {
         return _ref.apply(this, arguments);
     };
 }();
 
 require('dotenv/config');
 
-var _db = require('../db');
+var _db = require('../db/db');
 
 var _db2 = _interopRequireDefault(_db);
 
