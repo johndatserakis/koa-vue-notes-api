@@ -154,8 +154,8 @@ app.use(function () {
     return responseTime;
 }());
 
-//For cors
-app.use((0, _kcors2.default)());
+//For cors with options
+app.use((0, _kcors2.default)({ origin: '*' }));
 
 //For useragent detection
 app.use(_koaUseragent2.default);

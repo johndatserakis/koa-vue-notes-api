@@ -136,7 +136,7 @@ var UserController = function () {
                                 _context.prev = 19;
                                 _context.t0 = _context['catch'](13);
 
-                                ctx.throw(400, _context.t0);
+                                ctx.throw(400, 'INVALID_DATA');
 
                             case 22:
 
@@ -180,7 +180,7 @@ var UserController = function () {
                                 _context.prev = 36;
                                 _context.t1 = _context['catch'](23);
 
-                                ctx.throw(400, _context.t1);
+                                ctx.throw(400, 'INVALID_DATA');
 
                             case 39:
                             case 'end':
@@ -238,7 +238,7 @@ var UserController = function () {
                                 _context2.prev = 12;
                                 _context2.t0 = _context2['catch'](5);
 
-                                ctx.throw(400, _context2.t0);
+                                ctx.throw(400, 'INVALID_DATA');
 
                             case 15:
 
@@ -268,7 +268,7 @@ var UserController = function () {
                                 _context2.prev = 22;
                                 _context2.t1 = _context2['catch'](17);
 
-                                ctx.throw(400, _context2.t1);
+                                ctx.throw(400, 'INVALID_DATA');
 
                             case 25:
 
@@ -276,7 +276,7 @@ var UserController = function () {
                                 token = _jsonwebtoken2.default.sign({ data: userData }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME });
 
                                 ctx.body = {
-                                    access_token: token,
+                                    accessToken: token,
                                     refreshToken: refreshTokenData.refreshToken
                                 };
 
@@ -337,7 +337,7 @@ var UserController = function () {
                                 _context3.prev = 12;
                                 _context3.t0 = _context3['catch'](7);
 
-                                ctx.throw(400, _context3.t0);
+                                ctx.throw(400, 'INVALID_DATA');
 
                             case 15:
                                 _context3.next = 17;
@@ -374,7 +374,7 @@ var UserController = function () {
                                 _context3.prev = 25;
                                 _context3.t1 = _context3['catch'](20);
 
-                                ctx.throw(400, _context3.t1);
+                                ctx.throw(400, 'INVALID_DATA');
 
                             case 28:
 
@@ -382,7 +382,7 @@ var UserController = function () {
                                 token = _jsonwebtoken2.default.sign({ data: userData }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME });
 
                                 ctx.body = {
-                                    access_token: token,
+                                    accessToken: token,
                                     refreshToken: refreshTokenData.refreshToken
                                 };
 
@@ -420,7 +420,7 @@ var UserController = function () {
                                 _context4.prev = 5;
                                 _context4.t0 = _context4['catch'](0);
 
-                                ctx.throw(400, _context4.t0);
+                                ctx.throw(400, 'INVALID_DATA');
 
                             case 8:
 
@@ -464,7 +464,7 @@ var UserController = function () {
                                 _context5.prev = 6;
                                 _context5.t0 = _context5['catch'](1);
 
-                                ctx.throw(400, _context5.t0);
+                                ctx.throw(400, 'INVALID_DATA');
 
                             case 9:
 
@@ -518,19 +518,20 @@ var UserController = function () {
                                 _context6.prev = 9;
                                 _context6.t0 = _context6['catch'](2);
 
-                                ctx.throw(400, _context6.t0);
+                                ctx.throw(400, 'INVALID_DATA');
 
                             case 12:
-                                _context6.next = 14;
+                                if (!(ctx.request.body.type === 'web')) {
+                                    _context6.next = 20;
+                                    break;
+                                }
+
+                                _context6.next = 15;
                                 return _fsExtra2.default.readFile('./src/email/forgot.html', 'utf8');
 
-                            case 14:
+                            case 15:
                                 email = _context6.sent;
-                                resetUrlCustom = void 0;
-
-                                if (ctx.request.body.type === 'web') {
-                                    resetUrlCustom = ctx.request.body.url + '?passwordResetToken=' + resetData.passwordResetToken + '&email=' + ctx.request.body.email;
-                                }
+                                resetUrlCustom = ctx.request.body.url + '?passwordResetToken=' + resetData.passwordResetToken + '&email=' + ctx.request.body.email;
                                 emailData = {
                                     to: ctx.request.body.email,
                                     from: process.env.APP_EMAIL,
@@ -659,7 +660,7 @@ var UserController = function () {
                                 _context8.prev = 14;
                                 _context8.t0 = _context8['catch'](8);
 
-                                ctx.throw(400, _context8.t0);
+                                ctx.throw(400, 'INVALID_DATA');
 
                             case 17:
 
@@ -668,24 +669,25 @@ var UserController = function () {
                                 ctx.request.body.passwordResetExpiration = null;
                                 _context8.prev = 19;
                                 _context8.next = 22;
-                                return _db2.default.query('UPDATE koa_vue_notes_users SET ?', ctx.request.body);
+                                return _db2.default.query('UPDATE koa_vue_notes_users SET password = ?, passwordResetToken = ?, passwordResetExpiration = ? WHERE email = ?', [ctx.request.body.password, ctx.request.body.passwordResetToken, ctx.request.body.passwordResetExpiration, ctx.request.body.email]);
 
                             case 22:
                                 result = _context8.sent;
-                                _context8.next = 28;
+                                _context8.next = 29;
                                 break;
 
                             case 25:
                                 _context8.prev = 25;
                                 _context8.t1 = _context8['catch'](19);
 
+                                console.log(_context8.t1);
                                 ctx.throw(400, 'INVALID_DATA');
 
-                            case 28:
+                            case 29:
 
                                 ctx.body = { message: 'SUCCESS' };
 
-                            case 29:
+                            case 30:
                             case 'end':
                                 return _context8.stop();
                         }

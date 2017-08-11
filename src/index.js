@@ -69,8 +69,8 @@ app.use(async function responseTime(ctx, next) {
     ctx.set('X-Response-Time', Math.ceil(t2 - t1) + 'ms');
 });
 
-//For cors
-app.use(cors());
+//For cors with options
+app.use(cors({ origin: '*' }));
 
 //For useragent detection
 app.use(userAgent);

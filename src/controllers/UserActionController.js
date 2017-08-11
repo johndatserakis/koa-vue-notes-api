@@ -64,7 +64,7 @@ class UserController {
                 12
             );
         } catch (error) {
-            ctx.throw(400, error);
+            ctx.throw(400, 'INVALID_DATA');
         }
 
         //Let's grab their ipaddress
@@ -95,7 +95,7 @@ class UserController {
             //And return our response.
             ctx.body = { message: 'SUCCESS' };
         } catch (error) {
-            ctx.throw(400, error);
+            ctx.throw(400, 'INVALID_DATA');
         }
     }
 
@@ -123,7 +123,7 @@ class UserController {
                 ctx.throw(400, 'INVALID_CREDENTIALS');
             }
         } catch (error) {
-            ctx.throw(400, error);
+            ctx.throw(400, 'INVALID_DATA');
         }
 
         //Let's get rid of that password now for security reasons
@@ -150,7 +150,7 @@ class UserController {
                 refreshTokenData
             );
         } catch (error) {
-            ctx.throw(400, error);
+            ctx.throw(400, 'INVALID_DATA');
         }
 
         //Ok, they've made it, send them their jsonwebtoken with their data, accessToken and refreshToken
@@ -160,7 +160,7 @@ class UserController {
             { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME }
         );
         ctx.body = {
-            access_token: token,
+            accessToken: token,
             refreshToken: refreshTokenData.refreshToken,
         };
     }
@@ -198,7 +198,7 @@ class UserController {
                 ]
             );
         } catch (error) {
-            ctx.throw(400, error);
+            ctx.throw(400, 'INVALID_DATA');
         }
 
         //Let's find that user
@@ -232,7 +232,7 @@ class UserController {
                 refreshTokenData
             );
         } catch (error) {
-            ctx.throw(400, error);
+            ctx.throw(400, 'INVALID_DATA');
         }
 
         //Ok, they've made it, send them their jsonwebtoken with their data, accessToken and refreshToken
@@ -242,7 +242,7 @@ class UserController {
             { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME }
         );
         ctx.body = {
-            access_token: token,
+            accessToken: token,
             refreshToken: refreshTokenData.refreshToken,
         };
     }
@@ -257,7 +257,7 @@ class UserController {
                 ]
             );
         } catch (error) {
-            ctx.throw(400, error);
+            ctx.throw(400, 'INVALID_DATA');
         }
 
         ctx.body = { message: 'SUCCESS' };
@@ -278,7 +278,7 @@ class UserController {
                 ]
             );
         } catch (error) {
-            ctx.throw(400, error);
+            ctx.throw(400, 'INVALID_DATA');
         }
 
         ctx.body = { message: 'SUCCESS' };
@@ -307,33 +307,33 @@ class UserController {
                 ctx.throw(400, 'INVALID_DATA');
             }
         } catch (error) {
-            ctx.throw(400, error);
+            ctx.throw(400, 'INVALID_DATA');
         }
 
-        //Now for the email.
-        let email = await fse.readFile('./src/email/forgot.html', 'utf8');
-        let resetUrlCustom;
+        //Now for the email if they've chosen the web type of forgot password
         if (ctx.request.body.type === 'web') {
-            resetUrlCustom =
+            let email = await fse.readFile('./src/email/forgot.html', 'utf8');
+            let resetUrlCustom =
                 ctx.request.body.url +
                 '?passwordResetToken=' +
                 resetData.passwordResetToken +
                 '&email=' +
                 ctx.request.body.email;
+
+            const emailData = {
+                to: ctx.request.body.email,
+                from: process.env.APP_EMAIL,
+                subject: 'Password Reset For ' + process.env.APP_NAME,
+                html: email,
+                categories: ['koa-vue-notes-api-forgot'],
+                substitutions: {
+                    appName: process.env.APP_NAME,
+                    email: ctx.request.body.email,
+                    resetUrl: resetUrlCustom,
+                },
+            };
+            await sgMail.send(emailData);
         }
-        const emailData = {
-            to: ctx.request.body.email,
-            from: process.env.APP_EMAIL,
-            subject: 'Password Reset For ' + process.env.APP_NAME,
-            html: email,
-            categories: ['koa-vue-notes-api-forgot'],
-            substitutions: {
-                appName: process.env.APP_NAME,
-                email: ctx.request.body.email,
-                resetUrl: resetUrlCustom,
-            },
-        };
-        await sgMail.send(emailData);
 
         ctx.body = { passwordResetToken: resetData.passwordResetToken };
     }
@@ -399,7 +399,7 @@ class UserController {
                 12
             );
         } catch (error) {
-            ctx.throw(400, error);
+            ctx.throw(400, 'INVALID_DATA');
         }
 
         //Make sure to null out the password reset token and expiration on insertion
@@ -407,10 +407,16 @@ class UserController {
         ctx.request.body.passwordResetExpiration = null;
         try {
             let result = await pool.query(
-                `UPDATE koa_vue_notes_users SET ?`,
-                ctx.request.body
+                `UPDATE koa_vue_notes_users SET password = ?, passwordResetToken = ?, passwordResetExpiration = ? WHERE email = ?`,
+                [
+                    ctx.request.body.password,
+                    ctx.request.body.passwordResetToken,
+                    ctx.request.body.passwordResetExpiration,
+                    ctx.request.body.email,
+                ]
             );
         } catch (error) {
+            console.log(error);
             ctx.throw(400, 'INVALID_DATA');
         }
 
