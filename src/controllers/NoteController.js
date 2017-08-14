@@ -70,8 +70,8 @@ class NoteController {
         if (validator.error) ctx.throw(400, validator.error.details[0].message);
 
         try {
-            await note.store();
-            ctx.body = { message: 'SUCCESS' };
+            let result = await note.store();
+            ctx.body = { message: 'SUCCESS', id: result.insertId };
         } catch (error) {
             console.log(error);
             ctx.throw(400, 'INVALID_DATA');

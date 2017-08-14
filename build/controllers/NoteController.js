@@ -146,7 +146,7 @@ var NoteController = function () {
         key: 'create',
         value: function () {
             var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(ctx) {
-                var user, note, validator;
+                var user, note, validator, result;
                 return regeneratorRuntime.wrap(function _callee3$(_context3) {
                     while (1) {
                         switch (_context3.prev = _context3.next) {
@@ -173,23 +173,25 @@ var NoteController = function () {
                                 return note.store();
 
                             case 9:
-                                ctx.body = { message: 'SUCCESS' };
-                                _context3.next = 16;
+                                result = _context3.sent;
+
+                                ctx.body = { message: 'SUCCESS', id: result.insertId };
+                                _context3.next = 17;
                                 break;
 
-                            case 12:
-                                _context3.prev = 12;
+                            case 13:
+                                _context3.prev = 13;
                                 _context3.t0 = _context3['catch'](6);
 
                                 console.log(_context3.t0);
                                 ctx.throw(400, 'INVALID_DATA');
 
-                            case 16:
+                            case 17:
                             case 'end':
                                 return _context3.stop();
                         }
                     }
-                }, _callee3, this, [[6, 12]]);
+                }, _callee3, this, [[6, 13]]);
             }));
 
             function create(_x3) {

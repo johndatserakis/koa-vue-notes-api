@@ -23,13 +23,14 @@ class Note {
                 FROM koa_vue_notes_notes
                 WHERE userId = ?
                 AND title LIKE CONCAT('%', ?, '%')
-                ORDER BY ?
+                ORDER BY createdAt ` +
+                    input.order +
+                    `
                 LIMIT ?, ?
                 `,
                 [
                     input.userId,
                     input.sort ? input.sort : '',
-                    input.order,
                     +input.page * +input.limit,
                     +input.limit,
                 ]

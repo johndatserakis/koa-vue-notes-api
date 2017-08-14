@@ -83,7 +83,7 @@ var Note = function () {
                             case 0:
                                 _context.prev = 0;
                                 _context.next = 3;
-                                return _db2.default.query('\n                SELECT *\n                FROM koa_vue_notes_notes\n                WHERE userId = ?\n                AND title LIKE CONCAT(\'%\', ?, \'%\')\n                ORDER BY ?\n                LIMIT ?, ?\n                ', [input.userId, input.sort ? input.sort : '', input.order, +input.page * +input.limit, +input.limit]);
+                                return _db2.default.query('\n                SELECT *\n                FROM koa_vue_notes_notes\n                WHERE userId = ?\n                AND title LIKE CONCAT(\'%\', ?, \'%\')\n                ORDER BY createdAt ' + input.order + '\n                LIMIT ?, ?\n                ', [input.userId, input.sort ? input.sort : '', +input.page * +input.limit, +input.limit]);
 
                             case 3:
                                 return _context.abrupt('return', _context.sent);
