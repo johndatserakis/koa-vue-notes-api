@@ -2,9 +2,28 @@
 
 # Koa-Vue-Notes-Api
 
-This is a simple SPA built using [Koa](http://koajs.com/) (2.3) as the backend and [Vue](https://vuejs.org/) (2.3) as the frontend. Click [here](https://github.com/johndatserakis/koa-vue-notes-web) to see the frontend Vue code.
+This is a simple SPA built using [Koa](http://koajs.com/) (2.3) as the backend and [Vue](https://vuejs.org/) (2.3) as the frontend. Click [here](https://github.com/johndatserakis/koa-vue-notes-web) to see the frontend Vue code. Click [here](https://koa-vue-notes-web.innermonkdesign.com/) to view the app live.
 
-Work In Progress.
+## Features
+- Koa 2.3
+- Fully written using async/await
+- Koa-Router
+- Koa-Ratelimit
+- Koa-Bodyparser
+- KCors
+- Koa-Json-Error
+- Koa-Useragent
+- Bcrypt
+- Sendgrind Mailer
+- Joi
+- Fs-Extra
+- JWT
+- Nodemon
+- Prettier
+- Babel
+- PM2
+- MySQL
+- log4js
 
 ## Installing / Getting started
 
@@ -18,16 +37,68 @@ npm run watch
 # build for production with prettier
 npm run build
 
-# serve in production using the pm2 ecosystem.json file
+# serve in production using the pm2 ecosystem.json file Note: Currently
+# using yarn for the install due to the SendGrid node package requiring this
+# at the moment.
 npm run start-production
 ```
 
-Note: Currently using yarn for the install due to the SendGrid node package requiring this at the moment.
+## General Information
 
-## Work In Progress
+This backend is part of a pair of projects that serve a simple notes app. I chose a notes app because it give you a good look at a lot of the different actions you can make on an element in both the frontend and backend world. What's really cool is these projects feature a fully fleshed-out user login/signup/forgot/reset authentication system using JWT.
 
-Will update with more info shortly.
+I've liberally commented the code and tried to balance the project in a way  that it was complex enough to learn from but not so complex that it's impossible to follow. It can be tough to learn from a boilerplate that has too much or too little.
+
+Having used mainly PHP for the backend in the past - I am very glad I checked out Koa as I think it is absolutely awesome in the way it handles the server code. Same thing with Vue - I've used mainly jQuery in the past - albeit with the really structured Revealing-Module-Pattern - and using Vue was such a pleasure. You can really tell right away what kind of power a well-structured library can give you.
+
+You'll need to create a `.env` file and place it in the root of your directory. Take a look at `example.env` and add your information as needed. For `JWT_ACCESS_TOKEN_EXPIRATION_TIME` you can set it to 5m, 5w, 5d etc.
+
+This project only responds and listens in json. Keep that in mind when send requests through PostMan or your frontend.
+
+### PM2
+
+This project features an `ecosystem.json` file that is the target of the PM2 implementation in production. Very simple - we just give it a name and some other basic info and PM2 handles the rest. Great library with awesome documentation.
+
+The `src` folder is the heart of the program. I'll go over its subfolders now.
+
+### controllers
+
+We use controllers to keep our router thin. The controller's responsibility is to manage the request body and make sure it's nice and clean when it eventually gets sent to a `modal` to make database call. There are two controller files present - one for user signup/login/forgot... and one for notes.
+
+### db
+
+Here is our database setup. Basically we create a pool variable and export it to be used throughout our app. Very simple. A note - we are using the `promise-mysql` library instead of the vanilla `node-mysql` library to take advantage of it promise features. This works really well as we're able to fully utilize the new async/await present in the latest versions of Node. It makes the code really nice and lean.
+
+### middleware
+
+Here I place any custom middleware the app is using. The custom middleware we're using is based on the `koa-jwt` library - but I had to tweak it because it mysteriously didn't report an expired token correctly. Strange as I though that would be an important requirement. No biggie.
+
+### models
+
+Our models folder contains two model files - one for users and one for notes. These models are where the actual database calls are made. This keeps things nice and neat - also make actions reusable for the future.
+
+### routes
+
+Very simple - here are our routes. I've broken it down into two files - this keeps things in control. Each route is nice and thin - all it's doing is calling a controller. Some routes are using that jwt middleware I mentioned earlier. Koa make it really nice and easy to add middleware to a route. Very cool.
+
+### sql
+
+I provided the sql code here you'll need when creating your database. I was hoping to find a nice database-migration library for node - but unfortunately I came up empty-handed. I tried TJ's - but I think it's not really supported anymore - didn't work for me using the latest Node syntax. I'm keeping my eye out for one - let me know if you use one you like.
+
+### static
+
+Static files - just used for the favicon.
+
+### index.js
+
+index.js isn't a folder - it's the brain of the app. Here you'll see we are attaching a bunch of middleware to our Koa instance. Very slick and straight-forward.
+
+## Hit Me Up
+
+Go ahead and fork the project! Message me here if you have questions or submit an issue if needed. I'll be making touch-ups as time goes on. Have fun with this!
 
 ## License
+
+Copywrite 2017 John Datserakis
 
 [MIT](http://opensource.org/licenses/MIT)
