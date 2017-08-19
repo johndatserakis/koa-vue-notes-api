@@ -2,7 +2,7 @@
 
 # Koa-Vue-Notes-Api
 
-This is a simple SPA built using [Koa](http://koajs.com/) (2.3) as the backend and [Vue](https://vuejs.org/) (2.3) as the frontend. Click [here](https://github.com/johndatserakis/koa-vue-notes-web) to see the frontend Vue code. Click [here](https://koa-vue-notes-web.innermonkdesign.com/) to view the app live.
+This is a simple SPA built using [Koa](http://koajs.com/) (2.3) as the backend and [Vue](https://vuejs.org/) (2.4) as the frontend. Click [here](https://github.com/johndatserakis/koa-vue-notes-web) to see the frontend Vue code. Click [here](https://koa-vue-notes-web.innermonkdesign.com/) to view the app live.
 
 ## Features
 - Koa 2.3
@@ -24,6 +24,7 @@ This is a simple SPA built using [Koa](http://koajs.com/) (2.3) as the backend a
 - PM2
 - MySQL
 - log4js
+- And more...
 
 ## Installing / Getting started
 
@@ -45,9 +46,9 @@ npm run start-production
 
 ## General Information
 
-This backend is part of a pair of projects that serve a simple notes app. I chose a notes app because it give you a good look at a lot of the different actions you can make on an element in both the frontend and backend world. What's really cool is these projects feature a fully fleshed-out user login/signup/forgot/reset authentication system using JWT.
+This backend is part of a pair of projects that serve a simple notes app. I chose a notes app because it gives you a good look at the different techniques used in both the frontend and backend world. What's really cool is these projects feature a fully fleshed-out user login/signup/forgot/reset authentication system using JWT.
 
-I've liberally commented the code and tried to balance the project in a way  that it was complex enough to learn from but not so complex that it's impossible to follow. It can be tough to learn from a boilerplate that has too much or too little.
+I've liberally commented the code and tried to balance the project in a way that it's complex enough to learn from but not so complex that it's impossible to follow. It can be tough to learn from a boilerplate that has too much or too little.
 
 Having used mainly PHP for the backend in the past - I am very glad I checked out Koa as I think it is absolutely awesome in the way it handles the server code. Same thing with Vue - I've used mainly jQuery in the past - albeit with the really structured Revealing-Module-Pattern - and using Vue was such a pleasure. You can really tell right away what kind of power a well-structured library can give you.
 
@@ -72,7 +73,7 @@ The `src` folder is the heart of the program. I'll go over its subfolders now.
 
 ### controllers
 
-We use controllers to keep our router thin. The controller's responsibility is to manage the request body and make sure it's nice and clean when it eventually gets sent to a `modal` to make database call. There are two controller files present - one for user signup/login/forgot... and one for notes.
+We use controllers to keep our router thin. The controller's responsibility is to manage the request body and make sure it's nice and clean when it eventually gets sent to a `model` to make database calls. There are two controller files present - one for user signup/login/forgot... and one for notes.
 
 ### db
 
