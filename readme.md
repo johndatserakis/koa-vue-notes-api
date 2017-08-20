@@ -2,8 +2,7 @@
 
 <p align="center">
   <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Issues"></a>
-  <a href="https://twitter.com/intent/tweet?text=Check%20this%20out:%20&url=%5Bobject%20Object%5D"><img src="https://img.shields.io/twitter/url/https/github.com/johndatserakis/koa-vue-notes-api.svg?style=social
-" alt="Issues"></a>
+  <a href="https://twitter.com/intent/tweet?text=Check%20this%20out:%20&url=%5Bobject%20Object%5D"><img src="https://img.shields.io/twitter/url/https/github.com/johndatserakis/koa-vue-notes-api.svg?style=social" alt="Tweet"></a>
 </p>
 
 # Koa-Vue-Notes-Api
