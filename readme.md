@@ -99,7 +99,7 @@ Very simple - here are our routes. I've broken it down into two files - this kee
 
 ### sql
 
-I provided the sql code here you'll need when creating your database. I was hoping to find a nice database-migration library for node - but unfortunately I came up empty-handed. I tried TJ's - but I think it's not really supported anymore - didn't work for me using the latest Node syntax. I'm keeping my eye out for one - let me know if you use one you like.
+I provided the sql code here you'll need when creating your database. I was hoping to find a nice database-migration library for node - but unfortunately I came up empty-handed. I tried TJ's - but I think it's not really supported anymore - didn't work for me using the latest Node and ES6/7 syntax. I'm keeping my eye out for one - let me know if you use one you like.
 
 ### static
 
