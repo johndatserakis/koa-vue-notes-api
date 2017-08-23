@@ -153,6 +153,16 @@ class UserController {
             ctx.throw(400, 'INVALID_DATA');
         }
 
+        //Update their login count
+        try {
+            await pool.query(
+                `UPDATE koa_vue_notes_users SET loginCount = loginCount + 1 WHERE id = ?`,
+                userData[0].id
+            );
+        } catch (error) {
+            ctx.throw(400, 'INVALID_DATA');
+        }
+
         //Ok, they've made it, send them their jsonwebtoken with their data, accessToken and refreshToken
         const token = jsonwebtoken.sign(
             { data: userData },

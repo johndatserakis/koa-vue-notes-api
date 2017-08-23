@@ -60,7 +60,9 @@ Having used mainly PHP for the backend in the past - I am very glad I checked ou
 
 You'll need to create a `.env` file and place it in the root of your directory. Take a look at `example.env` and add your information as needed. For `JWT_ACCESS_TOKEN_EXPIRATION_TIME` you can set it to 5m, 5w, 5d etc.
 
-This project only responds and listens in json. Keep that in mind when send requests through PostMan or your frontend.
+This project only responds and listens in json. Keep that in mind when send requests through Postman or your frontend.
+
+### User Authentication Process
 
 As mentioned in the frontend code, the user authentication process is this:
 

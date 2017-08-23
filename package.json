@@ -16,7 +16,7 @@
   "license": "MIT",
   "homepage": "https://github.com/OrKoN/koa2-example-app#readme",
   "dependencies": {
-    "@sendgrid/mail": "6.0.0-beta.4",
+    "@sendgrid/mail": "6.0.0-beta.5",
     "babel-polyfill": "^6.5.0",
     "bcrypt": "^1.0.2",
     "date-fns": "^1.28.5",
