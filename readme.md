@@ -36,7 +36,7 @@ This is a simple SPA built using [Koa](http://koajs.com/) (2.3) as the backend a
 
 ``` bash
 # install dependencies
-yarn install
+npm install
 
 # serve using nodemon with hot reload
 npm run watch
@@ -44,9 +44,7 @@ npm run watch
 # build for production with prettier
 npm run build
 
-# serve in production using the pm2 ecosystem.json file Note: Currently
-# using yarn for the install due to the SendGrid node package requiring this
-# at the moment.
+# serve in production using the pm2 ecosystem.json file
 npm run start-production
 ```
 
