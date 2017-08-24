@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node app.js",
     "watch": "nodemon --exec npm run start",
-    "test": "npm run build; mocha --require 'babel-polyfill' --compilers js:babel-register",
+    "test": "",
     "build": "babel src -d build && npm run pretty",
     "pretty": "prettier --write --print-width 80 --single-quote --trailing-comma es5 --tab-width 4 'src/**/*.js' 'models/**/*.js' 'middleware/**/*.js' 'config/**/*.js'",
     "start-production": "pm2 start ecosystem.json",
