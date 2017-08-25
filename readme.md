@@ -67,7 +67,7 @@ As mentioned in the frontend code, the user authentication process is this:
 - User create an account
 - User logs in
 - The server sends and `accessToken` and a `refreshToken` back
-- We take the `accessToken` and decoded it using `jwt-decode`. This gets us the logged in user's information. We stick this in the Vuex variable `user`. Then we store the `refreshToken`.
+- We take the `accessToken` and decoded it using `jwt-decode`. This gets us the logged in user's information. We stick this in the Vuex variable `user`. Then we store the `refreshToken` amd `accessToken`.
 - Each protected endpoint will be expecting you to attach the `accessToken` you have to the call (using Authentication: Bearer). After a short amount of time, the server will respond with `401 TOKEN EXPIRED`. When you see this - that means you need to send your `refreshToken` and `user.email` to the endpoint that deals with `accessToken` refreshing. Once you do that, you'll received a brand new `accessToken` and `refreshToken`.
 - Repeat the process as needed.
 
@@ -87,7 +87,7 @@ Here is our database setup. Basically we create a pool variable and export it to
 
 ### middleware
 
-Here I place any custom middleware the app is using. The custom middleware we're using is based on the `koa-jwt` library - but I had to tweak it because it mysteriously didn't report an expired token correctly. Strange as I though that would be an important requirement. No biggie.
+Here I place any custom middleware the app is using. The custom middleware we're using is based on the `koa-jwt` library - but I had to tweak it because it mysteriously didn't report an expired token correctly. Strange, as I thought that would be an important requirement. No biggie.
 
 ### models
 
