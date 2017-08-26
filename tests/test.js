@@ -1,10 +1,10 @@
 const axios = require('axios')
 const app = require('../app')
-const url = `http://localhost:4000/api/v1/`
+const url = `http://localhost:4000`
 const request = axios.create({ baseURL: url })
 
-it('return homepage', async () => {
+it('returns homepage', async () => {
+    expect.assertions(1)
     const response = await request.get('/')
-    expect(response.statusCode).toBe(200)
-    done()
+    expect(response.status).toBe(200)
 });
