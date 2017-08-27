@@ -28,7 +28,7 @@ This is a simple SPA built using [Koa](http://koajs.com/) (2.3) as the backend a
 - Prettier
 - Babel
 - PM2
-- MySQL
+- MySQL with Knex
 - log4js
 - And more...
 
@@ -41,11 +41,14 @@ npm install
 # serve using nodemon with hot reload
 npm run watch
 
-# build for production with prettier
+# build for production with prettier and babel
 npm run build
 
 # serve in production using the pm2 ecosystem.json file
 npm run start-production
+
+# run prettier on the project
+npm run pretty
 ```
 
 ## General Information
@@ -67,7 +70,7 @@ As mentioned in the frontend code, the user authentication process is this:
 - User create an account
 - User logs in
 - The server sends and `accessToken` and a `refreshToken` back
-- We take the `accessToken` and decoded it using `jwt-decode`. This gets us the logged in user's information. We stick this in the Vuex variable `user`. Then we store the `refreshToken` amd `accessToken`.
+- We take the `accessToken` and decode it using `jwt-decode`. This gets us the logged in user's information. We stick this in the Vuex variable `user`. Then we store the `refreshToken` amd `accessToken`.
 - Each protected endpoint will be expecting you to attach the `accessToken` you have to the call (using Authentication: Bearer). After a short amount of time, the server will respond with `401 TOKEN EXPIRED`. When you see this - that means you need to send your `refreshToken` and `user.email` to the endpoint that deals with `accessToken` refreshing. Once you do that, you'll received a brand new `accessToken` and `refreshToken`.
 - Repeat the process as needed.
 
@@ -79,11 +82,11 @@ The `src` folder is the heart of the program. I'll go over its subfolders now.
 
 ### controllers
 
-We use controllers to keep our router thin. The controller's responsibility is to manage the request body and make sure it's nice and clean when it eventually gets sent to a `model` to make database calls. There are two controller files present - one for user signup/login/forgot... and one for notes.
+We use controllers to keep our router thin. The controller's responsibility is to manage the request body and make sure it's nice and clean when it eventually gets sent to a `model` to make database calls. There are two controller files present - one for user signup/login/forgot... and one for notes. Note: the `UserActionController.js` is a little different then normal controllers, as I believe the actions of a user signup/login/forgot/reset are seperate from the normal actions for a user - so that's why `UserActionController.js` in written in a more *functional* way.
 
 ### db
 
-Here is our database setup. This project uses Knex to manage migarations and execute queries. I initially wrote raw SQL queries for the program, but the need for a migrations maanager pushed me towards an ORM for the MySQL database. Knex is awesome - very powerful, easy to use and make queries, and the migarations are nice to have for sure - especially for testing.
+Here is our database setup. This project uses Knex to manage migrations and execute queries. I initially wrote wrote all the MySQL calls using raw SQL, but the need for a migrations maanager pushed me towards an ORM for the MySQL database. Knex is awesome - very powerful, easy to use and make queries, and the migrations are nice to have for sure - especially for testing.
 
 ### middleware
 
@@ -96,10 +99,6 @@ Our models folder contains two model files - one for users and one for notes. Th
 ### routes
 
 Very simple - here are our routes. I've broken it down into two files - this keeps things in control. Each route is nice and thin - all it's doing is calling a controller. Some routes are using that jwt middleware I mentioned earlier. Koa make it really nice and easy to add middleware to a route. Very cool.
-
-### sql
-
-I provided the sql code here you'll need when creating your database. I was hoping to find a nice database-migration library for node - but unfortunately I came up empty-handed. I tried TJ's - but I think it's not really supported anymore - didn't work for me using the latest Node and ES6/7 syntax. I'm keeping my eye out for one - let me know if you use one you like.
 
 ### static
 
