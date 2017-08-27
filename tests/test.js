@@ -8,3 +8,14 @@ it('returns homepage', async () => {
     const response = await request.get('/')
     expect(response.status).toBe(200)
 });
+
+// const userSignup = require('./controllers/userActionController')
+// it('signs up a user', async () => {
+//     expect.assertions(1)
+
+//     const userActionController = new UserActionController();
+//     await userActionController.signup({});
+
+//   // const response = await request.get('/')
+//   // expect(response.status).toBe(200)
+// });

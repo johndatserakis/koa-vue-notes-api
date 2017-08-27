@@ -1,107 +1,88 @@
-import {} from 'dotenv/config';
-import pool from '../db/db';
-import rand from 'randexp';
+import {} from 'dotenv/config'
+import db from '../db/db'
+import rand from 'randexp'
 
 class Note {
     constructor(data) {
         if (!data) {
-            return;
+            return
         }
 
-        this.id = data.id;
-        this.userId = data.userId;
-        this.title = data.title;
-        this.content = data.content;
-        this.ipAddress = data.ipAddress;
+        this.id = data.id
+        this.userId = data.userId
+        this.title = data.title
+        this.content = data.content
+        this.ipAddress = data.ipAddress
     }
 
-    async all(input) {
+    async all(request) {
         try {
-            return await pool.query(
-                `
-                SELECT *
-                FROM koa_vue_notes_notes
-                WHERE userId = ?
-                AND title LIKE CONCAT('%', ?, '%')
-                ORDER BY createdAt ` +
-                    input.order +
-                    `
-                LIMIT ?, ?
-                `,
-                [
-                    input.userId,
-                    input.sort ? input.sort : '',
-                    +input.page * +input.limit,
-                    +input.limit,
-                ]
-            );
+            return await db('notes')
+                .select('*')
+                .where({ userId: request.userId })
+                .where(
+                    'title',
+                    'like',
+                    '%' + (request.sort ? request.sort : '') + '%'
+                )
+                .orderBy('createdAt', request.order)
+                .offset(+request.page * +request.limit)
+                .limit(+request.limit)
         } catch (error) {
-            console.log(error);
-            throw new Error('ERROR');
+            console.log(error)
+            throw new Error('ERROR')
         }
     }
 
-    async find(input) {
+    async find(id) {
         try {
-            let result = await findById(input.id);
-            if (!result) return {};
-            this.constructor(result);
+            let result = await findById(id)
+            if (!result) return {}
+            this.constructor(result)
         } catch (error) {
-            console.log(error);
-            throw new Error('ERROR');
+            console.log(error)
+            throw new Error('ERROR')
         }
     }
 
     async store() {
         try {
-            return await pool.query(`INSERT INTO koa_vue_notes_notes SET ?`, [
-                this,
-            ]);
+            return await db('notes').insert(this)
         } catch (error) {
-            console.log(error);
-            throw new Error('ERROR');
+            console.log(error)
+            throw new Error('ERROR')
         }
     }
 
-    async save(input) {
+    async save(request) {
         try {
-            await pool.query(`UPDATE koa_vue_notes_notes SET ? WHERE id = ?`, [
-                this,
-                this.id,
-            ]);
+            return await db('notes').update(this).where({ id: this.id })
         } catch (error) {
-            console.log(error);
-            throw new Error('ERROR');
+            console.log(error)
+            throw new Error('ERROR')
         }
     }
 
-    async destroy(input) {
+    async destroy(request) {
         try {
-            await pool.query(`DELETE FROM koa_vue_notes_notes WHERE id = ?`, [
-                this.id,
-            ]);
+            return await db('notes').delete().where({ id: this.id })
         } catch (error) {
-            console.log(error);
-            throw new Error('ERROR');
+            console.log(error)
+            throw new Error('ERROR')
         }
     }
 }
 
 async function findById(id) {
     try {
-        let noteData = await pool.query(
-            `
-            SELECT id, userId, title, content
-            FROM koa_vue_notes_notes
-            WHERE id = ?
-            `,
-            [id]
-        );
-        return noteData[0];
+        let [noteData] = await db('notes')
+            .select('id', 'userId', 'title', 'content')
+            .where({ id: id })
+        return noteData
     } catch (error) {
-        console.log(error);
-        throw new Error('ERROR');
+        console.log(error)
+        throw new Error('ERROR')
     }
 }
 
-export { Note, findById };
+export { Note, findById }

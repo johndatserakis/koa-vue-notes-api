@@ -1,5 +1,5 @@
-import {} from 'dotenv/config';
-import log4js from 'log4js';
+import {} from 'dotenv/config'
+import log4js from 'log4js'
 
 log4js.configure({
     appenders: {
@@ -27,10 +27,10 @@ log4js.configure({
             level: 'info',
         },
     },
-});
+})
 const logger =
     process.env.NODE_ENV === 'development'
         ? log4js.getLogger('development')
-        : log4js.getLogger('production');
+        : log4js.getLogger('production')
 
-export default logger;
+export default logger

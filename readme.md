@@ -83,7 +83,7 @@ We use controllers to keep our router thin. The controller's responsibility is t
 
 ### db
 
-Here is our database setup. Basically we create a pool variable and export it to be used throughout our app. Very simple. A note - we are using the `promise-mysql` library instead of the vanilla `node-mysql` library to take advantage of it promise features. This works really well as we're able to fully utilize the new async/await present in the latest versions of Node. It makes the code really nice and lean.
+Here is our database setup. This project uses Knex to manage migarations and execute queries. I initially wrote raw SQL queries for the program, but the need for a migrations maanager pushed me towards an ORM for the MySQL database. Knex is awesome - very powerful, easy to use and make queries, and the migarations are nice to have for sure - especially for testing.
 
 ### middleware
 

@@ -1,6 +1,6 @@
 {
   "name": "koa-vue-notes-api",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A SPA using Koa as the backend and Vue as the frontend.",
   "author": "John Datserakis",
   "private": false,
@@ -9,7 +9,7 @@
     "watch": "nodemon --exec npm run start",
     "test": "jest --forceExit",
     "build": "babel src -d build && npm run pretty",
-    "pretty": "prettier --write --print-width 80 --single-quote --trailing-comma es5 --tab-width 4 'src/**/*.js' 'models/**/*.js' 'middleware/**/*.js' 'config/**/*.js'",
+    "pretty": "prettier --write --print-width 80 --single-quote --trailing-comma es5 --tab-width 4 --no-semi 'src/**/*.js' 'models/**/*.js' 'middleware/**/*.js' 'config/**/*.js'",
     "start-production": "pm2 start ecosystem.json",
     "clean": "npm run clean:dist && npm run clean:tmp"
   },
@@ -27,10 +27,10 @@
     "joi": "^10.6.0",
     "jsonwebtoken": "^7.4.1",
     "kcors": "^2.0.0",
+    "knex": "^0.13.0",
     "koa": "^2.0.0-alpha.3",
     "koa-bodyparser": "^3.0.0",
     "koa-json-error": "^3.1.2",
-    "koa-jwt": "^3.2.2",
     "koa-ratelimit": "^4.0.0",
     "koa-router": "^7.0.1",
     "koa-useragent": "^1.0.0",
