@@ -10,8 +10,15 @@ const config = {
         database: process.env.DB_DATABASE,
     },
     migrations: {
-        directory: __dirname + '/src/db/migrations',
+        directory: './src/db/migrations',
     },
+}
+
+//Here we check to see if we are in testing mode. If we are,
+//we set the database name to one with a '_tests' at the end,
+//which we'll build and tear-down for each test.
+if (process.env.NODE_ENV === 'testing') {
+    config.connection.database = process.env.DB_DATABASE + '_tests'
 }
 
 const db = knex(config)

@@ -1,17 +1,16 @@
 {
   "name": "koa-vue-notes-api",
-  "version": "1.0.4",
+  "version": "1.1.1",
   "description": "A SPA using Koa as the backend and Vue as the frontend.",
   "author": "John Datserakis",
   "private": false,
   "scripts": {
-    "start": "node app.js",
-    "watch": "nodemon --exec npm run start",
-    "test": "jest --forceExit",
-    "build": "babel src -d build && npm run pretty",
-    "pretty": "prettier --write --print-width 80 --single-quote --trailing-comma es5 --tab-width 4 --no-semi 'src/**/*.js' 'models/**/*.js' 'middleware/**/*.js' 'config/**/*.js'",
-    "start-production": "pm2 start ecosystem.json",
-    "clean": "npm run clean:dist && npm run clean:tmp"
+    "watch": "NODE_ENV=development nodemon app.js --exec",
+    "test": "NODE_ENV=testing jest -forceExit",
+    "build": "NODE_ENV=production babel src -d build && npm run pretty",
+    "pretty": "prettier --write --print-width 80 --single-quote --trailing-comma es5 --tab-width 4 --no-semi 'src/**/*.js'",
+    "start-production": "NODE_ENV=production pm2 start ecosystem.json",
+    "clean": "npm cache clean --force"
   },
   "license": "MIT",
   "homepage": "https://github.com/OrKoN/koa2-example-app#readme",
@@ -21,6 +20,7 @@
     "bcrypt": "^1.0.2",
     "date-fns": "^1.28.5",
     "dotenv": "^4.0.0",
+    "faker": "^4.1.0",
     "fs-extra": "^4.0.0",
     "install": "^0.10.1",
     "ioredis": "^3.1.1",

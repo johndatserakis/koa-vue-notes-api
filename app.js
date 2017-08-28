@@ -10,6 +10,12 @@ require('babel-polyfill');
 if (env === 'development') { require('babel-register'); }
 
 const app = require(src).default;
-app.listen(port);
+
+//Here we're assigning the server to a variable because
+//we're going to want to manually rip down the server in testing
+const server = app.listen(port);
 console.log('Server running at ' + port);
 console.log("Running in "  + process.env.NODE_ENV + " v" + process.env.npm_package_version);
+
+//Exporting the actual server here for testing availability
+module.exports = {server: server}
