@@ -1,4 +1,3 @@
-import {} from 'dotenv/config'
 import joi from 'joi'
 import dateFormat from 'date-fns/format'
 

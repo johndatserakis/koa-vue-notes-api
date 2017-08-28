@@ -1,4 +1,3 @@
-import {} from 'dotenv/config'
 import db from '../db/db'
 import joi from 'joi'
 import rand from 'randexp'
@@ -80,19 +79,21 @@ class UserController {
             var [result] = await db('users').insert(request).returning('id')
 
             //Let's send a welcome email.
-            let email = await fse.readFile('./src/email/welcome.html', 'utf8')
-            const emailData = {
-                to: request.email,
-                from: process.env.APP_EMAIL,
-                subject: 'Welcome To Koa-Vue-Notes-Api',
-                html: email,
-                categories: ['koa-vue-notes-api-new-user'],
-                substitutions: {
-                    appName: process.env.APP_NAME,
-                    appEmail: process.env.APP_EMAIL,
-                },
+            if (process.env.NODE_ENV !== 'testing') {
+                let email = await fse.readFile('./src/email/welcome.html', 'utf8')
+                const emailData = {
+                    to: request.email,
+                    from: process.env.APP_EMAIL,
+                    subject: 'Welcome To Koa-Vue-Notes-Api',
+                    html: email,
+                    categories: ['koa-vue-notes-api-new-user'],
+                    substitutions: {
+                        appName: process.env.APP_NAME,
+                        appEmail: process.env.APP_EMAIL,
+                    },
+                }
+                await sgMail.send(emailData)
             }
-            await sgMail.send(emailData)
 
             //And return our response.
             ctx.body = { message: 'SUCCESS', id: result }

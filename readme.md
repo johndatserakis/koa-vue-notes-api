@@ -109,6 +109,10 @@ We use controllers to keep our router thin. The controller's responsibility is t
 
 Here is our database setup. This project uses Knex to manage migrations and execute queries. I initially wrote wrote all the MySQL calls using raw SQL, but the need for a migrations maanager pushed me towards an ORM for the MySQL database. Knex is awesome - very powerful, easy to use and make queries, and the migrations are nice to have for sure - especially for testing.
 
+For this project you'll need to make two databases in your development environment, `koa_vue_notes` and `koa_vue_notes_testing`. In your production environment you would just have `koa_vue_notes`. Tests use a different database because the data there is extremely volatile - as table information is created and destroyed on every test.
+
+The `knexfile.js` in the root of the project is all setup with the ability to read your `.env` file. Let's say you download this project - first you'll `npm install`, then create a `koa_vue_notes` database and a `koa_vue_notes_testing` database, then `knex migrate:latest` and `knex seed:run` to create and seed your tables. Currently it's set up to make five users and 100 notes distributed to those users.
+
 ### middleware
 
 Here I place any custom middleware the app is using. The custom middleware we're using is based on the `koa-jwt` library - but I had to tweak it because it mysteriously didn't report an expired token correctly. Strange, as I thought that would be an important requirement. No biggie.
@@ -128,6 +132,10 @@ Static files - just used for the favicon.
 ### index.js
 
 index.js isn't a folder - it's the brain of the app. Here you'll see we are attaching a bunch of middleware to our Koa instance. Very slick and straight-forward.
+
+## Todo
+
+- Finish writing all the tests
 
 ## Hit Me Up
 

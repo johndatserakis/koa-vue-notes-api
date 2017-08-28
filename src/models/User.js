@@ -1,4 +1,3 @@
-import {} from 'dotenv/config'
 import db from '../db/db'
 
 class User {

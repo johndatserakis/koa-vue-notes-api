@@ -1,4 +1,3 @@
-import {} from 'dotenv/config'
 import log4js from 'log4js'
 
 log4js.configure({

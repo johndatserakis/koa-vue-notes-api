@@ -7,7 +7,7 @@ exports.seed = async function(knex, Promise) {
     //the passwords to make it exactly like the real app. All their
     //passwords will be 'secret'
     let seedData = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {
         let password = 'secret'
         try {
             password = await bcrypt.hash(password, 12)
