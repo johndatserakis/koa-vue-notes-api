@@ -1,6 +1,6 @@
 {
   "name": "koa-vue-notes-api",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A SPA using Koa as the backend and Vue as the frontend.",
   "author": "John Datserakis",
   "private": false,
@@ -13,9 +13,9 @@
     "clean": "npm cache clean --force"
   },
   "license": "MIT",
-  "homepage": "https://github.com/OrKoN/koa2-example-app#readme",
+  "homepage": "https://github.com/johndatserakis/koa-vue-notes-api#readme",
   "dependencies": {
-    "@sendgrid/mail": "6.0.0-beta.5",
+    "@sendgrid/mail": "6.0.0",
     "babel-polyfill": "^6.5.0",
     "bcrypt": "^1.0.2",
     "date-fns": "^1.28.5",
