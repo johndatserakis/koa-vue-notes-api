@@ -26,7 +26,7 @@ import db from '../src/db/db'
 //     return server.close()
 // });
 
-describe('general actions', () => {
+describe('general actions', async () => {
     it('returns homepage', async () => {
         expect.assertions(1)
         const response = await request.get('/')
