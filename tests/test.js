@@ -26,13 +26,13 @@ import db from '../src/db/db'
 //     return server.close()
 // });
 
-describe('general actions', () => {
-    it('returns homepage', async () => {
+// describe('general actions', () => {
+    it('returns homepage', () => {
         expect.assertions(1)
         const response = await request.get('/')
-        return expect(response.status).toBe(200)
+        expect(response.status).toBe(200)
     });
-});
+// });
 
 // describe('user account actions', () => {
 //     beforeAll(async () => {
