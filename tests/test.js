@@ -11,20 +11,20 @@ import db from '../src/db/db'
 
 //Before all promosie fix for async/await Jest
 //https://github.com/facebook/jest/issues/1760
-beforeAll(() => {
-    global.Promise = require.requireActual('promise');
-});
+// beforeAll(() => {
+//     global.Promise = require.requireActual('promise');
+// });
 
 //After all the tests are done we're going to close our server
 //and rollback our database.
-afterAll(async () => {
-    await db.migrate.rollback()
+// afterAll(async () => {
+//     await db.migrate.rollback()
 
-    //This closes the app but it doesn't stop the tests in
-    //Jest when done - that's why we have to --forceExit
-    //when running Jest for now.
-    return server.close()
-});
+//     //This closes the app but it doesn't stop the tests in
+//     //Jest when done - that's why we have to --forceExit
+//     //when running Jest for now.
+//     return server.close()
+// });
 
 describe('general actions', () => {
     it('returns homepage', async () => {
