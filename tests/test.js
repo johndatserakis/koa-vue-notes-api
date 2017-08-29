@@ -30,7 +30,7 @@ describe('general actions', async () => {
     it('returns homepage', async () => {
         expect.assertions(1)
         const response = await request.get('/')
-        expect(response.status).toBe(200)
+        return expect(response.status).toBe(200)
     });
 });
 
