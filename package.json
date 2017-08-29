@@ -6,7 +6,7 @@
   "private": false,
   "scripts": {
     "watch": "NODE_ENV=development nodemon app.js --exec",
-    "test": "NODE_ENV=testing jest --forceExit",
+    "test": "NODE_ENV=testing jest",
     "build": "NODE_ENV=production babel src -d build && npm run pretty",
     "pretty": "prettier --write --print-width 80 --single-quote --trailing-comma es5 --tab-width 4 --no-semi 'src/**/*.js'",
     "start-production": "NODE_ENV=production pm2 start ecosystem.json",
