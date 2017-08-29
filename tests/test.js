@@ -30,7 +30,7 @@ import db from '../src/db/db'
     it('returns homepage', async () => {
         expect.assertions(1)
         const response = await request.get('/')
-        return expect(response.status).resolves.toBe(200)
+        expect(response.status).toBe(200)
     });
 // });
 
