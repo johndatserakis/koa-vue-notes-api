@@ -55,7 +55,9 @@ class Note {
 
     async save(request) {
         try {
-            return await db('notes').update(this).where({ id: this.id })
+            return await db('notes')
+                .update(this)
+                .where({ id: this.id })
         } catch (error) {
             console.log(error)
             throw new Error('ERROR')
@@ -64,7 +66,9 @@ class Note {
 
     async destroy(request) {
         try {
-            return await db('notes').delete().where({ id: this.id })
+            return await db('notes')
+                .delete()
+                .where({ id: this.id })
         } catch (error) {
             console.log(error)
             throw new Error('ERROR')

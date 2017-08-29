@@ -30,6 +30,7 @@ This is a simple SPA built using [Koa](http://koajs.com/) (2.3) as the backend a
 - PM2
 - MySQL
 - Knex with migrations and seeds
+- Jest
 - Faker
 - log4js
 - And more...
@@ -51,6 +52,9 @@ npm run start-production
 
 # run prettier on the project
 npm run pretty
+
+# run tests
+npm run test with jest
 
 # knex migration examples
 # (from command line in root directory with knex installed globally)
@@ -133,9 +137,9 @@ Static files - just used for the favicon.
 
 index.js isn't a folder - it's the brain of the app. Here you'll see we are attaching a bunch of middleware to our Koa instance. Very slick and straight-forward.
 
-## Todo
+### Testing
 
-- Finish writing all the tests
+This project uses Jest for testing. Bascially, each API endpoint is tested with working request data to confirm the server behaves correctly when spoken to. Each time the tests are run the migrations get kicked into gear. After the tests are complete the testing database rolls-back - ready for the next test.
 
 ## Hit Me Up
 

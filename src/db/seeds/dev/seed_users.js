@@ -1,12 +1,11 @@
-const faker = require('faker');
-const bcrypt = require('bcrypt');
+const faker = require('faker')
+const bcrypt = require('bcrypt')
 
 exports.seed = async function(knex, Promise) {
-
     //Make 10 users using faker. Note: we're also bcrypting
     //the passwords to make it exactly like the real app. All their
     //passwords will be 'secret'
-    let seedData = [];
+    let seedData = []
     for (let i = 0; i < 5; i++) {
         let password = 'secret'
         try {
@@ -30,6 +29,5 @@ exports.seed = async function(knex, Promise) {
     await knex('users').truncate()
 
     //Insert users
-    await knex('users').insert(seedData);
-
-};
+    await knex('users').insert(seedData)
+}
