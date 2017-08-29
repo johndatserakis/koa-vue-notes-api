@@ -27,14 +27,11 @@ import db from '../src/db/db'
 // });
 
 // describe('general actions', () => {
-    it('returns homepage', async () => {
-        try {
-            expect.assertions(1)
-            const response = await request.get('/')
-            expect(response.status).toBe(200)
-        } catch (error) {
-            throw new Error(error)
-        }
+    it('returns homepage', async done => {
+        expect.assertions(1)
+        const response = await request.get('/')
+        expect(response.status).toBe(200)
+        done()
     });
 // });
 
