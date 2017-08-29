@@ -12,8 +12,8 @@ env:
   - DB_USER=root
   - DB_PASSWORD=
   - DB_DATABASE=koa_vue_notes_testing
-before_script:
-  - mysql -u root -e 'CREATE DATABASE koa_vue_notes_testing;'
+before_install:
+  - mysql -e 'CREATE DATABASE koa_vue_notes_testing;'
 services:
   - mysql
 notifications:
