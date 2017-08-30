@@ -27,7 +27,7 @@ import db from '../src/db/db'
 // });
 
 // describe('general actions', () => {
-    it('returns homepage', () => {
+    it('returns homepage', async () => {
         // expect.assertions(1)
         // const response = await request.get('/')
         // expect(response.status).toBe(200)
