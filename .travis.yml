@@ -6,16 +6,6 @@ install:
   - npm install
 script:
   - npm test
-env:
-  - DB_HOST=127.0.0.1
-  - DB_PORT=
-  - DB_USER=root
-  - DB_PASSWORD=
-  - DB_DATABASE=koa_vue_notes_testing
-before_install:
-  - mysql -e 'CREATE DATABASE koa_vue_notes_testing;'
-services:
-  - mysql
 notifications:
   email:
     on_success: never
