@@ -1,9 +1,9 @@
 import {server} from '../app'
 import axios from 'axios'
-// axios.defaults.baseURL = `http://localhost:4000`
 import MockAdapter from 'axios-mock-adapter';
-// const baseUrl = `http://localhost:4000`
 const mock = new MockAdapter(axios);
+
+import UserActionController from '../src/controllers/UserActionController'
 
 //After all the tests are done we're going to close our server
 //and rollback our database.
@@ -15,24 +15,27 @@ afterAll(async () => {
 });
 
 describe('user account actions', () => {
+    const userActionController = new UserActionController()
 
     it('signs up a user', async () => {
         mock.onPost('/api/v1/user/signup').reply(function() {
             return [200, { foo: 'bar' }];
         });
 
-        // axios.get('/foo1')
-        //     .then(function(response) {
-        //         console.log(response.data);
-        //         expect(response.status).toBe(200)
-        //     })
-        //     .catch(function(error) {
-        //         throw new Error(error)
-        //     })
-
-
         expect.assertions(1)
-        const response = await axios.post('/api/v1/user/signup')
+        //const response = await axios.post('/api/v1/user/signup')
+        let ctx = {
+            request: {
+                body: {
+                    "firstName": "John",
+                    "lastName": "Datserakis",
+                    "username": "johndatserakis@gmail.com",
+                    "email": "johndatserakis@gmail.com",
+                    "password": "Houses123993"
+                }
+            }
+        }
+        const response = await userActionController.signup(ctx);
         expect(response.status).toBe(200)
     });
 
