@@ -6,7 +6,10 @@ import { Note } from '../models/Note'
 
 const noteSchema = joi.object({
     id: joi.number().integer(),
-    userId: joi.number().integer().required(),
+    userId: joi
+        .number()
+        .integer()
+        .required(),
     title: joi.string().required(),
     content: joi.string().required(),
     ipAddress: joi.string(),

@@ -4,7 +4,10 @@ exports.up = function(knex, Promise) {
         table.string('username').notNullable()
         table.string('refreshToken').notNullable()
         table.string('info')
-        table.boolean('isValid').defaultTo(false).notNullable()
+        table
+            .boolean('isValid')
+            .defaultTo(false)
+            .notNullable()
         table.timestamp('expiration').nullable()
         table.string('ipAddress')
         table.timestamp('updatedAt').nullable()

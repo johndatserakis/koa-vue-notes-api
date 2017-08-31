@@ -12,16 +12,45 @@ import dateCompareAsc from 'date-fns/compare_asc'
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 const userSchemaSignup = joi.object({
-    firstName: joi.string().min(1).max(25).alphanum().required(),
-    lastName: joi.string().min(1).max(25).alphanum().required(),
-    username: joi.string().min(3).max(100).regex(/[a-zA-Z0-9@]/).required(),
-    email: joi.string().email().required(),
-    password: joi.string().min(8).max(35).required(),
+    firstName: joi
+        .string()
+        .min(1)
+        .max(25)
+        .alphanum()
+        .required(),
+    lastName: joi
+        .string()
+        .min(1)
+        .max(25)
+        .alphanum()
+        .required(),
+    username: joi
+        .string()
+        .min(3)
+        .max(100)
+        .regex(/[a-zA-Z0-9@]/)
+        .required(),
+    email: joi
+        .string()
+        .email()
+        .required(),
+    password: joi
+        .string()
+        .min(8)
+        .max(35)
+        .required(),
 })
 
 const userSchemaResetPassword = joi.object({
-    email: joi.string().email().required(),
-    password: joi.string().min(8).max(35).required(),
+    email: joi
+        .string()
+        .email()
+        .required(),
+    password: joi
+        .string()
+        .min(8)
+        .max(35)
+        .required(),
     passwordResetToken: joi.string().required(),
 })
 
@@ -76,11 +105,16 @@ class UserController {
 
         //Ok, at this point we can sign them up.
         try {
-            var [result] = await db('users').insert(request).returning('id')
+            var [result] = await db('users')
+                .insert(request)
+                .returning('id')
 
             //Let's send a welcome email.
             if (process.env.NODE_ENV !== 'testing') {
-                let email = await fse.readFile('./src/email/welcome.html', 'utf8')
+                let email = await fse.readFile(
+                    './src/email/welcome.html',
+                    'utf8'
+                )
                 const emailData = {
                     to: request.email,
                     from: process.env.APP_EMAIL,
@@ -158,7 +192,9 @@ class UserController {
 
         //Update their login count
         try {
-            await db('users').increment('loginCount').where({ id: userData.id })
+            await db('users')
+                .increment('loginCount')
+                .where({ id: userData.id })
         } catch (error) {
             ctx.throw(400, 'INVALID_DATA')
         }
@@ -181,8 +217,8 @@ class UserController {
             ctx.throw(401, 'NO_REFRESH_TOKEN')
 
         //Let's find that user and refreshToken in the refreshToken table
-        const [refreshTokenDatabaseData] = await db('users')
-            .select('username', 'refreshToken, expiration')
+        const [refreshTokenDatabaseData] = await db('refresh_tokens')
+            .select('username', 'refreshToken', 'expiration')
             .where({
                 username: request.username,
                 refreshToken: request.refreshToken,
@@ -201,21 +237,30 @@ class UserController {
             ctx.throw(400, 'REFRESH_TOKEN_EXPIRED')
         }
 
+        // console.log(refreshTokenDatabaseData)
+
         //Ok, everthing checked out. So let's invalidate the refresh token they just confirmed, and get them hooked up with a new one.
         try {
-            await db('users')
+            await db('refresh_tokens')
                 .update({
                     isValid: false,
                     updatedAt: dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss'),
                 })
                 .where({ refreshToken: refreshTokenDatabaseData.refreshToken })
         } catch (error) {
-            ctx.throw(400, 'INVALID_DATA')
+            ctx.throw(400, 'INVALID_DATA1')
+        }
+
+        const [userData] = await db('users')
+            .select('id', 'token', 'username', 'email', 'isAdmin')
+            .where({ username: request.username })
+        if (!userData) {
+            ctx.throw(401, 'INVALID_REFRESH_TOKEN')
         }
 
         //Generate the refreshToken data
         let refreshTokenData = {
-            username: userData.username,
+            username: request.username,
             refreshToken: new rand(/[a-zA-Z0-9_-]{64,64}/).gen(),
             info:
                 ctx.userAgent.os +
@@ -263,11 +308,9 @@ class UserController {
 
     async invalidateRefreshToken(ctx) {
         const request = ctx.request.body
-        console.log(request)
         if (!request.refreshToken) {
             ctx.throw(404, 'INVALID_DATA')
         }
-        console.log(ctx.state.user[0])
         try {
             await db('refresh_tokens')
                 .update({
