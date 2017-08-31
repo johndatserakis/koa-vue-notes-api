@@ -54,7 +54,7 @@ npm run start-production
 npm run pretty
 
 # run tests
-npm run test with jest
+npm run test
 
 # knex migration examples
 # (from command line in root directory with knex installed globally)
