@@ -101,7 +101,7 @@ class UserController {
 
         //Let's grab their ipaddress
         //TODO: This doesn't work correctly because of the reverse-proxy
-        request.ipAddress = ctx.request.ip
+        request.ipAddress = ctx.ip
 
         //Ok, at this point we can sign them up.
         try {
@@ -179,7 +179,7 @@ class UserController {
                 ctx.userAgent.platform +
                 ' ' +
                 ctx.userAgent.browser,
-            ipAddress: ctx.request.ip,
+            ipAddress: ctx.ip,
             expiration: dateAddMonths(new Date(), 1),
         }
 
@@ -268,7 +268,7 @@ class UserController {
                 ctx.userAgent.platform +
                 ' ' +
                 ctx.userAgent.browser,
-            ipAddress: ctx.request.ip,
+            ipAddress: ctx.ip,
             expiration: dateAddMonths(new Date(), 1),
         }
 

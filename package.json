@@ -1,6 +1,6 @@
 {
   "name": "koa-vue-notes-api",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "A SPA using Koa as the backend and Vue as the frontend.",
   "author": "John Datserakis",
   "private": false,

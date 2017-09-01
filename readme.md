@@ -56,12 +56,7 @@ npm run pretty
 # run tests
 npm run test
 
-# knex migration examples
-# (from command line in root directory with knex installed globally)
-# (*make* commands are just here to show syntax)
-
-# make migration
-knex migrate:make create_users_table
+## knex migrations ##
 
 # migrate latest
 knex migrate:latest
@@ -69,11 +64,18 @@ knex migrate:latest
 # rollback
 knex migrate:rollback
 
+# run all seeds
+knex seed:run
+
+## knex seed and migration make commands ##
+
+# make migration
+knex migrate:make create_users_table
+
 # make seed
 knex seed:make seed_users
 
-# run all seeds
-knex seed:run
+
 ```
 
 ## General Information
