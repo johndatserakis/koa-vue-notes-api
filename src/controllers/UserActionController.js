@@ -111,22 +111,24 @@ class UserController {
 
             //Let's send a welcome email.
             if (process.env.NODE_ENV !== 'testing') {
-                let email = await fse.readFile(
-                    './src/email/welcome.html',
-                    'utf8'
-                )
-                const emailData = {
-                    to: request.email,
-                    from: process.env.APP_EMAIL,
-                    subject: 'Welcome To Koa-Vue-Notes-Api',
-                    html: email,
-                    categories: ['koa-vue-notes-api-new-user'],
-                    substitutions: {
-                        appName: process.env.APP_NAME,
-                        appEmail: process.env.APP_EMAIL,
-                    },
-                }
-                await sgMail.send(emailData)
+                //Let's turn off welcome emails for the moment
+
+                // let email = await fse.readFile(
+                //     './src/email/welcome.html',
+                //     'utf8'
+                // )
+                // const emailData = {
+                //     to: request.email,
+                //     from: process.env.APP_EMAIL,
+                //     subject: 'Welcome To Koa-Vue-Notes-Api',
+                //     html: email,
+                //     categories: ['koa-vue-notes-api-new-user'],
+                //     substitutions: {
+                //         appName: process.env.APP_NAME,
+                //         appEmail: process.env.APP_EMAIL,
+                //     },
+                // }
+                // await sgMail.send(emailData)
             }
 
             //And return our response.

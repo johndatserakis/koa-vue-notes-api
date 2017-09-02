@@ -57,15 +57,18 @@ npm run pretty
 npm run test
 
 ## knex migrations ##
+## note - all knex migrate/rollback/seed calls must be prefaced
+## with the setting of NODE_ENV - also, seeds and rollbacks are
+## disabled in production
 
 # migrate latest
-knex migrate:latest
+NODE_ENV=development knex migrate:latest
 
 # rollback
-knex migrate:rollback
+NODE_ENV=developmentknex migrate:rollback
 
 # run all seeds
-knex seed:run
+NODE_ENV=development knex seed:run
 
 ## knex seed and migration make commands ##
 

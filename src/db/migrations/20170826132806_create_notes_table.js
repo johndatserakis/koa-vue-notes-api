@@ -1,3 +1,7 @@
+//I only want migrations, rollbacks, and seeds to run when the NODE_ENV is specified
+//in the knex seed/migrate command. Knex will error out if it is not specified.
+if (!process.env.NODE_ENV) { return; }
+
 exports.up = function(knex, Promise) {
     return knex.schema.createTable('notes', function(table) {
         table.increments('id').primary()
@@ -11,5 +15,8 @@ exports.up = function(knex, Promise) {
 }
 
 exports.down = function(knex, Promise) {
-    return knex.schema.dropTableIfExists('notes')
+    //We never want to drop tables in production
+    if (process.env.NODE_ENV !== 'production') {
+        return knex.schema.dropTableIfExists('notes')
+    }
 }
