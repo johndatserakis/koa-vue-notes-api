@@ -1,3 +1,6 @@
+//Only run tests if we've specifically set NODE_ENV to testing
+if (process.env.NODE_ENV !== 'testing') { throw new Error('NODE_ENV not set') }
+
 //This starts the app up
 import { server } from '../app'
 
