@@ -17,22 +17,22 @@ This is a simple SPA built using [Koa](http://koajs.com/) (2.3) as the backend a
 - Koa-Ratelimit
 - Koa-Bodyparser
 - KCors
-- Koa-Json-Error
-- Koa-Useragent
+- Koa-Json-Error for JSON requests/responses
+- Koa-Useragent to get client user-agent data
 - Bcrypt
-- Sendgrind Mailer
-- Joi
+- Sendgrind Mailer for email
+- Joi for input validation
 - Fs-Extra
 - JWT
-- Nodemon
+- Nodemon for running in development
 - Prettier
 - Babel
-- PM2
+- PM2 for running in production
 - MySQL
 - Knex with migrations and seeds
-- Jest
-- Faker
-- log4js
+- Jest for testing
+- Faker to create seeds
+- log4js for logging
 - And more...
 
 ## Installing / Getting started
