@@ -65,7 +65,7 @@ npm run test
 NODE_ENV=development knex migrate:latest
 
 # rollback
-NODE_ENV=developmentknex migrate:rollback
+NODE_ENV=development knex migrate:rollback
 
 # run all seeds
 NODE_ENV=development knex seed:run
