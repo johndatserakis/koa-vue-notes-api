@@ -78,7 +78,6 @@ knex migrate:make create_users_table
 # make seed
 knex seed:make seed_users
 
-
 ```
 
 ## General Information
