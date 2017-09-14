@@ -3,7 +3,7 @@
   "version": "1.2.6",
   "description": "A SPA using Koa as the backend and Vue as the frontend.",
   "author": "John Datserakis",
-  "private": false,
+  "private": true,
   "scripts": {
     "watch": "NODE_ENV=development nodemon app.js --exec",
     "test": "NODE_ENV=testing jest --forceExit",
