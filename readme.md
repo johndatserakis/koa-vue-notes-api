@@ -20,7 +20,7 @@ This is a simple SPA built using [Koa](http://koajs.com/) (2.3) as the backend a
 - Koa-Json-Error for JSON requests/responses
 - Koa-Useragent to get client user-agent data
 - Bcrypt
-- Sendgrind Mailer for email
+- Sendgrid Mailer for email
 - Joi for input validation
 - Fs-Extra
 - JWT
