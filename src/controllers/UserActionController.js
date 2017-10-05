@@ -375,7 +375,11 @@ class UserController {
                     resetUrl: resetUrlCustom,
                 },
             }
-            await sgMail.send(emailData)
+            
+            // Let's only send the email if we're not testing
+            if (process.env.NODE_ENV !== 'testing') {
+                await sgMail.send(emailData)
+            }
         }
 
         ctx.body = { passwordResetToken: resetData.passwordResetToken }
