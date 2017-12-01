@@ -120,9 +120,9 @@ We use controllers to keep our router thin. The controller's responsibility is t
 
 Here is our database setup. This project uses Knex to manage migrations and execute queries. I initially wrote wrote all the MySQL calls using raw SQL, but the need for a migrations manager pushed me towards an ORM for the MySQL database. Knex is awesome - very powerful, easy to use and make queries, and the migrations are nice to have for sure - especially for testing.
 
-For this project you'll need to make two databases in your development environment, `koa_vue_notes` and `koa_vue_notes_testing`. In your production environment you would just have `koa_vue_notes`. Tests use a different database because the data there is extremely volatile - as table information is created and destroyed on every test.
+For this project you'll need to make two databases in your development environment, `koa_vue_notes_development` and `koa_vue_notes_testing`. In your production environment you would just have `koa_vue_notes_production`. Tests use a different database because the data there is extremely volatile - as table information is created and destroyed on every test. The `knexfile.js` used here dynamically attaches to the proper database based the `NODE_ENV`.
 
-The `knexfile.js` in the root of the project is all setup with the ability to read your `.env` file. Let's say you download this project - first you'll `npm install`, then create a `koa_vue_notes` database and a `koa_vue_notes_testing` database, then `knex migrate:latest` and `knex seed:run` to create and seed your tables. Currently it's set up to make five users and 100 notes distributed to those users.
+The `knexfile.js` in the root of the project is all setup with the ability to read your `.env` file. Make sure to have knex installed globally, `npm install -g knex`. Let's say you download this project - first you'll `npm install`, then create a `koa_vue_notes` database and a `koa_vue_notes_testing` database, then `knex migrate:latest` and `knex seed:run` to create and seed your tables. Currently it's set up to make five users and 100 notes distributed to those users.
 
 ### middleware
 

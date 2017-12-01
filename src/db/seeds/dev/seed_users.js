@@ -21,6 +21,19 @@ exports.seed = async function(knex, Promise) {
             throw new Error('PASSWORD_ENCRIPTION_ERROR')
         }
 
+        if (i === 0) {
+            let testUser = {
+                token: 'qwertyuiop',
+                firstName: 'DemoFirstName',
+                lastName: 'DemoLastName',
+                username: 'demousername',
+                email: 'demoemail@example.com',
+                password: password,
+            }
+            seedData.push(testUser)
+            continue
+        }
+
         let testUser = {
             token: faker.internet.password(),
             firstName: faker.name.firstName(),
