@@ -1,6 +1,6 @@
 {
   "name": "koa-vue-notes-api",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "A SPA using Koa as the backend and Vue as the frontend.",
   "author": "John Datserakis",
   "private": true,
@@ -24,8 +24,8 @@
     "install": "^0.10.1",
     "ioredis": "^3.1.1",
     "jest": "^20.0.4",
-    "joi": "^10.6.0",
-    "jsonwebtoken": "^7.4.1",
+    "joi": "^13.1.2",
+    "jsonwebtoken": "^8.2.0",
     "kcors": "^2.0.0",
     "knex": "^0.13.0",
     "koa": "^2.0.0-alpha.3",
@@ -41,13 +41,13 @@
     "randexp": "^0.4.5"
   },
   "devDependencies": {
-    "axios-mock-adapter": "^1.9.0",
+    "axios-mock-adapter": "^1.14.1",
     "babel-cli": "^6.5.1",
     "babel-polyfill": "^6.5.0",
-    "babel-preset-env": "^1.6.0",
+    "babel-preset-env": "^1.6.1",
     "babel-register": "^6.9.0",
-    "nodemon": "^1.9.2",
-    "prettier": "^1.5.3",
+    "nodemon": "^1.17.1",
+    "prettier": "^1.11.1",
     "supertest": "^1.2.0"
   },
   "babel": {

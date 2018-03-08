@@ -51,7 +51,9 @@ const userSchemaResetPassword = joi.object({
         .min(8)
         .max(35)
         .required(),
-    passwordResetToken: joi.string().required(),
+    passwordResetToken: joi
+        .string()
+        .required(),
 })
 
 class UserController {
@@ -183,6 +185,7 @@ class UserController {
                 ctx.userAgent.browser,
             ipAddress: ctx.request.ip,
             expiration: dateAddMonths(new Date(), 1),
+            isValid: true
         }
 
         //Insert the refresh data into the db
@@ -215,8 +218,9 @@ class UserController {
 
     async refreshAccessToken(ctx) {
         const request = ctx.request.body
-        if (!request.username || !request.refreshToken)
+        if (!request.username || !request.refreshToken) {
             ctx.throw(401, 'NO_REFRESH_TOKEN')
+        }
 
         //Let's find that user and refreshToken in the refreshToken table
         const [refreshTokenDatabaseData] = await db('refresh_tokens')
@@ -224,7 +228,7 @@ class UserController {
             .where({
                 username: request.username,
                 refreshToken: request.refreshToken,
-                isValid: false,
+                isValid: true,
             })
         if (!refreshTokenDatabaseData) {
             ctx.throw(400, 'INVALID_REFRESH_TOKEN')
@@ -238,8 +242,6 @@ class UserController {
         if (refreshTokenIsValid !== -1) {
             ctx.throw(400, 'REFRESH_TOKEN_EXPIRED')
         }
-
-        // console.log(refreshTokenDatabaseData)
 
         //Ok, everthing checked out. So let's invalidate the refresh token they just confirmed, and get them hooked up with a new one.
         try {
@@ -272,6 +274,7 @@ class UserController {
                 ctx.userAgent.browser,
             ipAddress: ctx.request.ip,
             expiration: dateAddMonths(new Date(), 1),
+            isValid: true
         }
 
         //Insert the refresh data into the db
@@ -375,7 +378,7 @@ class UserController {
                     resetUrl: resetUrlCustom,
                 },
             }
-            
+
             // Let's only send the email if we're not testing
             if (process.env.NODE_ENV !== 'testing') {
                 await sgMail.send(emailData)
