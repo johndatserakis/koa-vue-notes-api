@@ -51,9 +51,7 @@ const userSchemaResetPassword = joi.object({
         .min(8)
         .max(35)
         .required(),
-    passwordResetToken: joi
-        .string()
-        .required(),
+    passwordResetToken: joi.string().required(),
 })
 
 class UserController {
@@ -114,7 +112,6 @@ class UserController {
             //Let's send a welcome email.
             if (process.env.NODE_ENV !== 'testing') {
                 //Let's turn off welcome emails for the moment
-
                 // let email = await fse.readFile(
                 //     './src/email/welcome.html',
                 //     'utf8'
@@ -167,6 +164,7 @@ class UserController {
                 ctx.throw(400, 'INVALID_CREDENTIALS')
             }
         } catch (error) {
+            console.log('here', error)
             ctx.throw(400, 'INVALID_DATA')
         }
 
@@ -185,7 +183,7 @@ class UserController {
                 ctx.userAgent.browser,
             ipAddress: ctx.request.ip,
             expiration: dateAddMonths(new Date(), 1),
-            isValid: true
+            isValid: true,
         }
 
         //Insert the refresh data into the db
@@ -274,7 +272,7 @@ class UserController {
                 ctx.userAgent.browser,
             ipAddress: ctx.request.ip,
             expiration: dateAddMonths(new Date(), 1),
-            isValid: true
+            isValid: true,
         }
 
         //Insert the refresh data into the db

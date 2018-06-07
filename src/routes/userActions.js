@@ -8,7 +8,7 @@ const router = new Router()
 const jwtMiddleware = jwt({ secret: process.env.JWT_SECRET })
 
 router.get('/', async (ctx, next) => {
-    ctx.body = { message: 'Hi there. ' +  process.env.npm_package_version}
+    ctx.body = { message: 'Hi there. ' + process.env.npm_package_version }
 })
 
 //Initial controller once for all routes

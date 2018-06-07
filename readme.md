@@ -8,10 +8,12 @@
 
 # Koa-Vue-Notes-Api
 
-This is a simple SPA built using [Koa](http://koajs.com/) (2.3) as the backend and [Vue](https://vuejs.org/) (2.4) as the frontend. Click [here](https://github.com/johndatserakis/koa-vue-notes-web) to see the frontend Vue code. Click [here](https://koa-vue-notes-web.innermonkdesign.com/) to view the app live. You can also check out the [koa-vue-notes-project](https://github.com/johndatserakis/koa-vue-notes-project) repo if you like to have both your frontend and backend living within the same folder.
+This is a simple SPA built using [Koa](http://koajs.com/) (2.5.1) as the backend and [Vue](https://vuejs.org/) (2.5.16) as the frontend. Click [here](https://github.com/johndatserakis/koa-vue-notes-api) to see the backend Koa code. Click [here](https://koa-vue-notes-web.innermonkdesign.com/) to view the app live. You can also check out the [koa-vue-notes-project](https://github.com/johndatserakis/koa-vue-notes-project) repo if you like to have both your frontend and backend living within the same folder.
+
+## Note - Now updated to Koa 2.5.1!
 
 ## Features
-- Koa 2.3
+- Koa 2.5.1
 - Fully written using async/await
 - Koa-Router
 - Koa-Ratelimit
@@ -33,6 +35,7 @@ This is a simple SPA built using [Koa](http://koajs.com/) (2.3) as the backend a
 - Jest for testing
 - Faker to create seeds
 - log4js for logging
+- Docker server
 - And more...
 
 ## Installing / Getting started
@@ -123,6 +126,10 @@ Here is our database setup. This project uses Knex to manage migrations and exec
 For this project you'll need to make two databases in your development environment, `koa_vue_notes_development` and `koa_vue_notes_testing`. In your production environment you would just have `koa_vue_notes_production`. Tests use a different database because the data there is extremely volatile - as table information is created and destroyed on every test. The `knexfile.js` used here dynamically attaches to the proper database based the `NODE_ENV`.
 
 The `knexfile.js` in the root of the project is all setup with the ability to read your `.env` file. Make sure to have knex installed globally, `npm install -g knex`. Let's say you download this project - first you'll `npm install`, then create a `koa_vue_notes` database and a `koa_vue_notes_testing` database, then `knex migrate:latest` and `knex seed:run` to create and seed your tables. Currently it's set up to make five users and 100 notes distributed to those users.
+
+### Docker
+
+Docker is used for the development virtual machine. To use the included dockerfile.yml, run `docker-compose up -d --build` to bring up the machine. To stop the machine, run `docker-compose down`. The main reason docker is used in this case is to host the MySQL database. Make a database named `koa-vue-notes_development`. Connect through Sequel Pro using `host: 127.0.0.1`, `port: 3360`, `user: root`, and `password: docker`.
 
 ### middleware
 

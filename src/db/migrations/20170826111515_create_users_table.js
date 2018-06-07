@@ -1,6 +1,8 @@
 //I only want migrations, rollbacks, and seeds to run when the NODE_ENV is specified
 //in the knex seed/migrate command. Knex will error out if it is not specified.
-if (!process.env.NODE_ENV) { throw new Error('NODE_ENV not set') }
+if (!process.env.NODE_ENV) {
+    throw new Error('NODE_ENV not set')
+}
 
 exports.up = function(knex, Promise) {
     return knex.schema.createTable('users', function(table) {
@@ -9,11 +11,11 @@ exports.up = function(knex, Promise) {
         table.string('firstName').notNullable()
         table.string('lastName').notNullable()
         table
-            .string('username')
+            .string('username', 191)
             .notNullable()
             .unique()
         table
-            .string('email')
+            .string('email', 191)
             .notNullable()
             .unique()
         table.string('password').notNullable()
