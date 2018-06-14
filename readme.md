@@ -8,7 +8,7 @@
 
 # Koa-Vue-Notes-Api
 
-This is a simple SPA built using [Koa](http://koajs.com/) (2.5.1) as the backend and [Vue](https://vuejs.org/) (2.5.16) as the frontend. Click [here](https://github.com/johndatserakis/koa-vue-notes-api) to see the backend Koa code. Click [here](https://koa-vue-notes-web.innermonkdesign.com/) to view the app live. You can also check out the [koa-vue-notes-project](https://github.com/johndatserakis/koa-vue-notes-project) repo if you like to have both your frontend and backend living within the same folder.
+This is a simple SPA built using [Koa](http://koajs.com/) (2.5.1) as the backend and [Vue](https://vuejs.org/) (2.5.16) as the frontend. Click [here](https://github.com/johndatserakis/koa-vue-notes-web) to see the frontend Vue code. Click [here](https://koa-vue-notes-web.innermonkdesign.com/) to view the app live. You can also check out the [koa-vue-notes-project](https://github.com/johndatserakis/koa-vue-notes-project) repo if you like to have both your frontend and backend living within the same folder.
 
 ## Note - Now updated to Koa 2.5.1!
 
