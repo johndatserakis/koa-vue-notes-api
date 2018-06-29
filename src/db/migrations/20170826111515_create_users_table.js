@@ -6,6 +6,9 @@ if (!process.env.NODE_ENV) {
 
 exports.up = function(knex, Promise) {
     return knex.schema.createTable('users', function(table) {
+        table.charset('utf8mb4')
+        table.collate('utf8mb4_unicode_ci')
+
         table.increments('id').primary()
         table.string('token').notNullable()
         table.string('firstName').notNullable()
@@ -35,8 +38,14 @@ exports.up = function(knex, Promise) {
             .notNullable()
         table.integer('loginCount').defaultTo(0)
         table.string('ipAddress')
-        table.timestamp('updatedAt').nullable()
-        table.timestamp('createdAt').defaultTo(knex.fn.now())
+
+        table
+            .dateTime('updatedAt')
+            .defaultTo(knex.raw('NULL ON UPDATE CURRENT_TIMESTAMP'))
+        table
+            .dateTime('createdAt')
+            .notNullable()
+            .defaultTo(knex.raw('CURRENT_TIMESTAMP'))
     })
 }
 

@@ -14,6 +14,8 @@ module.exports = {
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE + '_testing',
+            charset: 'utf8mb4',
+            collate: 'utf8mb4_unicode_ci'
         },
         migrations: {
             directory: './src/db/migrations',
@@ -31,6 +33,9 @@ module.exports = {
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE + '_development',
+            charset: 'utf8mb4',
+            collate: 'utf8mb4_unicode_ci'
+
         },
         migrations: {
             directory: './src/db/migrations',
@@ -48,6 +53,8 @@ module.exports = {
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE + '_production',
+            charset: 'utf8mb4',
+            collate: 'utf8mb4_unicode_ci'
         },
         migrations: {
             directory: './src/db/migrations',
