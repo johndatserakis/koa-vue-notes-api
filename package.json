@@ -27,7 +27,7 @@
     "joi": "^13.4.0",
     "jsonwebtoken": "^8.2.2",
     "kcors": "^2.2.1",
-    "knex": "^0.14.6",
+    "knex": "^0.19.5",
     "koa": "^2.5.1",
     "koa-bodyparser": "^4.2.1",
     "koa-json-error": "^3.1.2",
