@@ -1,32 +1,19 @@
-import Router from 'koa-router'
-import jwt from '../middleware/jwt'
-import logger from '../logs/log'
+import Router from "koa-router";
+import { jwt } from "../middleware/jwt";
 
-import NoteController from '../controllers/NoteController'
+import {
+  index,
+  show,
+  create,
+  update,
+  del,
+} from "../controllers/NoteController";
 
-const router = new Router()
-const jwtMiddleware = jwt({ secret: process.env.JWT_SECRET })
+export const router = new Router();
+const jwtMiddleware = jwt({ secret: process.env.JWT_SECRET });
 
-const noteController = new NoteController()
-
-router.get('/api/v1/notes', jwtMiddleware, async (ctx, next) => {
-    await noteController.index(ctx)
-})
-
-router.post('/api/v1/notes', jwtMiddleware, async (ctx, next) => {
-    await noteController.create(ctx)
-})
-
-router.get('/api/v1/notes/:id', jwtMiddleware, async (ctx, next) => {
-    await noteController.show(ctx)
-})
-
-router.put('/api/v1/notes/:id', jwtMiddleware, async (ctx, next) => {
-    await noteController.update(ctx)
-})
-
-router.delete('/api/v1/notes/:id', jwtMiddleware, async (ctx, next) => {
-    await noteController.delete(ctx)
-})
-
-export default router
+router.get("/api/v1/notes", jwtMiddleware, index);
+router.post("/api/v1/notes", jwtMiddleware, create);
+router.get("/api/v1/notes/:id", jwtMiddleware, show);
+router.put("/api/v1/notes/:id", jwtMiddleware, update);
+router.delete("/api/v1/notes/:id", jwtMiddleware, del);

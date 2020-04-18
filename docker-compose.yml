@@ -2,18 +2,18 @@ version: "3"
 services:
   php:
     image: php:7.1-fpm-alpine
-    build: './docker/php/'
+    build: "./docker/php/"
     networks:
-      - AMP
+      - network-main
     volumes:
       - ./:/var/www/html/
   apache:
     image: httpd:2.4-alpine
-    build: './docker/apache/'
+    build: "./docker/apache/"
     depends_on:
       - php
     networks:
-      - AMP
+      - network-main
     ports:
       - "443:443"
       - "80:80"
@@ -26,21 +26,25 @@ services:
     volumes:
       - ./docker/mysql/data/:/var/lib/mysql/
     networks:
-      - AMP
+      - network-main
     environment:
       - MYSQL_ROOT_PASSWORD=docker
     ports:
       - "3306:3306"
-    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    command:
+      [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+      ]
   redis:
     image: redis:4.0.5-alpine
     command: ["redis-server", "--appendonly", "yes"]
     hostname: redis
     networks:
-      - AMP
+      - network-main
     volumes:
       - ./docker/redis/data/:/data
     ports:
       - "6379:6379"
 networks:
-  AMP:
+  network-main:

@@ -75,3 +75,10 @@
 [Sun May 12 00:20:24.856064 2019] [mpm_event:notice] [pid 1:tid 139898954697576] AH00489: Apache/2.4.39 (Unix) configured -- resuming normal operations
 [Sun May 12 00:20:24.858385 2019] [core:notice] [pid 1:tid 139898954697576] AH00094: Command line: 'httpd -D FOREGROUND'
 [Sun May 12 01:02:42.804614 2019] [mpm_event:notice] [pid 1:tid 139898954697576] AH00491: caught SIGTERM, shutting down
+[Tue Mar 24 00:23:01.875478 2020] [mpm_event:notice] [pid 1:tid 139940937960776] AH00489: Apache/2.4.41 (Unix) configured -- resuming normal operations
+[Tue Mar 24 00:23:01.876225 2020] [core:notice] [pid 1:tid 139940937960776] AH00094: Command line: 'httpd -D FOREGROUND'
+[Tue Mar 24 00:50:53.403681 2020] [proxy_fcgi:error] [pid 8:tid 139940934785824] [client 172.18.0.1:43124] AH01071: Got error 'Primary script unknown\n'
+[Tue Mar 24 00:51:01.544287 2020] [proxy_fcgi:error] [pid 9:tid 139940934069024] [client 172.18.0.1:43130] AH01071: Got error 'Primary script unknown\n'
+[Tue Mar 24 00:51:02.651536 2020] [proxy_fcgi:error] [pid 7:tid 139940934785824] [client 172.18.0.1:43136] AH01071: Got error 'Primary script unknown\n'
+[Fri Apr 17 02:30:17.593115 2020] [mpm_event:notice] [pid 1:tid 140242154188104] AH00489: Apache/2.4.41 (Unix) configured -- resuming normal operations
+[Fri Apr 17 02:30:17.594668 2020] [core:notice] [pid 1:tid 140242154188104] AH00094: Command line: 'httpd -D FOREGROUND'

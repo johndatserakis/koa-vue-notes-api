@@ -1,10 +1,10 @@
 {
-    "apps" : [
-            {
-            "name": "koa-vue-notes-api",
-            "script": "app.js",
-            "instances": 2,
-            "exec_mode": "cluster",
-        }
-    ]
+  "apps": [
+    {
+      "name": "koa-vue-notes-api",
+      "script": "app.js",
+      "instances": 2,
+      "exec_mode": "cluster"
+    }
+  ]
 }
