@@ -16,10 +16,6 @@ import {
 export const router = new Router();
 const jwtMiddleware = jwt({ secret: process.env.JWT_SECRET });
 
-router.get("/", async (ctx) => {
-  ctx.body = { message: `Hi there. ${process.env.npm_package_version}` };
-});
-
 router.post("/api/v1/user/signup", signup);
 router.post("/api/v1/user/authenticate", authenticate);
 router.post("/api/v1/user/refreshAccessToken", refreshAccessToken);

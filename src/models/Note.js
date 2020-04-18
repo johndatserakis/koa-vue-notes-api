@@ -1,5 +1,7 @@
 import db from "../db/db";
 
+// Helpers
+
 async function findById(id) {
   try {
     const [noteData] = await db("notes")
@@ -11,6 +13,8 @@ async function findById(id) {
     throw new Error("ERROR");
   }
 }
+
+// Class
 
 class Note {
   constructor(data) {
@@ -54,7 +58,7 @@ class Note {
 
   async store() {
     try {
-      return await db("notes").insert(this);
+      return await db("notes").insert(this).returning("id");
     } catch (error) {
       console.log(error);
       throw new Error("ERROR");
@@ -63,7 +67,10 @@ class Note {
 
   async save() {
     try {
-      return await db("notes").update(this).where({ id: this.id });
+      return await db("notes")
+        .update(this)
+        .where({ id: this.id })
+        .returning("id");
     } catch (error) {
       console.log(error);
       throw new Error("ERROR");

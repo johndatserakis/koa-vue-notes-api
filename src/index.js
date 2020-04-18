@@ -8,6 +8,7 @@ import redis from "ioredis";
 import { logger } from "./logs/log";
 
 // Routes
+import { router as baseRouter } from "./routes/base";
 import { router as userActionsRouter } from "./routes/userActions";
 import { router as notesRouter } from "./routes/notes";
 
@@ -76,6 +77,8 @@ app.use(userAgent);
 app.use(bodyParser({ enableTypes: ["json"] }));
 
 // For router
+app.use(baseRouter.routes());
+app.use(baseRouter.allowedMethods());
 app.use(userActionsRouter.routes());
 app.use(userActionsRouter.allowedMethods());
 app.use(notesRouter.routes());

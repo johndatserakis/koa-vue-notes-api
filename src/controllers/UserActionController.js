@@ -32,6 +32,31 @@ const userSchemaResetPassword = joi.object({
   passwordResetToken: joi.string().required(),
 });
 
+// Helpers
+export const checkUniqueToken = async (token) => {
+  const result = await db("users")
+    .where({
+      token,
+    })
+    .count("id as id");
+  if (result[0].id) {
+    return true;
+  }
+  return false;
+};
+
+export const generateUniqueToken = async () => {
+  const token = new rand(/[a-zA-Z0-9_-]{7,7}/).gen();
+
+  if (await checkUniqueToken(token)) {
+    await generateUniqueToken();
+  } else {
+    return token;
+  }
+};
+
+// Methods
+
 export const signup = async (ctx) => {
   // First let's save off the ctx.request.body. Throughout this project
   // we're going to try and avoid using the ctx.request.body and instead use
@@ -41,7 +66,9 @@ export const signup = async (ctx) => {
   // Next do validation on the input
   const validator = joi.validate(request, userSchemaSignup);
   if (validator.error) {
-    ctx.throw(400, validator.error.details[0].message);
+    ctx.throw(400, {
+      error: { code: 400, message: validator.error.details[0].message },
+    });
   }
 
   // Now let's check for a duplicate username
@@ -51,7 +78,7 @@ export const signup = async (ctx) => {
     })
     .count("id as id");
   if (resultDuplicateUsername.id) {
-    ctx.throw(400, "DUPLICATE_USERNAME");
+    ctx.throw(400, { error: { code: 400, message: "DUPLICATE_USERNAME" } });
   }
 
   // ..and duplicate email
@@ -61,17 +88,17 @@ export const signup = async (ctx) => {
     })
     .count("id as id");
   if (resultDuplicateEmail.id) {
-    ctx.throw(400, "DUPLICATE_EMAIL");
+    ctx.throw(400, { error: { code: 400, message: "DUPLICATE_EMAIL" } });
   }
 
   // Now let's generate a token for this user
-  request.token = await this.generateUniqueToken();
+  request.token = await generateUniqueToken();
 
   // Ok now let's hash their password.
   try {
     request.password = await bcrypt.hash(request.password, 12);
   } catch (error) {
-    ctx.throw(400, "INVALID_DATA");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 
   // Let's grab their ipaddress
@@ -103,10 +130,10 @@ export const signup = async (ctx) => {
       // await sgMail.send(emailData)
     }
 
-    // And return our response.
-    ctx.body = { message: "SUCCESS", id: result };
+    // And return our response. Just the id here to be safe.
+    ctx.body = { data: { id: result } };
   } catch (error) {
-    ctx.throw(400, "INVALID_DATA");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 };
 
@@ -114,7 +141,7 @@ export const authenticate = async (ctx) => {
   const request = ctx.request.body;
 
   if (!request.username || !request.password) {
-    ctx.throw(404, "INVALID_DATA");
+    ctx.throw(404, { error: { code: 400, message: "INVALID_DATA" } });
   }
 
   // Let's find that user
@@ -124,18 +151,17 @@ export const authenticate = async (ctx) => {
     })
     .select("id", "token", "username", "email", "password", "isAdmin");
   if (!userData) {
-    ctx.throw(401, "INVALID_CREDENTIALS");
+    ctx.throw(401, { error: { code: 400, message: "INVALID_CREDENTIALS" } });
   }
 
   // Now let's check the password
   try {
     const correct = await bcrypt.compare(request.password, userData.password);
     if (!correct) {
-      ctx.throw(400, "INVALID_CREDENTIALS");
+      ctx.throw(401, { error: { code: 400, message: "INVALID_CREDENTIALS" } });
     }
   } catch (error) {
-    console.log("here", error);
-    ctx.throw(400, "INVALID_DATA");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 
   // Let's get rid of that password now for security reasons
@@ -155,14 +181,14 @@ export const authenticate = async (ctx) => {
   try {
     await db("refresh_tokens").insert(refreshTokenData);
   } catch (error) {
-    ctx.throw(400, "INVALID_DATA");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 
   // Update their login count
   try {
     await db("users").increment("loginCount").where({ id: userData.id });
   } catch (error) {
-    ctx.throw(400, "INVALID_DATA");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 
   // Ok, they've made it, send them their jsonwebtoken with their data, accessToken and refreshToken
@@ -170,15 +196,17 @@ export const authenticate = async (ctx) => {
     expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
   });
   ctx.body = {
-    accessToken: token,
-    refreshToken: refreshTokenData.refreshToken,
+    data: {
+      accessToken: token,
+      refreshToken: refreshTokenData.refreshToken,
+    },
   };
 };
 
 export const refreshAccessToken = async (ctx) => {
   const request = ctx.request.body;
   if (!request.username || !request.refreshToken) {
-    ctx.throw(401, "NO_REFRESH_TOKEN");
+    ctx.throw(401, { error: { code: 400, message: "NO_REFRESH_TOKEN" } });
   }
 
   // Let's find that user and refreshToken in the refreshToken table
@@ -190,7 +218,7 @@ export const refreshAccessToken = async (ctx) => {
       isValid: true,
     });
   if (!refreshTokenDatabaseData) {
-    ctx.throw(400, "INVALID_REFRESH_TOKEN");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_REFRESH_TOKEN" } });
   }
 
   // Let's make sure the refreshToken is not expired
@@ -199,7 +227,7 @@ export const refreshAccessToken = async (ctx) => {
     refreshTokenDatabaseData.expiration,
   );
   if (refreshTokenIsValid !== -1) {
-    ctx.throw(400, "REFRESH_TOKEN_EXPIRED");
+    ctx.throw(400, { error: { code: 400, message: "REFRESH_TOKEN_EXPIRED" } });
   }
 
   // Ok, everthing checked out. So let's invalidate the refresh token they just confirmed, and get them hooked up with a new one.
@@ -211,14 +239,14 @@ export const refreshAccessToken = async (ctx) => {
       })
       .where({ refreshToken: refreshTokenDatabaseData.refreshToken });
   } catch (error) {
-    ctx.throw(400, "INVALID_DATA1");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 
   const [userData] = await db("users")
     .select("id", "token", "username", "email", "isAdmin")
     .where({ username: request.username });
   if (!userData) {
-    ctx.throw(401, "INVALID_REFRESH_TOKEN");
+    ctx.throw(401, { error: { code: 400, message: "INVALID_REFRESH_TOKEN" } });
   }
 
   // Generate the refreshToken data
@@ -235,7 +263,7 @@ export const refreshAccessToken = async (ctx) => {
   try {
     await db("refresh_tokens").insert(refreshTokenData);
   } catch (error) {
-    ctx.throw(400, "INVALID_DATA");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 
   // Ok, they've made it, send them their jsonwebtoken with their data, accessToken and refreshToken
@@ -243,8 +271,10 @@ export const refreshAccessToken = async (ctx) => {
     expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
   });
   ctx.body = {
-    accessToken: token,
-    refreshToken: refreshTokenData.refreshToken,
+    data: {
+      accessToken: token,
+      refreshToken: refreshTokenData.refreshToken,
+    },
   };
 };
 
@@ -257,16 +287,16 @@ export const invalidateAllRefreshTokens = async (ctx) => {
         updatedAt: dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss"),
       })
       .where({ username: request.username });
-    ctx.body = { message: "SUCCESS" };
+    ctx.body = { data: {} };
   } catch (error) {
-    ctx.throw(400, "INVALID_DATA");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 };
 
 export const invalidateRefreshToken = async (ctx) => {
   const request = ctx.request.body;
   if (!request.refreshToken) {
-    ctx.throw(404, "INVALID_DATA");
+    ctx.throw(404, { error: { code: 400, message: "INVALID_DATA" } });
   }
   try {
     await db("refresh_tokens")
@@ -278,9 +308,9 @@ export const invalidateRefreshToken = async (ctx) => {
         username: ctx.state.user.username,
         refreshToken: request.refreshToken,
       });
-    ctx.body = { message: "SUCCESS" };
+    ctx.body = { data: {} };
   } catch (error) {
-    ctx.throw(400, "INVALID_DATA");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 };
 
@@ -288,7 +318,7 @@ export const forgot = async (ctx) => {
   const request = ctx.request.body;
 
   if (!request.email || !request.url || !request.type) {
-    ctx.throw(404, "INVALID_DATA");
+    ctx.throw(404, { error: { code: 400, message: "INVALID_DATA" } });
   }
 
   const resetData = {
@@ -302,10 +332,10 @@ export const forgot = async (ctx) => {
       .where({ email: request.email })
       .returning("id");
     if (!result) {
-      ctx.throw(400, "INVALID_DATA");
+      ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
     }
   } catch (error) {
-    ctx.throw(400, "INVALID_DATA");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 
   // Now for the email if they've chosen the web type of forgot password
@@ -332,14 +362,14 @@ export const forgot = async (ctx) => {
     }
   }
 
-  ctx.body = { passwordResetToken: resetData.passwordResetToken };
+  ctx.body = { data: { passwordResetToken: resetData.passwordResetToken } };
 };
 
 export const checkPasswordResetToken = async (ctx) => {
   const request = ctx.request.body;
 
   if (!request.passwordResetToken || !request.email) {
-    ctx.throw(404, "INVALID_DATA");
+    ctx.throw(404, { error: { code: 400, message: "INVALID_DATA" } });
   }
 
   const [passwordResetData] = await db("users")
@@ -349,7 +379,7 @@ export const checkPasswordResetToken = async (ctx) => {
       passwordResetToken: request.passwordResetToken,
     });
   if (!passwordResetData.passwordResetExpiration) {
-    ctx.throw(404, "INVALID_TOKEN");
+    ctx.throw(404, { error: { code: 400, message: "INVALID_TOKEN" } });
   }
 
   // Let's make sure the refreshToken is not expired
@@ -358,10 +388,10 @@ export const checkPasswordResetToken = async (ctx) => {
     passwordResetData.passwordResetExpiration,
   );
   if (tokenIsValid !== -1) {
-    ctx.throw(400, "RESET_TOKEN_EXPIRED");
+    ctx.throw(400, { error: { code: 400, message: "RESET_TOKEN_EXPIRED" } });
   }
 
-  ctx.body = { message: "SUCCESS" };
+  ctx.body = { data: {} };
 };
 
 export const resetPassword = async (ctx) => {
@@ -370,7 +400,9 @@ export const resetPassword = async (ctx) => {
   // First do validation on the input
   const validator = joi.validate(request, userSchemaResetPassword);
   if (validator.error) {
-    ctx.throw(400, validator.error.details[0].message);
+    ctx.throw(400, {
+      error: { code: 400, message: validator.error.details[0].message },
+    });
   }
 
   // Ok, let's make sure their token is correct again, just to be sure since it could have
@@ -382,7 +414,7 @@ export const resetPassword = async (ctx) => {
       passwordResetToken: request.passwordResetToken,
     });
   if (!passwordResetData && !passwordResetData.passwordResetExpiration) {
-    ctx.throw(404, "INVALID_TOKEN");
+    ctx.throw(404, { error: { code: 400, message: "INVALID_TOKEN" } });
   }
 
   const tokenIsValid = dateCompareAsc(
@@ -390,7 +422,7 @@ export const resetPassword = async (ctx) => {
     passwordResetData.passwordResetExpiration,
   );
   if (tokenIsValid !== -1) {
-    ctx.throw(400, "RESET_TOKEN_EXPIRED");
+    ctx.throw(400, { error: { code: 400, message: "RESET_TOKEN_EXPIRED" } });
   }
 
   // Ok, so we're good. Let's reset their password with the new one they submitted.
@@ -399,7 +431,7 @@ export const resetPassword = async (ctx) => {
   try {
     request.password = await bcrypt.hash(request.password, 12);
   } catch (error) {
-    ctx.throw(400, "INVALID_DATA");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 
   // Make sure to null out the password reset token and expiration on insertion
@@ -414,34 +446,11 @@ export const resetPassword = async (ctx) => {
       })
       .where({ email: request.email });
   } catch (error) {
-    ctx.throw(400, "INVALID_DATA");
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
-  ctx.body = { message: "SUCCESS" };
+  ctx.body = { data: {} };
 };
 
 export const privateArea = async (ctx) => {
-  ctx.body = { user: ctx.state.user };
-};
-
-// Helpers
-export const generateUniqueToken = async () => {
-  const token = new rand(/[a-zA-Z0-9_-]{7,7}/).gen();
-
-  if (await this.checkUniqueToken(token)) {
-    await this.generateUniqueToken();
-  } else {
-    return token;
-  }
-};
-
-export const checkUniqueToken = async (token) => {
-  const result = await db("users")
-    .where({
-      token,
-    })
-    .count("id as id");
-  if (result[0].id) {
-    return true;
-  }
-  return false;
+  ctx.body = { data: { user: ctx.state.user } };
 };

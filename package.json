@@ -15,10 +15,10 @@
   "license": "MIT",
   "homepage": "https://github.com/johndatserakis/koa-vue-notes-api#readme",
   "dependencies": {
+    "@babel/polyfill": "^7.8.7",
+    "@babel/register": "^7.9.0",
     "@sendgrid/mail": "6.2.1",
     "axios": "^0.18.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-register": "^6.26.0",
     "bcrypt": "^2.0.1",
     "date-fns": "^1.29.0",
     "dotenv": "^6.0.0",
@@ -44,8 +44,11 @@
     "randexp": "^0.4.9"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.2.3",
+    "babel-core": "^7.0.0-bridge.0",
     "cross-env": "^6.0.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
@@ -55,21 +58,6 @@
     "eslint-plugin-prettier": "^3.1.2",
     "nodemon": "^1.17.5",
     "prettier": "^2.0.4"
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "browsers": [
-              "last 2 versions",
-              "safari >= 7"
-            ]
-          }
-        }
-      ]
-    ]
   },
   "keywords": [
     "koa",
