@@ -8,8 +8,8 @@ import redis from "ioredis";
 import { logger } from "./logs/log";
 
 // Routes
-import userActionsRouter from "./routes/userActions";
-import notesRouter from "./routes/notes";
+import { router as userActionsRouter } from "./routes/userActions";
+import { router as notesRouter } from "./routes/notes";
 
 // Initialize app
 export const app = new Koa();

@@ -25,7 +25,8 @@ class Note {
     this.ipAddress = data.ipAddress;
   }
 
-  static async all(request) {
+  // eslint-disable-next-line class-methods-use-this
+  async all(request) {
     try {
       return await db("notes")
         .select("*")

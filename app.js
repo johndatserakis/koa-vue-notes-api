@@ -12,7 +12,7 @@ if (env === "development") {
 }
 
 // eslint-disable-next-line import/no-dynamic-require
-const app = require(src).default;
+const { app } = require(src);
 
 // Here we're assigning the server to a variable because
 // we're going to want to manually rip down the server in testing

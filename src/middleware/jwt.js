@@ -21,7 +21,7 @@ export const jwt = (opts = {}) => {
     return ctx.throw(401, "AUTHENTICATION_ERROR");
   }
 
-  const middleware = async (ctx, next) => {
+  return (ctx, next) => {
     // If there's no secret set, toss it out right away
     if (!secret) ctx.throw(401, "INVALID_SECRET");
 
@@ -30,7 +30,7 @@ export const jwt = (opts = {}) => {
 
     try {
       // Try and decode the token asynchronously
-      const decoded = await jsonwebtoken.verify(token, process.env.JWT_SECRET);
+      const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
 
       // If it worked set the ctx.state.user parameter to the decoded token.
       ctx.state.user = decoded.data;
@@ -45,6 +45,4 @@ export const jwt = (opts = {}) => {
 
     return next();
   };
-
-  return middleware;
 };

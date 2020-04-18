@@ -1,5 +1,5 @@
 import Router from "koa-router";
-import jwt from "../middleware/jwt";
+import { jwt } from "../middleware/jwt";
 
 import {
   signup,
