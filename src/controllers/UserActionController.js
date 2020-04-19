@@ -1,14 +1,11 @@
 /* eslint-disable new-cap */
-import joi from "joi";
+import joi from "@hapi/joi";
 import rand from "randexp";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import fse from "fs-extra";
 import sgMail from "@sendgrid/mail";
-import dateFormat from "date-fns/format";
-import dateAddMinutes from "date-fns/add_minutes";
-import dateAddMonths from "date-fns/add_months";
-import dateCompareAsc from "date-fns/compare_asc";
+import { format, addMinutes, addMonths, compareAsc } from "date-fns";
 import db from "../db/db";
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -173,7 +170,7 @@ export const authenticate = async (ctx) => {
     refreshToken: new rand(/[a-zA-Z0-9_-]{64,64}/).gen(),
     info: `${ctx.userAgent.os} ${ctx.userAgent.platform} ${ctx.userAgent.browser}`,
     ipAddress: ctx.request.ip,
-    expiration: dateAddMonths(new Date(), 1),
+    expiration: addMonths(new Date(), 1),
     isValid: true,
   };
 
@@ -222,7 +219,7 @@ export const refreshAccessToken = async (ctx) => {
   }
 
   // Let's make sure the refreshToken is not expired
-  const refreshTokenIsValid = dateCompareAsc(
+  const refreshTokenIsValid = compareAsc(
     dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss"),
     refreshTokenDatabaseData.expiration,
   );
@@ -255,7 +252,7 @@ export const refreshAccessToken = async (ctx) => {
     refreshToken: new rand(/[a-zA-Z0-9_-]{64,64}/).gen(),
     info: `${ctx.userAgent.os} ${ctx.userAgent.platform} ${ctx.userAgent.browser}`,
     ipAddress: ctx.request.ip,
-    expiration: dateAddMonths(new Date(), 1),
+    expiration: addMonths(new Date(), 1),
     isValid: true,
   };
 
@@ -323,7 +320,7 @@ export const forgot = async (ctx) => {
 
   const resetData = {
     passwordResetToken: new rand(/[a-zA-Z0-9_-]{64,64}/).gen(),
-    passwordResetExpiration: dateAddMinutes(new Date(), 30),
+    passwordResetExpiration: addMinutes(new Date(), 30),
   };
 
   try {
@@ -383,7 +380,7 @@ export const checkPasswordResetToken = async (ctx) => {
   }
 
   // Let's make sure the refreshToken is not expired
-  const tokenIsValid = dateCompareAsc(
+  const tokenIsValid = compareAsc(
     dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss"),
     passwordResetData.passwordResetExpiration,
   );
@@ -417,7 +414,7 @@ export const resetPassword = async (ctx) => {
     ctx.throw(404, { error: { code: 400, message: "INVALID_TOKEN" } });
   }
 
-  const tokenIsValid = dateCompareAsc(
+  const tokenIsValid = compareAsc(
     dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss"),
     passwordResetData.passwordResetExpiration,
   );

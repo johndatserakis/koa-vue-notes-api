@@ -1,5 +1,5 @@
-import joi from "joi";
-import dateFormat from "date-fns/format";
+import joi from "@hapi/joi";
+import { format } from "date-fns";
 
 import { User } from "../models/User";
 import { Note } from "../models/Note";
@@ -101,7 +101,7 @@ export const update = async (ctx) => {
     ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
 
   // Add the updated date value
-  request.updatedAt = dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss");
+  request.updatedAt = format(new Date(), "YYYY-MM-DD HH:mm:ss");
 
   // Add the ip
   request.ipAddress = ctx.ip;
