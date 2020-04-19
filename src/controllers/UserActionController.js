@@ -1,32 +1,31 @@
 /* eslint-disable new-cap */
-import joi from "@hapi/joi";
+import Joi from "@hapi/joi";
 import rand from "randexp";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import fse from "fs-extra";
 import sgMail from "@sendgrid/mail";
-import { format, addMinutes, addMonths, compareAsc } from "date-fns";
+import { format, addMinutes, addMonths, compareAsc, parseISO } from "date-fns";
 import db from "../db/db";
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const userSchemaSignup = joi.object({
-  firstName: joi.string().min(1).max(25).alphanum().required(),
-  lastName: joi.string().min(1).max(25).alphanum().required(),
-  username: joi
-    .string()
+const userSchemaSignup = Joi.object({
+  firstName: Joi.string().min(1).max(25).alphanum().required(),
+  lastName: Joi.string().min(1).max(25).alphanum().required(),
+  username: Joi.string()
     .min(3)
     .max(100)
     .regex(/[a-zA-Z0-9@]/)
     .required(),
-  email: joi.string().email().required(),
-  password: joi.string().min(8).max(35).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(8).max(35).required(),
 });
 
-const userSchemaResetPassword = joi.object({
-  email: joi.string().email().required(),
-  password: joi.string().min(8).max(35).required(),
-  passwordResetToken: joi.string().required(),
+const userSchemaResetPassword = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(8).max(35).required(),
+  passwordResetToken: Joi.string().required(),
 });
 
 // Helpers
@@ -61,7 +60,7 @@ export const signup = async (ctx) => {
   const request = ctx.request.body;
 
   // Next do validation on the input
-  const validator = joi.validate(request, userSchemaSignup);
+  const validator = userSchemaSignup.validate(request);
   if (validator.error) {
     ctx.throw(400, {
       error: { code: 400, message: validator.error.details[0].message },
@@ -104,7 +103,7 @@ export const signup = async (ctx) => {
 
   // Ok, at this point we can sign them up.
   try {
-    const [result] = await db("users").insert(request).returning("id");
+    const [result] = await db("users").insert(request);
 
     // Let's send a welcome email.
     if (process.env.NODE_ENV !== "testing") {
@@ -220,7 +219,7 @@ export const refreshAccessToken = async (ctx) => {
 
   // Let's make sure the refreshToken is not expired
   const refreshTokenIsValid = compareAsc(
-    dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss"),
+    parseISO(format(new Date(), "yyyy-MM-dd HH:mm:ss")),
     refreshTokenDatabaseData.expiration,
   );
   if (refreshTokenIsValid !== -1) {
@@ -232,7 +231,7 @@ export const refreshAccessToken = async (ctx) => {
     await db("refresh_tokens")
       .update({
         isValid: false,
-        updatedAt: dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss"),
+        updatedAt: parseISO(format(new Date(), "yyyy-MM-dd HH:mm:ss")),
       })
       .where({ refreshToken: refreshTokenDatabaseData.refreshToken });
   } catch (error) {
@@ -281,7 +280,7 @@ export const invalidateAllRefreshTokens = async (ctx) => {
     await db("refresh_tokens")
       .update({
         isValid: false,
-        updatedAt: dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss"),
+        updatedAt: parseISO(format(new Date(), "yyyy-MM-dd HH:mm:ss")),
       })
       .where({ username: request.username });
     ctx.body = { data: {} };
@@ -299,7 +298,7 @@ export const invalidateRefreshToken = async (ctx) => {
     await db("refresh_tokens")
       .update({
         isValid: false,
-        updatedAt: dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss"),
+        updatedAt: parseISO(format(new Date(), "yyyy-MM-dd HH:mm:ss")),
       })
       .where({
         username: ctx.state.user.username,
@@ -326,8 +325,7 @@ export const forgot = async (ctx) => {
   try {
     const result = await db("users")
       .update(resetData)
-      .where({ email: request.email })
-      .returning("id");
+      .where({ email: request.email });
     if (!result) {
       ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
     }
@@ -381,7 +379,7 @@ export const checkPasswordResetToken = async (ctx) => {
 
   // Let's make sure the refreshToken is not expired
   const tokenIsValid = compareAsc(
-    dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss"),
+    parseISO(format(new Date(), "yyyy-MM-dd HH:mm:ss")),
     passwordResetData.passwordResetExpiration,
   );
   if (tokenIsValid !== -1) {
@@ -395,7 +393,7 @@ export const resetPassword = async (ctx) => {
   const request = ctx.request.body;
 
   // First do validation on the input
-  const validator = joi.validate(request, userSchemaResetPassword);
+  const validator = userSchemaResetPassword.validate(request);
   if (validator.error) {
     ctx.throw(400, {
       error: { code: 400, message: validator.error.details[0].message },
@@ -415,7 +413,7 @@ export const resetPassword = async (ctx) => {
   }
 
   const tokenIsValid = compareAsc(
-    dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss"),
+    parseISO(format(new Date(), "yyyy-MM-dd HH:mm:ss")),
     passwordResetData.passwordResetExpiration,
   );
   if (tokenIsValid !== -1) {

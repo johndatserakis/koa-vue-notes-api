@@ -1,15 +1,16 @@
-import joi from "@hapi/joi";
-import { format } from "date-fns";
+import Joi from "@hapi/joi";
+import { format, parseISO } from "date-fns";
+import { logger } from "../logs/log";
 
 import { User } from "../models/User";
 import { Note } from "../models/Note";
 
-const noteSchema = joi.object({
-  id: joi.number().integer(),
-  userId: joi.number().integer().required(),
-  title: joi.string().required(),
-  content: joi.string().required(),
-  ipAddress: joi.string(),
+const noteSchema = Joi.object({
+  id: Joi.number().integer(),
+  userId: Joi.number().integer().required(),
+  title: Joi.string().required(),
+  content: Joi.string().required(),
+  ipAddress: Joi.string(),
 });
 
 export const index = async (ctx) => {
@@ -32,8 +33,8 @@ export const index = async (ctx) => {
     const result = await note.all(query);
     ctx.body = { data: { notes: result } };
   } catch (error) {
-    console.log(error);
-    ctx.throw(400, `INVALID_DATA${error}`);
+    logger.error(error);
+    ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 };
 
@@ -50,7 +51,7 @@ export const show = async (ctx) => {
     await note.find(params.id);
     ctx.body = { data: { note } };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 };
@@ -69,7 +70,7 @@ export const create = async (ctx) => {
   const note = new Note(request);
 
   // Validate the newly created note
-  const validator = joi.validate(note, noteSchema);
+  const validator = noteSchema.validate(note);
   if (validator.error) ctx.throw(400, validator.error.details[0].message);
 
   try {
@@ -77,7 +78,7 @@ export const create = async (ctx) => {
     note.id = resultId;
     ctx.body = { data: { note } };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 };
@@ -101,7 +102,7 @@ export const update = async (ctx) => {
     ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
 
   // Add the updated date value
-  request.updatedAt = format(new Date(), "YYYY-MM-DD HH:mm:ss");
+  request.updatedAt = parseISO(format(new Date(), "yyyy-MM-dd HH:mm:ss"));
 
   // Add the ip
   request.ipAddress = ctx.ip;
@@ -115,7 +116,7 @@ export const update = async (ctx) => {
     await note.save();
     ctx.body = { data: { note } };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 };
@@ -139,7 +140,7 @@ export const del = async (ctx) => {
     await note.destroy();
     ctx.body = { data: {} };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     ctx.throw(400, { error: { code: 400, message: "INVALID_DATA" } });
   }
 };

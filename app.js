@@ -1,10 +1,9 @@
 require("dotenv").config();
+require("@babel/polyfill");
 
 const env = process.env.NODE_ENV || "development";
 const port = process.env.PORT || 4000;
 const src = env === "production" ? "./build/index" : "./src/index";
-
-require("@babel/polyfill");
 
 if (env === "development") {
   // eslint-disable-next-line global-require

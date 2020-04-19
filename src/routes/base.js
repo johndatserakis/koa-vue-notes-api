@@ -1,5 +1,5 @@
 import Router from "koa-router";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import db from "../db/db";
 
 export const router = new Router();
@@ -12,7 +12,7 @@ router.get("/", (ctx) => {
 
 router.get("/datetime", (ctx) => {
   ctx.body = {
-    data: { datetime: format(new Date(), "YYYY-MM-DD HH:mm:ss") },
+    data: { datetime: parseISO(format(new Date(), "yyyy-MM-dd HH:mm:ss")) },
   };
 });
 

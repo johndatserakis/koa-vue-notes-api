@@ -1,4 +1,5 @@
 import db from "../db/db";
+import { logger } from "../logs/log";
 
 // Helpers
 
@@ -9,7 +10,7 @@ async function findById(id) {
       .where({ id });
     return userData;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     throw new Error("ERROR");
   }
 }

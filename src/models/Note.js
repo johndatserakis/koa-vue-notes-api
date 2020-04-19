@@ -1,4 +1,5 @@
 import db from "../db/db";
+import { logger } from "../logs/log";
 
 // Helpers
 
@@ -9,7 +10,7 @@ async function findById(id) {
       .where({ id });
     return noteData;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     throw new Error("ERROR");
   }
 }
@@ -40,7 +41,7 @@ class Note {
         .offset(+request.page * +request.limit)
         .limit(+request.limit);
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw new Error("ERROR");
     }
   }
@@ -51,28 +52,25 @@ class Note {
       if (!result) return {};
       this.constructor(result);
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw new Error("ERROR");
     }
   }
 
   async store() {
     try {
-      return await db("notes").insert(this).returning("id");
+      return await db("notes").insert(this);
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw new Error("ERROR");
     }
   }
 
   async save() {
     try {
-      return await db("notes")
-        .update(this)
-        .where({ id: this.id })
-        .returning("id");
+      return await db("notes").update(this).where({ id: this.id });
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw new Error("ERROR");
     }
   }
@@ -81,7 +79,7 @@ class Note {
     try {
       return await db("notes").delete().where({ id: this.id });
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw new Error("ERROR");
     }
   }
