@@ -1,0 +1,62 @@
+FROM node:8
+
+ARG APP_VERSION
+ARG APP_ENV
+ARG APP_PORT
+ARG JWT_SECRET
+ARG JWT_ACCESS_TOKEN_EXPIRATION_TIME
+ARG DB_HOST
+ARG DB_DATABASE
+ARG DB_USER
+ARG DB_PASSWORD
+ARG DB_PORT
+ARG APP_NAME
+ARG APP_EMAIL
+ARG SENDGRID_API_KEY
+ARG RECAPTCHA_SECRET
+
+ENV APP_VERSION=$APP_VERSION \
+    APP_ENV=$APP_ENV \
+    APP_PORT=$APP_PORT \
+    JWT_SECRET=$JWT_SECRET \
+    JWT_ACCESS_TOKEN_EXPIRATION_TIME=$JWT_ACCESS_TOKEN_EXPIRATION_TIME \
+    DB_HOST=$DB_HOST \
+    DB_DATABASE=$DB_DATABASE \
+    DB_USER=$DB_USER \
+    DB_PASSWORD=$DB_PASSWORD \
+    DB_PORT=$DB_PORT \
+    APP_NAME=$APP_NAME \
+    APP_EMAIL=$APP_EMAIL \
+    SENDGRID_API_KEY=$SENDGRID_API_KEY \
+    RECAPTCHA_SECRET=$RECAPTCHA_SECRET
+
+WORKDIR /usr/src/app
+
+COPY package.json ./
+
+RUN npm install
+
+RUN npm install knex -g && npm install pm2 -g
+
+COPY . .
+
+RUN npm run build
+
+ENTRYPOINT touch .env && \
+        echo APP_VERSION=$APP_VERSION > .env && \
+        echo APP_URL=$APP_URL >> .env && \
+        echo APP_ENV=$APP_ENV >> .env && \
+        echo APP_PORT=$APP_PORT >> .env && \
+        echo JWT_SECRET=$JWT_SECRET >> .env && \
+        echo JWT_ACCESS_TOKEN_EXPIRATION_TIME=$JWT_ACCESS_TOKEN_EXPIRATION_TIME >> .env && \
+        echo DB_HOST=$DB_HOST >> .env && \
+        echo DB_DATABASE=$DB_DATABASE >> .env && \
+        echo DB_USER=$DB_USER >> .env && \
+        echo DB_PASSWORD=$DB_PASSWORD >> .env && \
+        echo DB_PORT=$DB_PORT >> .env && \
+        echo APP_NAME=$APP_NAME >> .env && \
+        echo APP_EMAIL=$APP_EMAIL >> .env && \
+        echo SENDGRID_API_KEY=$SENDGRID_API_KEY >> .env && \
+        echo RECAPTCHA_SECRET=$RECAPTCHA_SECRET >> .env && \
+        # cat .env && \
+        npm run start-production
