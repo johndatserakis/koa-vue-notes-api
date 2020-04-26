@@ -373,7 +373,7 @@ export const checkPasswordResetToken = async (ctx) => {
       email: request.email,
       passwordResetToken: request.passwordResetToken,
     });
-  if (!passwordResetData.passwordResetExpiration) {
+  if (!passwordResetData && !passwordResetData.passwordResetExpiration) {
     ctx.throw(404, { error: { code: 400, message: "INVALID_TOKEN" } });
   }
 
@@ -389,7 +389,7 @@ export const checkPasswordResetToken = async (ctx) => {
   ctx.body = { data: {} };
 };
 
-export const resetPassword = async (ctx) => {
+export const reset = async (ctx) => {
   const request = ctx.request.body;
 
   // First do validation on the input

@@ -9,7 +9,7 @@ import {
   invalidateRefreshToken,
   forgot,
   checkPasswordResetToken,
-  resetPassword,
+  reset,
   privateArea,
 } from "../controllers/UserActionController";
 
@@ -31,5 +31,5 @@ router.post(
 );
 router.post("/api/v1/user/forgot", forgot);
 router.post("/api/v1/user/checkPasswordResetToken", checkPasswordResetToken);
-router.post("/api/v1/user/resetPassword", resetPassword);
+router.post("/api/v1/user/reset", reset);
 router.post("/api/v1/user/private", jwtMiddleware, privateArea);
