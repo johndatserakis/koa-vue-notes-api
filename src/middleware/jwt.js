@@ -37,9 +37,11 @@ export const jwt = (opts = {}) => {
     } catch (error) {
       // If it's an expiration error, let's report that specifically.
       if (error.name === "TokenExpiredError") {
-        ctx.throw(401, "TOKEN_EXPIRED");
+        ctx.throw(401, { error: { code: 401, message: "TOKEN_EXPIRED" } });
       } else {
-        ctx.throw(401, "AUTHENTICATION_ERROR");
+        ctx.throw(401, {
+          error: { code: 401, message: "AUTHENTICATION_ERROR" },
+        });
       }
     }
 
