@@ -40,7 +40,7 @@ jobs:
         source ./.env.production
         set +o allexport
         ls -a
-        echo ${{ $APP_VERSION }}
+        echo ${{ APP_VERSION }}
     
     # AWS Creds
     - name: Configure AWS Credentials
@@ -64,7 +64,7 @@ jobs:
         docker info
         docker-compose --version
         docker-compose -f docker-compose.production.yml build
-          --build-arg APP_VERSION=${{ $APP_VERSION }}
+          --build-arg APP_VERSION=${{ APP_VERSION }}
           --build-arg APP_ENV=$APP_ENV
           --build-arg APP_PORT=$APP_PORT
           --build-arg JWT_SECRET=$JWT_SECRET
