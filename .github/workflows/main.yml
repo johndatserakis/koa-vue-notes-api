@@ -65,7 +65,7 @@ jobs:
         docker info
         docker-compose --version
         docker-compose -f docker-compose.production.yml build
-          --build-arg APP_VERSION=${{ secrets.APP_VERSION }}
+          --build-arg APP_VERSION=0.0.1
           --build-arg APP_ENV=${{ env.APP_ENV }}
           --build-arg APP_PORT=${{ env.APP_PORT }}
           --build-arg JWT_SECRET=${{ env.JWT_SECRET }}
