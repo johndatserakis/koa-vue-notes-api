@@ -35,7 +35,7 @@ jobs:
     # Write keys to file
     - name: Write key file
       run: |
-        echo ${{ secrets.APP_ENV_VARIABLES_PRODUCTION }} | base64 -d > ./.env.production
+        echo ${{ secrets.APP_ENV_VARIABLES_PRODUCTION }} |- base64 -d > ./.env.production
         for v in `cat ./.env.production` ; do echo "::set-env name=${v%%=*}::${v##*=}" ; done
         #set -a
         #[ -f ./.env.production ] && . ./.env.production
@@ -68,8 +68,8 @@ jobs:
         docker info
         docker-compose --version
         docker-compose -f docker-compose.production.yml build
-          --build-arg APP_VERSION={{ env.APP_VERSION }}
-          --build-arg APP_ENV={{ env.APP_ENV }}
+          --build-arg APP_VERSION=${{ env.APP_VERSION }}
+          --build-arg APP_ENV=${{ env.APP_ENV }}
           --build-arg APP_PORT=$APP_PORT
           --build-arg JWT_SECRET=$JWT_SECRET
           --build-arg JWT_ACCESS_TOKEN_EXP=$JWT_ACCESS_TOKEN_EXP
