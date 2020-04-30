@@ -39,6 +39,7 @@ jobs:
         set -o allexport
         source ./.env.production
         set +o allexport
+        ls
     
     # AWS Creds
     - name: Configure AWS Credentials
@@ -59,8 +60,8 @@ jobs:
         ECR_REPOSITORY: my-ecr-repo
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        # docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker info
+        docker-compose --version
         docker-compose -f docker-compose.production.yml build
           --build-arg APP_VERSION=$APP_VERSION
           --build-arg APP_ENV=$APP_ENV
