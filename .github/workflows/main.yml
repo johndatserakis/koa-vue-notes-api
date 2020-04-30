@@ -42,7 +42,7 @@ jobs:
     # Write keys to file
     - name: Write key file
       run: |
-        cat ${{ steps.write_file.outputs.filePath }}
+        # ${{ steps.write_file.outputs.filePath }}
         # echo "::set-env name=NEW_APP_ENV_VARIABLES_PRODUCTION::${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}"
         # echo ${{ env.NEW_APP_ENV_VARIABLES_PRODUCTION }}
         # echo "::set-env name=APP_ENV_VARIABLES_PRODUCTION::${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}"
@@ -53,9 +53,9 @@ jobs:
         # set -a
         # [ -f ./.env.production ] && . ./.env.production
         # set +a
-        # set -o allexport
-        # source ./.env.production
-        # set +o allexport
+        set -o allexport
+        source ${{ steps.write_file.outputs.filePath }}
+        set +o allexport
         # ls -a
         # echo ${ APP_VERSION }
     
