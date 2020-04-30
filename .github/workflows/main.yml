@@ -37,7 +37,6 @@ jobs:
       run: |
         echo ${{ secrets.APP_ENV_VARIABLES_PRODUCTION }} | base64 -d > ./.env.production
         for v in `cat ./.env.production` ; do echo "::set-env name=${v%%=*}::${v##*=}" ; done
-        
         #set -a
         #[ -f ./.env.production ] && . ./.env.production
         #set +a
