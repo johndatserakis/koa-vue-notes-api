@@ -35,7 +35,7 @@ jobs:
     # Write keys to file
     - name: Write key file
       run: |
-        echo "::set-env name={NEW_APP_ENV_VARIABLES_PRODUCTION}::${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}"
+        echo "::set-env name=NEW_APP_ENV_VARIABLES_PRODUCTION::${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}"
         echo {{ env.NEW_APP_ENV_VARIABLES_PRODUCTION }}
         
         #echo "::set-env name=APP_ENV_VARIABLES_PRODUCTION::${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}"
