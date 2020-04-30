@@ -31,17 +31,24 @@ jobs:
       run: |
         echo Add other actions to build,
         echo test, and deploy your project.
+        
+    - name: Run Workflow
+      id: write_file
+      uses: timheuer/base64-to-file@v1.0.3
+      with:
+        fileName: '.env.production'
+        encodedString: ${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}
     
     # Write keys to file
     - name: Write key file
       run: |
-        echo "::set-env name=NEW_APP_ENV_VARIABLES_PRODUCTION::${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}"
-        echo ${{ env.NEW_APP_ENV_VARIABLES_PRODUCTION }}
+        # echo "::set-env name=NEW_APP_ENV_VARIABLES_PRODUCTION::${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}"
+        # echo ${{ env.NEW_APP_ENV_VARIABLES_PRODUCTION }}
         # echo "::set-env name=APP_ENV_VARIABLES_PRODUCTION::${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}"
         # echo ${{env.APP_ENV_VARIABLES_PRODUCTION }}
         # echo ${{ env.APP_ENV_VARIABLES_PRODUCTION }} | base64 -d > ./.env.production
         # cat ./.env.production
-        # for v in `cat ./.env.production` ; do echo "::set-env name=${v%%=*}::${v##*=}" ; done
+        for v in `cat ${{ steps.write_file.outputs.filePath }}` ; do echo "::set-env name=${v%%=*}::${v##*=}" ; done
         # set -a
         # [ -f ./.env.production ] && . ./.env.production
         # set +a
