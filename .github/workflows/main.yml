@@ -37,20 +37,19 @@ jobs:
       run: |
         echo "::set-env name=NEW_APP_ENV_VARIABLES_PRODUCTION::${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}"
         echo {{ env.NEW_APP_ENV_VARIABLES_PRODUCTION }}
-        
-        #echo "::set-env name=APP_ENV_VARIABLES_PRODUCTION::${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}"
-        #echo ${{env.APP_ENV_VARIABLES_PRODUCTION }}
-        #echo ${{ env.APP_ENV_VARIABLES_PRODUCTION }} | base64 -d > ./.env.production
-        #cat ./.env.production
-        #for v in `cat ./.env.production` ; do echo "::set-env name=${v%%=*}::${v##*=}" ; done
-        #set -a
-        #[ -f ./.env.production ] && . ./.env.production
-        #set +a
+        # echo "::set-env name=APP_ENV_VARIABLES_PRODUCTION::${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}"
+        # echo ${{env.APP_ENV_VARIABLES_PRODUCTION }}
+        # echo ${{ env.APP_ENV_VARIABLES_PRODUCTION }} | base64 -d > ./.env.production
+        # cat ./.env.production
+        # for v in `cat ./.env.production` ; do echo "::set-env name=${v%%=*}::${v##*=}" ; done
+        # set -a
+        # [ -f ./.env.production ] && . ./.env.production
+        # set +a
         # set -o allexport
         # source ./.env.production
         # set +o allexport
         # ls -a
-        #echo ${ APP_VERSION }
+        # echo ${ APP_VERSION }
     
     # AWS Creds
     - name: Configure AWS Credentials
