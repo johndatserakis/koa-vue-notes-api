@@ -39,7 +39,9 @@ jobs:
         set -o allexport
         source ./.env.production
         set +o allexport
-        ls
+        ls -a
+        export $APP_VERSION
+        export $APP_ENV
     
     # AWS Creds
     - name: Configure AWS Credentials
