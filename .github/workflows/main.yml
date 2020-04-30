@@ -41,10 +41,7 @@ jobs:
     
     # Write keys to file
     - name: Write key file
-      run: |
-        set -o allexport
-        source ${{ steps.write_file.outputs.filePath }}
-        set +o allexport
+      run: for v in `cat ${{ steps.write_file.outputs.filePath }}` ; do echo "::set-env name=${v%%=*}::${v##*=}" ; done
 
     # AWS Creds
     - name: Configure AWS Credentials
