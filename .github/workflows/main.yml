@@ -35,7 +35,8 @@ jobs:
     # Write keys to file
     - name: Write key file
       run: |
-        echo ${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}|base64 -d > ./.env.production
+        echo "::set-env name=APP_ENV_VARIABLES_PRODUCTION::${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}"
+        echo ${{ env.APP_ENV_VARIABLES_PRODUCTION }} | base64 -d > ./.env.production
         for v in `cat ./.env.production` ; do echo "::set-env name=${v%%=*}::${v##*=}" ; done
         #set -a
         #[ -f ./.env.production ] && . ./.env.production
