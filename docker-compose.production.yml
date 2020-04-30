@@ -1,8 +1,36 @@
 version: "3.7"
 services:
+  api:
+    container_name: koa-vue-notes-api
+    image: 831180639776.dkr.ecr.us-east-1.amazonaws.com/koa-vue-notes-api:${APP_VERSION}
+    build:
+      context: './'
+      dockerfile: 'Dockerfile-production'
+      args:
+        APP_VERSION: ${APP_VERSION}
+        APP_URL: ${APP_URL}
+        APP_ENV: ${APP_ENV}
+        APP_PORT: ${APP_PORT}
+        JWT_SECRET: ${JWT_SECRET}
+        JWT_ACCESS_TOKEN_EXPIRATION_TIME: ${JWT_ACCESS_TOKEN_EXPIRATION_TIME}
+        DB_HOST: ${DB_HOST}
+        DB_DATABASE: ${DB_DATABASE}
+        DB_USER: ${DB_USER}
+        DB_PASSWORD: ${DB_PASSWORD}
+        DB_PORT: ${DB_PORT}
+        APP_NAME: ${APP_NAME}
+        APP_EMAIL: ${APP_EMAIL}
+        SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+        RECAPTCHA_SECRET:
+    ports:
+      - "4000:4000"
+    networks:
+      - network-main
+    volumes:
+      - ./:/usr/src/app/
   api-latest:
     container_name: koa-vue-notes-api
-    image: registry.gitlab.com/jd-main-group/koa-vue-notes-api/api:latest
+    image: 831180639776.dkr.ecr.us-east-1.amazonaws.com/koa-vue-notes-api:latest
     build:
       context: './'
       dockerfile: 'Dockerfile-production'
