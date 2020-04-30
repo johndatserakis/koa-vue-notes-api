@@ -62,6 +62,7 @@ jobs:
         ECR_REPOSITORY: my-ecr-repo
         IMAGE_TAG: ${{ github.sha }}
       run: |
+        echo ${{ env.APP_ENV }}
         docker info
         docker-compose --version
         docker-compose -f docker-compose.production.yml build
