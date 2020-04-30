@@ -62,25 +62,24 @@ jobs:
         ECR_REPOSITORY: my-ecr-repo
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        echo ${{ env.APP_ENV }}
         docker info
         docker-compose --version
         docker-compose -f docker-compose.production.yml build
           --build-arg APP_VERSION=${{ env.APP_VERSION }}
           --build-arg APP_ENV=${{ env.APP_ENV }}
-          --build-arg APP_PORT=$APP_PORT
-          --build-arg JWT_SECRET=$JWT_SECRET
-          --build-arg JWT_ACCESS_TOKEN_EXP=$JWT_ACCESS_TOKEN_EXP
+          --build-arg APP_PORT=${{ env.APP_PORT }}
+          --build-arg JWT_SECRET=${{ env.JWT_SECRET }}
+          --build-arg JWT_ACCESS_TOKEN_EXP=${{ env.JWT_ACCESS_TOKEN_EXP }}
           --build-arg DB_ADDR="$DB_ADDR"
-          --build-arg DB_DATABASE=$DB_DATABASE
-          --build-arg DB_USER=$DB_USER
-          --build-arg DB_PASSWORD=$DB_PASSWORD
-          --build-arg DB_HOST=$DB_HOST
-          --build-arg DB_PORT=$DB_PORT
+          --build-arg DB_DATABASE=${{ env.DB_DATABASE }}
+          --build-arg DB_USER=${{ env.DB_USER }}
+          --build-arg DB_PASSWORD=${{ env.DB_PASSWORD }}
+          --build-arg DB_HOST=${{ env.DB_HOST }}
+          --build-arg DB_PORT=${{ env.DB_PORT }}
           --build-arg APP_NAME="$APP_NAME"
-          --build-arg APP_EMAIL=$APP_EMAIL
-          --build-arg SENDGRID_API_KEY=$SENDGRID_API_KEY
-          --build-arg RECAPTCHA_SECRET=$RECAPTCHA_SECRET
+          --build-arg APP_EMAIL=${{ env.APP_EMAIL }}
+          --build-arg SENDGRID_API_KEY=${{ env.SENDGRID_API_KEY }}
+          --build-arg RECAPTCHA_SECRET=${{ env.RECAPTCHA_SECRET }}
         docker-compose -f docker-compose.production.yml push
 
     # Logout of AWS ECR
