@@ -68,7 +68,7 @@ jobs:
         RECAPTCHA_SECRET: ${{ env.RECAPTCHA_SECRET }}
       run: |
         docker info
-        docker-compose --version
+        # docker-compose --version
         docker-compose -f docker-compose.production.yml build
         docker-compose -f docker-compose.production.yml push
 
