@@ -27,7 +27,7 @@ jobs:
         if [ ${{ env.APP_PORT }} != "" ]; then echo ::add-mask::${{ env.APP_PORT }} fi
         if [ ${{ env.JWT_SECRET }} != "" ]; then echo ::add-mask::${{ env.JWT_SECRET }} fi
         if [ ${{ env.JWT_ACCESS_TOKEN_EXP }} != "" ]; then echo ::add-mask::${{ env.JWT_ACCESS_TOKEN_EXP }} fi
-        if [ ${{ env.DB_ADDR }} != "" ]; then echo ::add-mask::${{ env.DB_ADDR }} fi
+        if [ ${{ "env.DB_ADDR" }} != "" ]; then echo ::add-mask::${{ "env.DB_ADDR" }} fi
         if [ ${{ env.DB_DATABASE }} != "" ]; then echo ::add-mask::${{ env.DB_DATABASE }} fi
         if [ ${{ env.DB_USER }} != "" ]; then echo ::add-mask::${{ env.DB_USER }} fi
         if [ ${{ env.DB_PASSWORD }} != "" ]; then echo ::add-mask::${{ env.DB_PASSWORD }} fi
