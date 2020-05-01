@@ -42,6 +42,7 @@ jobs:
       run: |
         docker info
         docker-compose --version
+        sudo chown $USER:docker /var/run/docker.sock
         docker-compose -f docker-compose.production.yml build
         docker-compose -f docker-compose.production.yml push
 
