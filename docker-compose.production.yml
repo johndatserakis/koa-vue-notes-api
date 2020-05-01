@@ -2,7 +2,7 @@ version: "3.7"
 services:
   api:
     container_name: ${REPOSITORY_NAME}
-    image: 831180639776.dkr.ecr.us-east-1.amazonaws.com/${REPOSITORY_NAME}:${APP_VERSION}
+    image: 831180639776.dkr.ecr.us-east-1.amazonaws.com/koa-vue-notes-api:0.0.1
     build:
       context: './'
       dockerfile: 'Dockerfile-production'
@@ -30,7 +30,7 @@ services:
       - ./:/usr/src/app/
   api-latest:
     container_name: ${REPOSITORY_NAME}
-    image: 831180639776.dkr.ecr.us-east-1.amazonaws.com/${REPOSITORY_NAME}:latest
+    image: 831180639776.dkr.ecr.us-east-1.amazonaws.com/koa-vue-notes-api:latest
     build:
       context: './'
       dockerfile: 'Dockerfile-production'
