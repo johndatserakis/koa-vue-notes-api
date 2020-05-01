@@ -33,7 +33,6 @@ jobs:
         if [ ${{ env.DB_PASSWORD }} != "" ]; then echo ::add-mask::${{ env.DB_PASSWORD }} fi
         if [ ${{ env.DB_HOST }} != "" ]; then echo ::add-mask::${{ env.DB_HOST }} fi
         if [ ${{ env.DB_PORT }} != "" ]; then echo ::add-mask::${{ env.DB_PORT }} fi
-        # if [ "${{ env.APP_NAME }}" != "" ]; then echo ::add-mask::"${{ env.APP_NAME }}" fi
         if [ ${{ env.APP_EMAIL }} != "" ]; then echo ::add-mask::${{ env.APP_EMAIL }} fi
         if [ ${{ env.SENDGRID_API_KEY }} != "" ]; then echo ::add-mask::${{ env.SENDGRID_API_KEY }} fi
         if [ ${{ env.RECAPTCHA_SECRET }} != "" ]; then echo ::add-mask::${{ env.RECAPTCHA_SECRET }} fi
@@ -63,7 +62,6 @@ jobs:
         DB_PASSWORD: ${{ env.DB_PASSWORD }}
         DB_HOST: ${{ env.DB_HOST }}
         DB_PORT: ${{ env.DB_PORT }}
-        # APP_NAME: ${{ env.APP_NAME }}
         APP_NAME: "Koa Vue Notes"
         APP_EMAIL: ${{ env.APP_EMAIL }}
         SENDGRID_API_KEY: ${{ env.SENDGRID_API_KEY }}
