@@ -2,7 +2,7 @@ version: "3.7"
 services:
   api:
     container_name: koa-vue-notes-api
-    image: 831180639776.dkr.ecr.us-east-1.amazonaws.com/koa-vue-notes-api:0.0.2
+    image: 831180639776.dkr.ecr.us-east-1.amazonaws.com/koa-vue-notes-api:${APP_VERSION}
     build:
       context: './'
       dockerfile: 'Dockerfile-production'
