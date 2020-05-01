@@ -42,7 +42,6 @@ jobs:
         RECAPTCHA_SECRET: ${{ secrets.RECAPTCHA_SECRET }}
         SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
       run: |
-        journalctl -u docker.service
         docker info
         docker-compose --version
         docker-compose -f docker-compose.production.yml build
