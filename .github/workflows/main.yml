@@ -23,19 +23,19 @@ jobs:
 
     - name: Mask Variables
       run: |
-        if [ ${{ env.APP_ENV }} != "" ]; then echo ::add-mask::${{ env.APP_ENV }} fi
-        if [ ${{ env.APP_PORT }} != "" ]; then echo ::add-mask::${{ env.APP_PORT }} fi
-        if [ ${{ env.JWT_SECRET }} != "" ]; then echo ::add-mask::${{ env.JWT_SECRET }} fi
-        if [ ${{ env.JWT_ACCESS_TOKEN_EXP }} != "" ]; then echo ::add-mask::${{ env.JWT_ACCESS_TOKEN_EXP }} fi
-        if [ "${{ env.DB_ADDR }}" != "" ]; then echo ::add-mask::"${{ env.DB_ADDR }}" fi
-        if [ ${{ env.DB_DATABASE }} != "" ]; then echo ::add-mask::${{ env.DB_DATABASE }} fi
-        if [ ${{ env.DB_USER }} != "" ]; then echo ::add-mask::${{ env.DB_USER }} fi
-        if [ ${{ env.DB_PASSWORD }} != "" ]; then echo ::add-mask::${{ env.DB_PASSWORD }} fi
-        if [ ${{ env.DB_HOST }} != "" ]; then echo ::add-mask::${{ env.DB_HOST }} fi
-        if [ ${{ env.DB_PORT }} != "" ]; then echo ::add-mask::${{ env.DB_PORT }} fi
-        if [ ${{ env.APP_EMAIL }} != "" ]; then echo ::add-mask::${{ env.APP_EMAIL }} fi
-        if [ ${{ env.SENDGRID_API_KEY }} != "" ]; then echo ::add-mask::${{ env.SENDGRID_API_KEY }} fi
-        if [ ${{ env.RECAPTCHA_SECRET }} != "" ]; then echo ::add-mask::${{ env.RECAPTCHA_SECRET }} fi
+        if [ ${{ env.APP_ENV }} != "" ]; then echo ::add-mask::${{ env.APP_ENV }} fi ; done
+        if [ ${{ env.APP_PORT }} != "" ]; then echo ::add-mask::${{ env.APP_PORT }} fi ; done
+        if [ ${{ env.JWT_SECRET }} != "" ]; then echo ::add-mask::${{ env.JWT_SECRET }} fi ; done
+        if [ ${{ env.JWT_ACCESS_TOKEN_EXP }} != "" ]; then echo ::add-mask::${{ env.JWT_ACCESS_TOKEN_EXP }} fi ; done
+        if [ "${{ env.DB_ADDR }}" != "" ]; then echo ::add-mask::"${{ env.DB_ADDR }}" fi ; done
+        if [ ${{ env.DB_DATABASE }} != "" ]; then echo ::add-mask::${{ env.DB_DATABASE }} fi ; done
+        if [ ${{ env.DB_USER }} != "" ]; then echo ::add-mask::${{ env.DB_USER }} fi ; done
+        if [ ${{ env.DB_PASSWORD }} != "" ]; then echo ::add-mask::${{ env.DB_PASSWORD }} fi ; done
+        if [ ${{ env.DB_HOST }} != "" ]; then echo ::add-mask::${{ env.DB_HOST }} fi ; done
+        if [ ${{ env.DB_PORT }} != "" ]; then echo ::add-mask::${{ env.DB_PORT }} fi ; done
+        if [ ${{ env.APP_EMAIL }} != "" ]; then echo ::add-mask::${{ env.APP_EMAIL }} fi ; done
+        if [ ${{ env.SENDGRID_API_KEY }} != "" ]; then echo ::add-mask::${{ env.SENDGRID_API_KEY }} fi ; done
+        if [ ${{ env.RECAPTCHA_SECRET }} != "" ]; then echo ::add-mask::${{ env.RECAPTCHA_SECRET }} fi ; done
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
