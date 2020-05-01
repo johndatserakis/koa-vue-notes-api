@@ -21,7 +21,7 @@ services:
         APP_NAME: ${APP_NAME}
         APP_EMAIL: ${APP_EMAIL}
         SENDGRID_API_KEY: ${SENDGRID_API_KEY}
-        RECAPTCHA_SECRET:
+        RECAPTCHA_SECRET: ${RECAPTCHA_SECRET}
     ports:
       - "4000:4000"
     networks:
@@ -49,7 +49,7 @@ services:
         APP_NAME: ${APP_NAME}
         APP_EMAIL: ${APP_EMAIL}
         SENDGRID_API_KEY: ${SENDGRID_API_KEY}
-        RECAPTCHA_SECRET:
+        RECAPTCHA_SECRET: ${RECAPTCHA_SECRET}
     ports:
       - "4000:4000"
     networks:
