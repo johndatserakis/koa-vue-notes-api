@@ -19,7 +19,7 @@ jobs:
         encodedString: ${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}
 
     - name: Export Variables
-      run: for v in `cat ${{ steps.write-file.outputs.filePath }}` ; do echo "::set-env name=${v%%=*}::${v##*=}" & "echo ::add-mask::${v##*=}" ; done
+      run: for v in `cat ${{ steps.write-file.outputs.filePath }}` ; do echo "::set-env name=${v%%=*}::${v##*=}" && "echo ::add-mask::${v##*=}" ; done
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
