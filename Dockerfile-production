@@ -1,34 +1,34 @@
 FROM node:8
 
-ARG APP_VERSION
+ARG APP_EMAIL
 ARG APP_ENV
+ARG APP_NAME
 ARG APP_PORT
-ARG JWT_SECRET
-ARG JWT_ACCESS_TOKEN_EXP
-ARG DB_HOST
+ARG APP_VERSION
 ARG DB_DATABASE
-ARG DB_USER
+ARG DB_HOST
 ARG DB_PASSWORD
 ARG DB_PORT
-ARG APP_NAME
-ARG APP_EMAIL
-ARG SENDGRID_API_KEY
+ARG DB_USER
+ARG JWT_ACCESS_TOKEN_EXP
+ARG JWT_SECRET
 ARG RECAPTCHA_SECRET
+ARG SENDGRID_API_KEY
 
-ENV APP_VERSION=$APP_VERSION \
+ENV APP_EMAIL=$APP_EMAIL \
     APP_ENV=$APP_ENV \
+    APP_NAME=$APP_NAME \
     APP_PORT=$APP_PORT \
-    JWT_SECRET=$JWT_SECRET \
-    JWT_ACCESS_TOKEN_EXP=$JWT_ACCESS_TOKEN_EXP \
-    DB_HOST=$DB_HOST \
+    APP_VERSION=$APP_VERSION \
     DB_DATABASE=$DB_DATABASE \
-    DB_USER=$DB_USER \
+    DB_HOST=$DB_HOST \
     DB_PASSWORD=$DB_PASSWORD \
     DB_PORT=$DB_PORT \
-    APP_NAME=$APP_NAME \
-    APP_EMAIL=$APP_EMAIL \
-    SENDGRID_API_KEY=$SENDGRID_API_KEY \
-    RECAPTCHA_SECRET=$RECAPTCHA_SECRET
+    DB_USER=$DB_USER \
+    JWT_ACCESS_TOKEN_EXP=$JWT_ACCESS_TOKEN_EXP \
+    JWT_SECRET=$JWT_SECRET \
+    RECAPTCHA_SECRET=$RECAPTCHA_SECRET \
+    SENDGRID_API_KEY=$SENDGRID_API_KEY
 
 WORKDIR /usr/src/app
 
@@ -43,20 +43,19 @@ COPY . .
 RUN npm run build
 
 ENTRYPOINT touch .env && \
-        echo APP_VERSION=$APP_VERSION > .env && \
-        echo APP_URL=$APP_URL >> .env && \
+        echo APP_EMAIL=$APP_EMAIL >> .env && \
         echo APP_ENV=$APP_ENV >> .env && \
+        echo APP_NAME=$APP_NAME >> .env && \
         echo APP_PORT=$APP_PORT >> .env && \
-        echo JWT_SECRET=$JWT_SECRET >> .env && \
-        echo JWT_ACCESS_TOKEN_EXP=$JWT_ACCESS_TOKEN_EXP >> .env && \
-        echo DB_HOST=$DB_HOST >> .env && \
+        echo APP_URL=$APP_URL >> .env && \
+        echo APP_VERSION=$APP_VERSION > .env && \
         echo DB_DATABASE=$DB_DATABASE >> .env && \
-        echo DB_USER=$DB_USER >> .env && \
+        echo DB_HOST=$DB_HOST >> .env && \
         echo DB_PASSWORD=$DB_PASSWORD >> .env && \
         echo DB_PORT=$DB_PORT >> .env && \
-        echo APP_NAME=$APP_NAME >> .env && \
-        echo APP_EMAIL=$APP_EMAIL >> .env && \
-        echo SENDGRID_API_KEY=$SENDGRID_API_KEY >> .env && \
+        echo DB_USER=$DB_USER >> .env && \
+        echo JWT_ACCESS_TOKEN_EXP=$JWT_ACCESS_TOKEN_EXP >> .env && \
+        echo JWT_SECRET=$JWT_SECRET >> .env && \
         echo RECAPTCHA_SECRET=$RECAPTCHA_SECRET >> .env && \
-        # cat .env && \
+        echo SENDGRID_API_KEY=$SENDGRID_API_KEY >> .env && \
         npm run start-production
