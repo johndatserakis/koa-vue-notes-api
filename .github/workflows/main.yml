@@ -19,7 +19,24 @@ jobs:
         encodedString: ${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}
 
     - name: Export Variables
-      run: for v in `cat ${{ steps.write-file.outputs.filePath }}` ; do echo "::set-env name=${v%%=*}::${v##*=} && ::add-mask::${v##*=}" ; done
+      run: |
+        for v in `cat ${{ steps.write-file.outputs.filePath }}` ; do echo "::set-env name=${v%%=*}::${v##*=}" ; done
+        ::add-mask::${{ env.APP_ENV }}
+        ::add-mask::${{ env.APP_ENV }}
+        ::add-mask::${{ env.APP_PORT }}
+        ::add-mask::${{ env.JWT_SECRET }}
+        ::add-mask::${{ env.JWT_ACCESS_TOKEN_EXP }}
+        ::add-mask::${{ env.DB_ADDR }}
+        ::add-mask::${{ env.DB_DATABASE }}
+        ::add-mask::${{ env.DB_USER }}
+        ::add-mask::${{ env.DB_PASSWORD }}
+        ::add-mask::${{ env.DB_HOST }}
+        ::add-mask::${{ env.DB_PORT }}
+        ::add-mask::${{ env.APP_NAME }}
+        ::add-mask::${{ env.APP_EMAIL }}
+        ::add-mask::${{ env.SENDGRID_API_KEY }}
+        ::add-mask::${{ env.RECAPTCHA_SECRET }}
+
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
