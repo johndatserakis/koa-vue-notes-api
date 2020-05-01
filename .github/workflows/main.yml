@@ -11,32 +11,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Write File
-      id: write-file
-      uses: timheuer/base64-to-file@v1.0.3
-      with:
-        fileName: '.env.production'
-        encodedString: ${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}
-
-    - name: Export Variables
-      run: for v in `cat ${{ steps.write-file.outputs.filePath }}` ; do echo "::set-env name=${v%%=*}::${v##*=}" ; done
-
-    - name: Mask Variables
-      run: |
-        if [ ${{ env.APP_ENV }} != "" ]; then echo ::add-mask::${{ env.APP_ENV }} fi ; done
-        if [ ${{ env.APP_PORT }} != "" ]; then echo ::add-mask::${{ env.APP_PORT }} fi ; done
-        if [ ${{ env.JWT_SECRET }} != "" ]; then echo ::add-mask::${{ env.JWT_SECRET }} fi ; done
-        if [ ${{ env.JWT_ACCESS_TOKEN_EXP }} != "" ]; then echo ::add-mask::${{ env.JWT_ACCESS_TOKEN_EXP }} fi ; done
-        if [ "${{ env.DB_ADDR }}" != "" ]; then echo ::add-mask::"${{ env.DB_ADDR }}" fi ; done
-        if [ ${{ env.DB_DATABASE }} != "" ]; then echo ::add-mask::${{ env.DB_DATABASE }} fi ; done
-        if [ ${{ env.DB_USER }} != "" ]; then echo ::add-mask::${{ env.DB_USER }} fi ; done
-        if [ ${{ env.DB_PASSWORD }} != "" ]; then echo ::add-mask::${{ env.DB_PASSWORD }} fi ; done
-        if [ ${{ env.DB_HOST }} != "" ]; then echo ::add-mask::${{ env.DB_HOST }} fi ; done
-        if [ ${{ env.DB_PORT }} != "" ]; then echo ::add-mask::${{ env.DB_PORT }} fi ; done
-        if [ ${{ env.APP_EMAIL }} != "" ]; then echo ::add-mask::${{ env.APP_EMAIL }} fi ; done
-        if [ ${{ env.SENDGRID_API_KEY }} != "" ]; then echo ::add-mask::${{ env.SENDGRID_API_KEY }} fi ; done
-        if [ ${{ env.RECAPTCHA_SECRET }} != "" ]; then echo ::add-mask::${{ env.RECAPTCHA_SECRET }} fi ; done
-
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -52,23 +26,23 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ github.event.repository.name }}
         APP_VERSION: ${{ secrets.APP_VERSION }}
-        APP_ENV: ${{ env.APP_ENV }}
-        APP_PORT: ${{ env.APP_PORT }}
-        JWT_SECRET: ${{ env.JWT_SECRET }}
-        JWT_ACCESS_TOKEN_EXP: ${{ env.JWT_ACCESS_TOKEN_EXP }}
-        DB_ADDR: ${{ env.DB_ADDR }}
-        DB_DATABASE: ${{ env.DB_DATABASE }}
-        DB_USER: ${{ env.DB_USER }}
-        DB_PASSWORD: ${{ env.DB_PASSWORD }}
-        DB_HOST: ${{ env.DB_HOST }}
-        DB_PORT: ${{ env.DB_PORT }}
-        APP_NAME: "Koa Vue Notes"
-        APP_EMAIL: ${{ env.APP_EMAIL }}
-        SENDGRID_API_KEY: ${{ env.SENDGRID_API_KEY }}
-        RECAPTCHA_SECRET: ${{ env.RECAPTCHA_SECRET }}
+        APP_ENV: ${{ secrets.APP_ENV }}
+        APP_PORT: ${{ secrets.APP_PORT }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        JWT_ACCESS_TOKEN_EXP: ${{ secrets.JWT_ACCESS_TOKEN_EXP }}
+        DB_ADDR: ${{ secrets.DB_ADDR }}
+        DB_DATABASE: ${{ secrets.DB_DATABASE }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        APP_NAME: ${{ secrets.DB_PORT }}
+        APP_EMAIL: ${{ secrets.APP_EMAIL }}
+        SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+        RECAPTCHA_SECRET: ${{ secrets.RECAPTCHA_SECRET }}
       run: |
         docker info
-        # docker-compose --version
+        docker-compose --version
         docker-compose -f docker-compose.production.yml build
         docker-compose -f docker-compose.production.yml push
 
