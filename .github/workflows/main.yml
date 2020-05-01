@@ -19,8 +19,10 @@ jobs:
         encodedString: ${{ secrets.APP_ENV_VARIABLES_PRODUCTION }}
 
     - name: Export Variables
+      run: for v in `cat ${{ steps.write-file.outputs.filePath }}` ; do echo "::set-env name=${v%%=*}::${v##*=}" ; done
+
+    - name: Mask Variables
       run: |
-        for v in `cat ${{ steps.write-file.outputs.filePath }}` ; do echo "::set-env name=${v%%=*}::${v##*=}" ; done
         echo "::add-mask::${{ env.APP_ENV }}"
         echo "::add-mask::${{ env.APP_PORT }}"
         echo "::add-mask::${{ env.JWT_SECRET }}"
@@ -35,7 +37,6 @@ jobs:
         echo "::add-mask::${{ env.APP_EMAIL }}"
         echo "::add-mask::${{ env.SENDGRID_API_KEY }}"
         echo "::add-mask::${{ env.RECAPTCHA_SECRET }}"
-
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
