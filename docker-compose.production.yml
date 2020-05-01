@@ -7,21 +7,21 @@ services:
       context: './'
       dockerfile: 'Dockerfile-production'
       args:
-        APP_VERSION: ${APP_VERSION}
-        APP_URL: ${APP_URL}
+        APP_EMAIL: ${APP_EMAIL}
         APP_ENV: ${APP_ENV}
+        APP_NAME: ${APP_NAME}
         APP_PORT: ${APP_PORT}
-        JWT_SECRET: ${JWT_SECRET}
-        JWT_ACCESS_TOKEN_EXP: ${JWT_ACCESS_TOKEN_EXP}
-        DB_HOST: ${DB_HOST}
+        APP_URL: ${APP_URL}
+        APP_VERSION: ${APP_VERSION}
         DB_DATABASE: ${DB_DATABASE}
-        DB_USER: ${DB_USER}
+        DB_HOST: ${DB_HOST}
         DB_PASSWORD: ${DB_PASSWORD}
         DB_PORT: ${DB_PORT}
-        APP_NAME: ${APP_NAME}
-        APP_EMAIL: ${APP_EMAIL}
-        SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+        DB_USER: ${DB_USER}
+        JWT_ACCESS_TOKEN_EXP: ${JWT_ACCESS_TOKEN_EXP}
+        JWT_SECRET: ${JWT_SECRET}
         RECAPTCHA_SECRET: ${RECAPTCHA_SECRET}
+        SENDGRID_API_KEY: ${SENDGRID_API_KEY}
     ports:
       - "4000:4000"
     networks:
@@ -35,21 +35,21 @@ services:
       context: './'
       dockerfile: 'Dockerfile-production'
       args:
-        APP_VERSION: ${APP_VERSION}
-        APP_URL: ${APP_URL}
+        APP_EMAIL: ${APP_EMAIL}
         APP_ENV: ${APP_ENV}
+        APP_NAME: ${APP_NAME}
         APP_PORT: ${APP_PORT}
-        JWT_SECRET: ${JWT_SECRET}
-        JWT_ACCESS_TOKEN_EXP: ${JWT_ACCESS_TOKEN_EXP}
-        DB_HOST: ${DB_HOST}
+        APP_URL: ${APP_URL}
+        APP_VERSION: ${APP_VERSION}
         DB_DATABASE: ${DB_DATABASE}
-        DB_USER: ${DB_USER}
+        DB_HOST: ${DB_HOST}
         DB_PASSWORD: ${DB_PASSWORD}
         DB_PORT: ${DB_PORT}
-        APP_NAME: ${APP_NAME}
-        APP_EMAIL: ${APP_EMAIL}
-        SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+        DB_USER: ${DB_USER}
+        JWT_ACCESS_TOKEN_EXP: ${JWT_ACCESS_TOKEN_EXP}
+        JWT_SECRET: ${JWT_SECRET}
         RECAPTCHA_SECRET: ${RECAPTCHA_SECRET}
+        SENDGRID_API_KEY: ${SENDGRID_API_KEY}
     ports:
       - "4000:4000"
     networks:
