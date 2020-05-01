@@ -189,7 +189,7 @@ export const authenticate = async (ctx) => {
 
   // Ok, they've made it, send them their jsonwebtoken with their data, accessToken and refreshToken
   const token = jsonwebtoken.sign({ data: userData }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+    expiresIn: process.env.JWT_ACCESS_TOKEN_EXP,
   });
   ctx.body = {
     data: {
@@ -264,7 +264,7 @@ export const refreshAccessToken = async (ctx) => {
 
   // Ok, they've made it, send them their jsonwebtoken with their data, accessToken and refreshToken
   const token = jsonwebtoken.sign({ data: userData }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+    expiresIn: process.env.JWT_ACCESS_TOKEN_EXP,
   });
   ctx.body = {
     data: {
