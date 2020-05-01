@@ -34,8 +34,7 @@ jobs:
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         DB_PORT: ${{ secrets.DB_PORT }}
         DB_USER: ${{ secrets.DB_USER }}
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: ${{ github.event.repository.name }}
+        REPOSITORY_NAME: ${{ github.event.repository.name }}
         JWT_ACCESS_TOKEN_EXP: ${{ secrets.JWT_ACCESS_TOKEN_EXP }}
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
         RECAPTCHA_SECRET: ${{ secrets.RECAPTCHA_SECRET }}
