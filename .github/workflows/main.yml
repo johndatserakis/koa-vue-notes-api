@@ -33,7 +33,7 @@ jobs:
         if [ ${{ env.DB_PASSWORD }} != "" ]; then echo ::add-mask::${{ env.DB_PASSWORD }} fi
         if [ ${{ env.DB_HOST }} != "" ]; then echo ::add-mask::${{ env.DB_HOST }} fi
         if [ ${{ env.DB_PORT }} != "" ]; then echo ::add-mask::${{ env.DB_PORT }} fi
-        if [ ${{ env.APP_NAME }} != "" ]; then echo ::add-mask::${{ env.APP_NAME }} fi
+        if [ "${{ env.APP_NAME }}" != "" ]; then echo ::add-mask::"${{ env.APP_NAME }}" fi
         if [ ${{ env.APP_EMAIL }} != "" ]; then echo ::add-mask::${{ env.APP_EMAIL }} fi
         if [ ${{ env.SENDGRID_API_KEY }} != "" ]; then echo ::add-mask::${{ env.SENDGRID_API_KEY }} fi
         if [ ${{ env.RECAPTCHA_SECRET }} != "" ]; then echo ::add-mask::${{ env.RECAPTCHA_SECRET }} fi
