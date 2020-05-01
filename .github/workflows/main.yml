@@ -23,20 +23,20 @@ jobs:
 
     - name: Mask Variables
       run: |
-        echo ::add-mask::${{ env.APP_ENV }}
-        echo ::add-mask::${{ env.APP_PORT }}
-        echo ::add-mask::${{ env.JWT_SECRET }}
-        echo ::add-mask::${{ env.JWT_ACCESS_TOKEN_EXP }}
-        echo ::add-mask::${{ env.DB_ADDR }}
-        echo ::add-mask::${{ env.DB_DATABASE }}
-        echo ::add-mask::${{ env.DB_USER }}
-        echo ::add-mask::${{ env.DB_PASSWORD }}
-        echo ::add-mask::${{ env.DB_HOST }}
-        echo ::add-mask::${{ env.DB_PORT }}
-        echo ::add-mask::${{ env.APP_NAME }}
-        echo ::add-mask::${{ env.APP_EMAIL }}
-        echo ::add-mask::${{ env.SENDGRID_API_KEY }}
-        echo ::add-mask::${{ env.RECAPTCHA_SECRET }}
+        if [[ ${{ env.APP_ENV }} ]] then echo ::add-mask::${{ env.APP_ENV }}
+        if [[ ${{ env.APP_PORT }} ]] then echo ::add-mask::${{ env.APP_PORT }}
+        if [[ ${{ env.JWT_SECRET }} ]] then echo ::add-mask::${{ env.JWT_SECRET }}
+        if [[ ${{ env.JWT_ACCESS_TOKEN_EXP }} ]] then echo ::add-mask::${{ env.JWT_ACCESS_TOKEN_EXP }}
+        if [[ ${{ env.DB_ADDR }} ]] then echo ::add-mask::${{ env.DB_ADDR }}
+        if [[ ${{ env.DB_DATABASE }} ]] then echo ::add-mask::${{ env.DB_DATABASE }}
+        if [[ ${{ env.DB_USER }} ]] then echo ::add-mask::${{ env.DB_USER }}
+        if [[ ${{ env.DB_PASSWORD }} ]] then echo ::add-mask::${{ env.DB_PASSWORD }}
+        if [[ ${{ env.DB_HOST }} ]] then echo ::add-mask::${{ env.DB_HOST }}
+        if [[ ${{ env.DB_PORT }} ]] then echo ::add-mask::${{ env.DB_PORT }}
+        if [[ ${{ env.APP_NAME }} ]] then echo ::add-mask::${{ env.APP_NAME }}
+        if [[ ${{ env.APP_EMAIL }} ]] then echo ::add-mask::${{ env.APP_EMAIL }}
+        if [[ ${{ env.SENDGRID_API_KEY }} ]] then echo ::add-mask::${{ env.SENDGRID_API_KEY }}
+        if [[ ${{ env.RECAPTCHA_SECRET }} ]] then echo ::add-mask::${{ env.RECAPTCHA_SECRET }}
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
