@@ -25,11 +25,10 @@ jobs:
       env:
         APP_EMAIL: ${{ secrets.APP_EMAIL }}
         APP_ENV: ${{ secrets.APP_ENV }}
-        APP_NAME: "${{ secrets.APP_NAME }}"
+        APP_NAME: ${{ secrets.APP_NAME }}
         APP_PORT: ${{ secrets.APP_PORT }}
         APP_URL: ${{ secrets.APP_URL }}
         APP_VERSION: ${{ secrets.APP_VERSION }}
-        DB_ADDR: "${{ secrets.DB_ADDR }}"
         DB_DATABASE: ${{ secrets.DB_DATABASE }}
         DB_HOST: ${{ secrets.DB_HOST }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
