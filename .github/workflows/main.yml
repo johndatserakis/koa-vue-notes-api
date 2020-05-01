@@ -34,7 +34,6 @@ jobs:
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         DB_PORT: ${{ secrets.DB_PORT }}
         DB_USER: ${{ secrets.DB_USER }}
-        REPOSITORY_NAME: ${{ github.event.repository.name }}
         JWT_ACCESS_TOKEN_EXP: ${{ secrets.JWT_ACCESS_TOKEN_EXP }}
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
         RECAPTCHA_SECRET: ${{ secrets.RECAPTCHA_SECRET }}
