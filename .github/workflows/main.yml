@@ -68,6 +68,8 @@ jobs:
         SENDGRID_API_KEY: ${{ env.SENDGRID_API_KEY }}
         RECAPTCHA_SECRET: ${{ env.RECAPTCHA_SECRET }}
       run: |
+        docker info
+        docker-compose --version
         docker-compose -f docker-compose.production.yml build
         docker-compose -f docker-compose.production.yml push
 
