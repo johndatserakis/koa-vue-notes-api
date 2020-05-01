@@ -25,17 +25,17 @@ jobs:
       env:
         APP_EMAIL: ${{ secrets.APP_EMAIL }}
         APP_ENV: ${{ secrets.APP_ENV }}
-        APP_NAME: ${{ secrets.APP_NAME }}
+        APP_NAME: "${{ secrets.APP_NAME }}"
         APP_PORT: ${{ secrets.APP_PORT }}
         APP_URL: ${{ secrets.APP_URL }}
         APP_VERSION: ${{ secrets.APP_VERSION }}
-        DB_ADDR: ${{ secrets.DB_ADDR }}
+        DB_ADDR: "${{ secrets.DB_ADDR }}"
         DB_DATABASE: ${{ secrets.DB_DATABASE }}
         DB_HOST: ${{ secrets.DB_HOST }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         DB_PORT: ${{ secrets.DB_PORT }}
         DB_USER: ${{ secrets.DB_USER }}
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REGISTRY: "${{ steps.login-ecr.outputs.registry }}"
         ECR_REPOSITORY: ${{ github.event.repository.name }}
         JWT_ACCESS_TOKEN_EXP: ${{ secrets.JWT_ACCESS_TOKEN_EXP }}
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
