@@ -41,8 +41,7 @@ jobs:
       run: |
         docker info
         docker-compose --version
-        docker-compose -f docker-compose.production.yml build
-          --build-arg APP_VERSION=${{ secrets.APP_VERSION }}
+        docker-compose -f docker-compose.production.yml build --build-arg APP_VERSION=${{ secrets.APP_VERSION }}
         docker-compose -f docker-compose.production.yml push
 
     - name: Fill in the new image ID in the Amazon ECS task definition
