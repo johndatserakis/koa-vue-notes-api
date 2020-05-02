@@ -23,7 +23,6 @@ jobs:
 
     - name: Build, tag, and push image to Amazon ECR
       env:
-        APP_VERSION: ${{ secrets.APP_VERSION }}
         APP_EMAIL: ${{ secrets.APP_EMAIL }}
         APP_ENV: ${{ secrets.APP_ENV }}
         APP_NAME: ${{ secrets.APP_NAME }}
@@ -42,10 +41,8 @@ jobs:
       run: |
         docker info
         docker-compose --version
-        # export APP_VERSION=${{ secrets.APP_VERSION }}
-        echo $APP_VERSION
         docker-compose -f docker-compose.production.yml build
-        #  --build-arg APP_VERSION=${{ secrets.APP_VERSION }}
+          --build-arg APP_VERSION=${{ secrets.APP_VERSION }}
         docker-compose -f docker-compose.production.yml push
 
     # Logout of AWS ECR
