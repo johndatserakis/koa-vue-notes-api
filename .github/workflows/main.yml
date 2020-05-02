@@ -45,7 +45,22 @@ jobs:
           --build-arg APP_VERSION=${{ secrets.APP_VERSION }}
         docker-compose -f docker-compose.production.yml push
 
-    # Logout of AWS ECR
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        container-name: koa-vue-notes-api
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: koa-vue-notes-api-service
+        cluster: koa-vue-notes-api-cluster
+        wait-for-service-stability: true
+
     - name: Logout of Amazon ECR
       if: always()
       run: docker logout ${{ steps.login-ecr.outputs.registry }}
