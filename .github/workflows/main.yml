@@ -52,8 +52,8 @@ jobs:
         docker-compose -f docker-compose.production.yml push
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-    #- name: Download and store the task definition
-    #  run: aws ecs describe-task-definition --task-definition koa-view-notes-api-task-definition > task-definition.json
+    - name: Download and store the task definition
+      run: aws ecs describe-task-definition --task-definition koa-view-notes-api-task-definition > task-definition.json
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
