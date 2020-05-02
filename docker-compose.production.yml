@@ -2,7 +2,7 @@ version: "3.7"
 services:
   api:
     container_name: koa-vue-notes-api
-    image: 831180639776.dkr.ecr.us-east-1.amazonaws.com/koa-vue-notes-api:${APP_VERSION}
+    image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
     build:
       context: './'
       dockerfile: 'Dockerfile-production'
@@ -12,7 +12,7 @@ services:
         APP_NAME: ${APP_NAME}
         APP_PORT: ${APP_PORT}
         APP_URL: ${APP_URL}
-        APP_VERSION: ${APP_VERSION}
+        IMAGE_TAG: ${IMAGE_TAG}
         DB_DATABASE: ${DB_DATABASE}
         DB_HOST: ${DB_HOST}
         DB_PASSWORD: ${DB_PASSWORD}
@@ -30,7 +30,7 @@ services:
       - ./:/usr/src/app/
   api-latest:
     container_name: koa-vue-notes-api
-    image: 831180639776.dkr.ecr.us-east-1.amazonaws.com/koa-vue-notes-api:latest
+    image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
     build:
       context: './'
       dockerfile: 'Dockerfile-production'
@@ -40,7 +40,7 @@ services:
         APP_NAME: ${APP_NAME}
         APP_PORT: ${APP_PORT}
         APP_URL: ${APP_URL}
-        APP_VERSION: ${APP_VERSION}
+        IMAGE_TAG: ${IMAGE_TAG}
         DB_DATABASE: ${DB_DATABASE}
         DB_HOST: ${DB_HOST}
         DB_PASSWORD: ${DB_PASSWORD}

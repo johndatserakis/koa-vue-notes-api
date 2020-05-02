@@ -4,7 +4,7 @@ ARG APP_EMAIL
 ARG APP_ENV
 ARG APP_NAME
 ARG APP_PORT
-ARG APP_VERSION
+ARG IMAGE_TAG
 ARG APP_URL
 ARG DB_DATABASE
 ARG DB_HOST
@@ -20,7 +20,7 @@ ENV APP_EMAIL=$APP_EMAIL \
     APP_ENV=$APP_ENV \
     APP_NAME=$APP_NAME \
     APP_PORT=$APP_PORT \
-    APP_VERSION=$APP_VERSION \
+    IMAGE_TAG=$IMAGE_TAG \
     APP_URL=$APP_URL \
     DB_DATABASE=$DB_DATABASE \
     DB_HOST=$DB_HOST \
@@ -50,7 +50,7 @@ ENTRYPOINT touch .env && \
         echo APP_NAME=$APP_NAME >> .env && \
         echo APP_PORT=$APP_PORT >> .env && \
         echo APP_URL=$APP_URL >> .env && \
-        echo APP_VERSION=$APP_VERSION > .env && \
+        echo IMAGE_TAG=$IMAGE_TAG > .env && \
         echo DB_DATABASE=$DB_DATABASE >> .env && \
         echo DB_HOST=$DB_HOST >> .env && \
         echo DB_PASSWORD=$DB_PASSWORD >> .env && \

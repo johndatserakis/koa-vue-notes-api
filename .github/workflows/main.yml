@@ -29,7 +29,6 @@ jobs:
         APP_NAME: ${{ secrets.APP_NAME }}
         APP_PORT: ${{ secrets.APP_PORT }}
         APP_URL: ${{ secrets.APP_URL }}
-        APP_VERSION: ${{ secrets.APP_VERSION }}
         DB_DATABASE: ${{ secrets.DB_DATABASE }}
         DB_HOST: ${{ secrets.DB_HOST }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -40,10 +39,14 @@ jobs:
         RECAPTCHA_SECRET: ${{ secrets.RECAPTCHA_SECRET }}
         SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
       run: |
+        export ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }} && echo $ECR_REGISTRY
+        export REPOSITORY_NAME=${{ github.event.repository.name }} && echo $REPOSITORY_NAME
+        export IMAGE_TAG=${{ github.sha }} && echo $IMAGE_TAG
         docker info
         docker-compose --version
-        docker-compose -f docker-compose.production.yml build --build-arg APP_VERSION=${{ secrets.APP_VERSION }}
+        docker-compose -f docker-compose.production.yml build
         docker-compose -f docker-compose.production.yml push
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
