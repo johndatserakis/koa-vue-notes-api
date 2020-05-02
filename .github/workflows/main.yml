@@ -39,9 +39,12 @@ jobs:
         RECAPTCHA_SECRET: ${{ secrets.RECAPTCHA_SECRET }}
         SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
       run: |
-        export ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }} && echo $ECR_REGISTRY
-        export ECR_REPOSITORY=${{ github.event.repository.name }} && echo $ECR_REPOSITORY
-        export IMAGE_TAG=${{ github.sha }} && echo $IMAGE_TAG
+        export ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
+        echo $ECR_REGISTRY
+        export ECR_REPOSITORY=${{ github.event.repository.name }}
+        echo $ECR_REPOSITORY
+        export IMAGE_TAG=${{ github.sha }}
+        echo $IMAGE_TAG
         docker info
         docker-compose --version
         docker-compose -f docker-compose.production.yml build
