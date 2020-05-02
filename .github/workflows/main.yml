@@ -19,6 +19,7 @@ jobs:
         aws-region: us-east-1
 
     - name: Amazon ECR "Login" Action for GitHub Actions
+      id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Build, tag, and push image to Amazon ECR
