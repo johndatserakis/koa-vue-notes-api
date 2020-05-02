@@ -22,6 +22,7 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Build, tag, and push image to Amazon ECR
+      id: build-image
       env:
         APP_EMAIL: ${{ secrets.APP_EMAIL }}
         APP_ENV: ${{ secrets.APP_ENV }}
