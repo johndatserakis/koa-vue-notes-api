@@ -41,10 +41,8 @@ jobs:
       run: |
         docker info
         docker-compose --version
-        export $APP_VERSION=0.0.3
-        echo $APP_VERSION
         docker-compose -f docker-compose.production.yml build
-        #  --build-arg APP_VERSION=${{ secrets.APP_VERSION }}
+          --build-arg APP_VERSION=${{ secrets.APP_VERSION }}
         docker-compose -f docker-compose.production.yml push
 
     # Logout of AWS ECR
