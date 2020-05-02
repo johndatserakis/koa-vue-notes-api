@@ -41,9 +41,10 @@ jobs:
       run: |
         docker info
         docker-compose --version
-        # docker-compose -f docker-compose.production.yml build
+        export APP_VERSION=${{ secrets.APP_VERSION }}
+        docker-compose -f docker-compose.production.yml build
         #  --build-arg APP_VERSION=${{ secrets.APP_VERSION }}
-        # docker-compose -f docker-compose.production.yml push
+        docker-compose -f docker-compose.production.yml push
 
     # Logout of AWS ECR
     - name: Logout of Amazon ECR
