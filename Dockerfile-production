@@ -36,10 +36,10 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install
+# We want the devDependencies here
+RUN npm --production=false install
 
 RUN npm install knex -g
-RUN npm install babel-cli -g
 
 COPY . .
 
