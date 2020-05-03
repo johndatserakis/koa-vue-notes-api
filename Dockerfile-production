@@ -44,7 +44,25 @@ COPY . .
 
 RUN npm run build
 
-ENTRYPOINT touch .env && \
+# ENTRYPOINT touch .env && \
+#        echo APP_EMAIL=$APP_EMAIL >> .env && \
+#        echo APP_ENV=$APP_ENV >> .env && \
+#        echo APP_NAME=$APP_NAME >> .env && \
+#        echo APP_PORT=$APP_PORT >> .env && \
+#        echo APP_URL=$APP_URL >> .env && \
+#        echo IMAGE_TAG=$IMAGE_TAG > .env && \
+#        echo DB_DATABASE=$DB_DATABASE >> .env && \
+#        echo DB_HOST=$DB_HOST >> .env && \
+#        echo DB_PASSWORD=$DB_PASSWORD >> .env && \
+#        echo DB_PORT=$DB_PORT >> .env && \
+#        echo DB_USER=$DB_USER >> .env && \
+#        echo JWT_ACCESS_TOKEN_EXP=$JWT_ACCESS_TOKEN_EXP >> .env && \
+#        echo JWT_SECRET=$JWT_SECRET >> .env && \
+#        echo RECAPTCHA_SECRET=$RECAPTCHA_SECRET >> .env && \
+#        echo SENDGRID_API_KEY=$SENDGRID_API_KEY >> .env && \
+#        npm run start-production
+
+RUN touch .env && \
         echo APP_EMAIL=$APP_EMAIL >> .env && \
         echo APP_ENV=$APP_ENV >> .env && \
         echo APP_NAME=$APP_NAME >> .env && \
@@ -59,5 +77,6 @@ ENTRYPOINT touch .env && \
         echo JWT_ACCESS_TOKEN_EXP=$JWT_ACCESS_TOKEN_EXP >> .env && \
         echo JWT_SECRET=$JWT_SECRET >> .env && \
         echo RECAPTCHA_SECRET=$RECAPTCHA_SECRET >> .env && \
-        echo SENDGRID_API_KEY=$SENDGRID_API_KEY >> .env && \
-        npm run start-production
+        echo SENDGRID_API_KEY=$SENDGRID_API_KEY >> .env
+
+CMD [ "node", "app.js" ]
