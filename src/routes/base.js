@@ -6,7 +6,7 @@ export const router = new Router();
 
 router.get("/", (ctx) => {
   ctx.body = {
-    data: { message: "Hi there.", version: process.env.npm_package_version },
+    data: { message: "Hi there.", version: process.env.IMAGE_TAG },
   };
 });
 
@@ -18,7 +18,7 @@ router.get("/datetime", (ctx) => {
 
 router.get("/health", (ctx) => {
   ctx.body = {
-    data: { version: process.env.npm_package_version },
+    data: { version: process.env.IMAGE_TAG },
   };
 });
 
@@ -30,7 +30,7 @@ router.get("/healthd", async (ctx) => {
       data: {
         message: "SUCCESS",
         datetime: result[0].currentTime,
-        version: process.env.npm_package_version,
+        version: process.env.IMAGE_TAG,
       },
     };
   } catch (error) {

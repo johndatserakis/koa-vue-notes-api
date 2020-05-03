@@ -26,7 +26,6 @@ jobs:
       id: build-image
       env:
         APP_EMAIL: ${{ secrets.APP_EMAIL }}
-        APP_ENV: ${{ secrets.APP_ENV }}
         APP_NAME: ${{ secrets.APP_NAME }}
         APP_PORT: ${{ secrets.APP_PORT }}
         APP_URL: ${{ secrets.APP_URL }}
@@ -37,6 +36,7 @@ jobs:
         DB_USER: ${{ secrets.DB_USER }}
         JWT_ACCESS_TOKEN_EXP: ${{ secrets.JWT_ACCESS_TOKEN_EXP }}
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        NODE_ENV: "production"
         RECAPTCHA_SECRET: ${{ secrets.RECAPTCHA_SECRET }}
         SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
       run: |

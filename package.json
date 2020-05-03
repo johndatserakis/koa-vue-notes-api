@@ -8,7 +8,6 @@
     "watch": "NODE_ENV=development nodemon app.js --exec \"npm run lint && node\"",
     "test": "NODE_ENV=testing jest --forceExit",
     "build": "NODE_ENV=production babel src -d build",
-    "start-production": "NODE_ENV=production node app.js",
     "clean": "npm cache clean --force",
     "lint": "eslint \"**/*.{js,ts}\" --quiet --fix"
   },

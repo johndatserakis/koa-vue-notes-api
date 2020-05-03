@@ -8,18 +8,18 @@ services:
       dockerfile: 'Dockerfile-production'
       args:
         APP_EMAIL: ${APP_EMAIL}
-        APP_ENV: ${APP_ENV}
         APP_NAME: ${APP_NAME}
         APP_PORT: ${APP_PORT}
         APP_URL: ${APP_URL}
-        IMAGE_TAG: ${IMAGE_TAG}
         DB_DATABASE: ${DB_DATABASE}
         DB_HOST: ${DB_HOST}
         DB_PASSWORD: ${DB_PASSWORD}
         DB_PORT: ${DB_PORT}
         DB_USER: ${DB_USER}
+        IMAGE_TAG: ${IMAGE_TAG}
         JWT_ACCESS_TOKEN_EXP: ${JWT_ACCESS_TOKEN_EXP}
         JWT_SECRET: ${JWT_SECRET}
+        NODE_ENV: ${NODE_ENV}
         RECAPTCHA_SECRET: ${RECAPTCHA_SECRET}
         SENDGRID_API_KEY: ${SENDGRID_API_KEY}
     ports:
@@ -28,33 +28,6 @@ services:
       - network-main
     volumes:
       - ./:/usr/src/app/
-  api-latest:
-    container_name: koa-vue-notes-api
-    image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
-    build:
-      context: './'
-      dockerfile: 'Dockerfile-production'
-      args:
-        APP_EMAIL: ${APP_EMAIL}
-        APP_ENV: ${APP_ENV}
-        APP_NAME: ${APP_NAME}
-        APP_PORT: ${APP_PORT}
-        APP_URL: ${APP_URL}
-        IMAGE_TAG: ${IMAGE_TAG}
-        DB_DATABASE: ${DB_DATABASE}
-        DB_HOST: ${DB_HOST}
-        DB_PASSWORD: ${DB_PASSWORD}
-        DB_PORT: ${DB_PORT}
-        DB_USER: ${DB_USER}
-        JWT_ACCESS_TOKEN_EXP: ${JWT_ACCESS_TOKEN_EXP}
-        JWT_SECRET: ${JWT_SECRET}
-        RECAPTCHA_SECRET: ${RECAPTCHA_SECRET}
-        SENDGRID_API_KEY: ${SENDGRID_API_KEY}
-    ports:
-      - "4000"
-    networks:
-      - network-main
-    volumes:
-      - ./:/usr/src/app/
+      - /usr/src/app/node_modules/ # To ignore node_modules
 networks:
   network-main:
