@@ -23,7 +23,7 @@ services:
         RECAPTCHA_SECRET: ${RECAPTCHA_SECRET}
         SENDGRID_API_KEY: ${SENDGRID_API_KEY}
     ports:
-      - "4000:4000"
+      - "4000"
     networks:
       - network-main
     volumes:
@@ -51,7 +51,7 @@ services:
         RECAPTCHA_SECRET: ${RECAPTCHA_SECRET}
         SENDGRID_API_KEY: ${SENDGRID_API_KEY}
     ports:
-      - "4000:4000"
+      - "4000"
     networks:
       - network-main
     volumes:
