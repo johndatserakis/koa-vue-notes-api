@@ -52,9 +52,10 @@ jobs:
         docker-compose -f docker-compose.production.yml push
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
+    # https://github.com/aws-actions/amazon-ecs-render-task-definition/issues/13#issuecomment-599013051
     - name: Download and store the task definition
       run: |
-        aws ecs describe-task-definition --task-definition --query taskDefinition koa-view-notes-api-task-definition > task-definition.json
+        aws ecs describe-task-definition --task-definition koa-view-notes-api-task-definition --query taskDefinition > task-definition.json
         cat task-definition.json
 
     - name: Fill in the new image ID in the Amazon ECS task definition
@@ -70,7 +71,7 @@ jobs:
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         service: koa-vue-notes-api-service
-        cluster: koa-vue-notes-api-cluster
+        cluster: jd-main-cluster
         wait-for-service-stability: true
 
     - name: Logout of Amazon ECR
