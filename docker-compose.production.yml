@@ -1,27 +1,33 @@
 version: "3.7"
 services:
   api:
-    container_name: koa-vue-notes-api
+    container_name: ${ECR_REPOSITORY}
     image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
     build:
       context: './'
       dockerfile: 'Dockerfile-production'
       args:
         APP_EMAIL: ${APP_EMAIL}
+        APP_ENV: ${APP_ENV}
         APP_NAME: ${APP_NAME}
         APP_PORT: ${APP_PORT}
         APP_URL: ${APP_URL}
+        AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+        AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
         DB_DATABASE: ${DB_DATABASE}
         DB_HOST: ${DB_HOST}
         DB_PASSWORD: ${DB_PASSWORD}
         DB_PORT: ${DB_PORT}
         DB_USER: ${DB_USER}
+        ECR_REGISTRY: ${ECR_REGISTRY}
+        ECR_REPOSITORY: ${ECR_REPOSITORY}
         IMAGE_TAG: ${IMAGE_TAG}
         JWT_ACCESS_TOKEN_EXP: ${JWT_ACCESS_TOKEN_EXP}
         JWT_SECRET: ${JWT_SECRET}
         NODE_ENV: ${NODE_ENV}
         RECAPTCHA_SECRET: ${RECAPTCHA_SECRET}
         SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+        STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
     ports:
       - "4000"
     networks:

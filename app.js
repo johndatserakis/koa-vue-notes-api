@@ -19,9 +19,7 @@ const server = app.listen(port);
 // eslint-disable-next-line no-console
 console.log(`Server running at ${port}`);
 // eslint-disable-next-line no-console
-console.log(
-  `Running in ${process.env.NODE_ENV} v${process.env.IMAGE_TAG}`,
-);
+console.log(`Running in ${process.env.NODE_ENV} v${process.env.IMAGE_TAG}`);
 
 // Exporting the actual server here for testing availability
 module.exports = { server };

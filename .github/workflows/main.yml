@@ -26,24 +26,28 @@ jobs:
       id: build-image
       env:
         APP_EMAIL: ${{ secrets.APP_EMAIL }}
+        APP_ENV: ${{ secrets.APP_ENV }}
         APP_NAME: ${{ secrets.APP_NAME }}
         APP_PORT: ${{ secrets.APP_PORT }}
         APP_URL: ${{ secrets.APP_URL }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         DB_DATABASE: ${{ secrets.DB_DATABASE }}
         DB_HOST: ${{ secrets.DB_HOST }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         DB_PORT: ${{ secrets.DB_PORT }}
         DB_USER: ${{ secrets.DB_USER }}
+        ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+        ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        IMAGE_TAG: ${{ secrets.IMAGE_TAG }}
         JWT_ACCESS_TOKEN_EXP: ${{ secrets.JWT_ACCESS_TOKEN_EXP }}
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        NODE_ENV: "production"
         RECAPTCHA_SECRET: ${{ secrets.RECAPTCHA_SECRET }}
         SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+        STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
       run: |
-        export ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
-        echo $ECR_REGISTRY
-        export ECR_REPOSITORY=${{ github.event.repository.name }}
-        echo $ECR_REPOSITORY
+        export NODE_ENV=production
+        echo $NODE_ENV
         export IMAGE_TAG=${{ github.sha }}
         echo $IMAGE_TAG
         docker info
@@ -55,7 +59,7 @@ jobs:
     # https://github.com/aws-actions/amazon-ecs-render-task-definition/issues/13#issuecomment-599013051
     - name: Download and store the task definition
       run: |
-        aws ecs describe-task-definition --task-definition koa-vue-notes-api-task-definition --query taskDefinition > task-definition.json
+        aws ecs describe-task-definition --task-definition ${{ secrets.ECR_REPOSITORY }}-task-definition --query taskDefinition > task-definition.json
         cat task-definition.json
 
     - name: Fill in the new image ID in the Amazon ECS task definition
@@ -63,14 +67,14 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition.json
-        container-name: koa-vue-notes-api-task-definition-container
+        container-name: ${{ secrets.ECR_REPOSITORY }}-task-definition-container
         image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: koa-vue-notes-api-service
+        service: ${{ secrets.ECR_REPOSITORY }}-service
         cluster: jd-main-cluster
         wait-for-service-stability: true
 
