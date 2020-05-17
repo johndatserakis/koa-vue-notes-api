@@ -157,6 +157,6 @@ Go ahead and fork the project! Message me here if you have questions or submit a
 
 ## License
 
-Copywrite 2017 John Datserakis
+Copyright 2017 John Datserakis
 
 [MIT](http://opensource.org/licenses/MIT)
