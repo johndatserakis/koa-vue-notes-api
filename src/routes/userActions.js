@@ -16,20 +16,22 @@ import {
 export const router = new Router();
 const jwtMiddleware = jwt({ secret: process.env.JWT_SECRET });
 
-router.post("/api/v1/user/signup", signup);
-router.post("/api/v1/user/authenticate", authenticate);
-router.post("/api/v1/user/refreshAccessToken", refreshAccessToken);
+const baseUrl = "/api/v1";
+
+router.post(`${baseUrl}/user/signup`, signup);
+router.post(`${baseUrl}/user/authenticate`, authenticate);
+router.post(`${baseUrl}/user/refreshAccessToken`, refreshAccessToken);
 router.post(
-  "/api/v1/user/invalidateAllRefreshTokens",
+  `${baseUrl}/user/invalidateAllRefreshTokens`,
   jwtMiddleware,
   invalidateAllRefreshTokens,
 );
 router.post(
-  "/api/v1/user/invalidateRefreshToken",
+  `${baseUrl}/user/invalidateRefreshToken`,
   jwtMiddleware,
   invalidateRefreshToken,
 );
-router.post("/api/v1/user/forgot", forgot);
-router.post("/api/v1/user/checkPasswordResetToken", checkPasswordResetToken);
-router.post("/api/v1/user/reset", reset);
-router.post("/api/v1/user/private", jwtMiddleware, privateArea);
+router.post(`${baseUrl}/user/forgot`, forgot);
+router.post(`${baseUrl}/user/checkPasswordResetToken`, checkPasswordResetToken);
+router.post(`${baseUrl}/user/reset`, reset);
+router.post(`${baseUrl}/user/private`, jwtMiddleware, privateArea);

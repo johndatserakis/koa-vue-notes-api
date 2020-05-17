@@ -4,25 +4,27 @@ import db from "../db/db";
 
 export const router = new Router();
 
-router.get("/", (ctx) => {
+const baseUrl = "/api/v1";
+
+router.get(`${baseUrl}/`, (ctx) => {
   ctx.body = {
     data: { message: "Hi there.", version: process.env.IMAGE_TAG },
   };
 });
 
-router.get("/datetime", (ctx) => {
+router.get(`${baseUrl}/datetime`, (ctx) => {
   ctx.body = {
     data: { datetime: parseISO(format(new Date(), "yyyy-MM-dd HH:mm:ss")) },
   };
 });
 
-router.get("/health", (ctx) => {
+router.get(`${baseUrl}/health`, (ctx) => {
   ctx.body = {
     data: { version: process.env.IMAGE_TAG },
   };
 });
 
-router.get("/healthd", async (ctx) => {
+router.get(`${baseUrl}/healthd`, async (ctx) => {
   try {
     const [result] = await db.raw("SELECT NOW() as currentTime");
 
@@ -38,6 +40,6 @@ router.get("/healthd", async (ctx) => {
   }
 });
 
-router.get("/panic", () => {
+router.get(`${baseUrl}/panic`, () => {
   throw new Error("panic");
 });

@@ -12,8 +12,10 @@ import {
 export const router = new Router();
 const jwtMiddleware = jwt({ secret: process.env.JWT_SECRET });
 
-router.get("/api/v1/notes", jwtMiddleware, index);
-router.post("/api/v1/notes", jwtMiddleware, create);
-router.get("/api/v1/notes/:id", jwtMiddleware, show);
-router.put("/api/v1/notes/:id", jwtMiddleware, update);
-router.delete("/api/v1/notes/:id", jwtMiddleware, del);
+const baseUrl = "/api/v1";
+
+router.get(`${baseUrl}/notes`, jwtMiddleware, index);
+router.post(`${baseUrl}/notes`, jwtMiddleware, create);
+router.get(`${baseUrl}/notes/:id`, jwtMiddleware, show);
+router.put(`${baseUrl}/notes/:id`, jwtMiddleware, update);
+router.delete(`${baseUrl}/notes/:id`, jwtMiddleware, del);
