@@ -1,16 +1,18 @@
-// Only run tests if we've specifically set NODE_ENV to testing
-// This starts the app up
 import axios from "axios";
 import { server } from "../app";
-
-// Set up axios a little bit
 
 // Grab the db variable
 import db from "../src/db/db";
 
-if (process.env.NODE_ENV !== "testing") {
+// Only run tests if we've specifically set NODE_ENV to testing
+if (!process.env.NODE_ENV) {
   throw new Error("NODE_ENV not set");
 }
+if (process.env.NODE_ENV !== "testing") {
+  throw new Error("NODE_ENV not set to testing");
+}
+
+// Set up axios
 const url = "http://localhost:4000";
 const request = axios.create({ baseURL: url });
 
@@ -31,9 +33,7 @@ afterAll(async () => {
   return server.close();
 });
 
-// ///////////
-// General //
-// ///////////
+// General
 
 // Variables for testing that get populated from different calls
 let accessToken;
@@ -48,9 +48,7 @@ describe("general actions", () => {
   });
 });
 
-// ////////
-// User //
-// ////////
+// User
 
 describe("user account actions", () => {
   it("signs up a user", async () => {
@@ -75,14 +73,14 @@ describe("user account actions", () => {
     });
 
     expect(response.status).toBe(200);
-    expect(response.data.accessToken).toBeDefined();
-    expect(response.data.refreshToken).toBeDefined();
+    expect(response.data.data.accessToken).toBeDefined();
+    expect(response.data.data.refreshToken).toBeDefined();
 
     // Let's store the returned access and refresh tokens for the
     // upcoming tests. Also we'll set the Auth on the axios
     // instance for testing.
-    accessToken = response.data.accessToken;
-    refreshToken = response.data.refreshToken;
+    accessToken = response.data.data.accessToken;
+    refreshToken = response.data.data.refreshToken;
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   });
 
@@ -94,13 +92,14 @@ describe("user account actions", () => {
       refreshToken,
     });
     expect(response.status).toBe(200);
-    expect(response.data.accessToken).toBeDefined();
-    expect(response.data.refreshToken).toBeDefined();
+    expect(response.data.data.accessToken).toBeDefined();
+    expect(response.data.data.refreshToken).toBeDefined();
   });
 
   it("invalidate all the user's refreshTokens", async () => {
     expect.assertions(1);
 
+    request.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     const response = await request.post(
       "/api/v1/user/invalidateAllRefreshTokens",
       {
@@ -113,6 +112,7 @@ describe("user account actions", () => {
   it("invalidate specific refreshToken", async () => {
     expect.assertions(1);
 
+    request.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     const response = await request.post("/api/v1/user/invalidateRefreshToken", {
       refreshToken,
     });
@@ -128,10 +128,10 @@ describe("user account actions", () => {
       type: "web",
     });
     expect(response.status).toBe(200);
-    expect(response.data.passwordResetToken).toBeDefined();
+    expect(response.data.data.passwordResetToken).toBeDefined();
 
     // Store password reset token
-    passwordResetToken = response.data.passwordResetToken;
+    passwordResetToken = response.data.data.passwordResetToken;
   });
 
   it("checks password reset token", async () => {
@@ -150,7 +150,7 @@ describe("user account actions", () => {
   it("reset user's password", async () => {
     expect.assertions(1);
 
-    const response = await request.post("/api/v1/user/resetPassword", {
+    const response = await request.post("/api/v1/user/reset", {
       email: "TestEmail@example.com",
       passwordResetToken,
       password: "TestPassword",
@@ -161,19 +161,19 @@ describe("user account actions", () => {
   it("return data from a authenticated route", async () => {
     expect.assertions(1);
 
+    request.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     const response = await request.post("/api/v1/user/private", {});
     expect(response.status).toBe(200);
   });
 });
 
-// /////////
-// Notes //
-// /////////
+// Notes
 
 describe("note actions", () => {
   it("creates a note", async () => {
     expect.assertions(1);
 
+    request.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     const response = await request.post("/api/v1/notes", {
       title: "Here is my first note",
       content: "Here is my main content.",
@@ -184,28 +184,33 @@ describe("note actions", () => {
   it("shows a note", async () => {
     expect.assertions(4);
 
+    request.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     const response = await request.get("/api/v1/notes/1");
     expect(response.status).toBe(200);
-    expect(response.data.id).toBe(1);
-    expect(response.data.title).toBe("Here is my first note");
-    expect(response.data.content).toBe("Here is my main content.");
+    expect(response.data.data.note.id).toBe(1);
+    expect(response.data.data.note.title).toBe("Here is my first note");
+    expect(response.data.data.note.content).toBe("Here is my main content.");
   });
 
   it("gets a bunch of a user's notes", async () => {
     expect.assertions(4);
 
+    request.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     const response = await request.get("/api/v1/notes/", {
       params: { sort: "", order: "desc", page: 0, limit: 20 },
     });
     expect(response.status).toBe(200);
-    expect(response.data[0].id).toBe(1);
-    expect(response.data[0].title).toBe("Here is my first note");
-    expect(response.data[0].content).toBe("Here is my main content.");
+    expect(response.data.data.notes[0].id).toBe(1);
+    expect(response.data.data.notes[0].title).toBe("Here is my first note");
+    expect(response.data.data.notes[0].content).toBe(
+      "Here is my main content.",
+    );
   });
 
   it("updates a note", async () => {
     expect.assertions(1);
 
+    request.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     const response = await request.put("/api/v1/notes/1", {
       title: "Here is my first note",
       content: "Here is my main content.",
@@ -216,6 +221,7 @@ describe("note actions", () => {
   it("deletes a note", async () => {
     expect.assertions(1);
 
+    request.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     const response = await request.delete("/api/v1/notes/1");
     expect(response.status).toBe(200);
   });
