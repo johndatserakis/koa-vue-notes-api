@@ -6,6 +6,12 @@ export const router = new Router();
 
 const baseUrl = "/api/v1";
 
+router.get("/", (ctx) => {
+  ctx.body = {
+    data: { message: "Hi there.", version: process.env.IMAGE_TAG },
+  };
+});
+
 router.get(`${baseUrl}/`, (ctx) => {
   ctx.body = {
     data: { message: "Hi there.", version: process.env.IMAGE_TAG },
