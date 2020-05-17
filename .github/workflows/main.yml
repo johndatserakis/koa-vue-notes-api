@@ -76,7 +76,7 @@ jobs:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         service: ${{ secrets.ECR_REPOSITORY }}-service
         cluster: jd-main-cluster
-        wait-for-service-stability: true
+        wait-for-service-stability: false
 
     - name: Logout of Amazon ECR
       if: always()
