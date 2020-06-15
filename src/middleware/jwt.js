@@ -18,7 +18,9 @@ export const jwt = (opts = {}) => {
         return credentials;
       }
     }
-    return ctx.throw(401, "AUTHENTICATION_ERROR");
+    return ctx.throw(401, {
+      error: { code: 401, message: "AUTHENTICATION_ERROR" },
+    });
   }
 
   return (ctx, next) => {
