@@ -1,10 +1,16 @@
 module.exports = {
-  "extends": [
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    project: "./tsconfig.json",
+  },
+  extends: [
     "airbnb/base",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended",
   ],
-  "rules": {
+  rules: {
     "indent": ["error", 2],
     "prefer-const": ["error"],
     "no-const-assign": ["error"],

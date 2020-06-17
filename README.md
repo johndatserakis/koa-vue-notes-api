@@ -155,6 +155,10 @@ index.js isn't a folder - it's the brain of the app. Here you'll see we are atta
 
 This project uses `Jest` for testing. Bascially, each API endpoint is tested with working request data to confirm the server behaves correctly when spoken to. Each time the tests are run the migrations get kicked into gear. After the tests are complete the testing database rolls-back - ready for the next test.
 
+### TypeScript
+
+So, I added some basic TypeScript support because I've been really digging TypeScript lately. The implementation in this project is not perfect, but it's initialized and a good amount of the files are now converted. I'll get to the rest of the files as soon as I can, but the good news is that any new files needed going forward will be all set to write in TypeScript.
+
 ## Hit Me Up
 
 Go ahead and fork the project! Message me here if you have questions or submit an issue if needed. I'll be making touch-ups as time goes on. Have fun with this!

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "allowJs": true, // For now as we convert this project to TypeScript
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["es6"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2016",
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.js"
+  ]
+}
