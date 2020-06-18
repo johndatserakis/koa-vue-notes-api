@@ -30,7 +30,7 @@
     "pm2": "^4.3.0",
     "randexp": "^0.5.3"
   },
-  "description": "A SPA using Koa as the backend and Vue as the frontend.",
+  "description": "This is a simple SPA built using Koa as the backend, Vue as the first frontend, and React as the second frontend. Features MySQL integration, user authentication, CRUD note actions, and async/await.",
   "devDependencies": {
     "@babel/cli": "^7.10.1",
     "@babel/core": "^7.10.2",
@@ -69,6 +69,7 @@
     "api",
     "boilerplate",
     "vue",
+    "react",
     "spa",
     "backend",
     "jwt",
@@ -84,7 +85,7 @@
     "clean": "npm cache clean --force",
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
     "test": "NODE_ENV=testing jest --forceExit --config ./jest.config.js",
-    "watch": "NODE_ENV=development nodemon --watch src -e js,jsx,ts,tsx --exec ts-node app.ts"
+    "watch": "NODE_ENV=development nodemon --watch src -e js,jsx,ts,tsx --exec ts-node ./src/app.ts"
   },
   "version": "3.0.0"
 }

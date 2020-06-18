@@ -2,7 +2,8 @@ require("dotenv").config();
 
 const env = process.env.NODE_ENV || "development";
 const port = process.env.PORT || 4000;
-const src = env === "production" ? "./dist/index" : "./src/index";
+// const src = env === "production" ? "./index" : "./src/index";
+const src = "./index";
 
 // eslint-disable-next-line import/no-dynamic-require
 const { app } = require(src);
