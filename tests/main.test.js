@@ -1,5 +1,5 @@
 import axios from "axios";
-import { server } from "../app";
+import { server } from "../src/app";
 
 // Grab the db variable
 import db from "../src/db/db";

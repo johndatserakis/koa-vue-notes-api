@@ -87,5 +87,5 @@
     "test": "NODE_ENV=testing jest --forceExit --config ./jest.config.js",
     "watch": "NODE_ENV=development nodemon --watch src -e js,jsx,ts,tsx --exec ts-node ./src/app.ts"
   },
-  "version": "3.0.0"
+  "version": "4.0.0"
 }

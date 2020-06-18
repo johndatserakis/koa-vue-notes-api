@@ -17,8 +17,11 @@
     "strict": true,
     "target": "es2016",
   },
+  "exclude": [
+    "tests/**/*.js"
+  ],
   "include": [
     "src/**/*.ts",
-    "tests/**/*.js"
+    "src/**/*.js"
   ]
 }
