@@ -21,6 +21,7 @@ This is a simple SPA built using [Koa](http://koajs.com/) as the backend, [Vue](
 - [Backend Koa GitHub](https://github.com/johndatserakis/koa-vue-notes-api)
 
 # Features
+
 - Koa 2.5.1
 - Fully written using async/await
 - Koa-Router
@@ -47,7 +48,7 @@ This is a simple SPA built using [Koa](http://koajs.com/) as the backend, [Vue](
 
 ## Installing / Getting started
 
-``` bash
+```bash
 # Install dependencies
 npm i
 
@@ -86,6 +87,7 @@ knex seed:make seed_users
 ```
 
 #### Note
+
 If you want to turn on the rate-limiter, uncomment the rate-limiter block in `./src/index.js` and make sure you have redis running. I use homebrew. You can follow [this](https://medium.com/@petehouston/install-and-config-redis-on-mac-os-x-via-homebrew-eb8df9a4f298) guide. After installing and running redis, you should be able to enter `redis-cli ping` into a terminal and get `PONG` back.
 
 ## General Information
@@ -117,7 +119,7 @@ The `src` folder is the heart of the program. I'll go over its subfolders now.
 
 ### Controllers
 
-We use controllers to keep our router thin. The controller's responsibility is to manage the request body and make sure it's nice and clean when it eventually gets sent to a `model` to make database calls. There are two controller files present - one for user signup/login/forgot... and one for notes. Note: the `UserActionController.js` is a little different then normal controllers, as I believe the actions of a user signup/login/forgot/reset are seperate from the normal actions for a user - so that's why `UserActionController.js` in written in a more *procedural* way.
+We use controllers to keep our router thin. The controller's responsibility is to manage the request body and make sure it's nice and clean when it eventually gets sent to a `model` to make database calls. There are two controller files present - one for user signup/login/forgot... and one for notes. Note: the `UserActionController.js` is a little different then normal controllers, as I believe the actions of a user signup/login/forgot/reset are seperate from the normal actions for a user - so that's why `UserActionController.js` in written in a more _procedural_ way.
 
 ### DB
 
@@ -168,3 +170,5 @@ Go ahead and fork the project! Message me here if you have questions or submit a
 Copyright 2017 John Datserakis
 
 [MIT](http://opensource.org/licenses/MIT)
+
+-
